@@ -83,7 +83,11 @@ class MonthlyView: BaseView {
         calendar.snp.makeConstraints { make in
             make.top.equalTo(calHeaderView.snp.bottom)
             make.width.equalTo(UIScreen.main.bounds.size.width)
-            make.height.equalTo(300)
+            if UIDevice.current.model.hasPrefix("iPad") {
+                make.height.equalTo(400)
+            } else {
+                make.height.equalTo(300)
+            }
         }
         
         tableView.snp.makeConstraints { make in
@@ -155,6 +159,9 @@ class MonthlyView: BaseView {
         // 캘린더 숫자와 subtitle간의 간격 조정
         calendar.appearance.subtitleOffset = CGPoint(x: 0, y: 4)
         
+        // 이벤트 컬러 마크
+        calendar.appearance.eventDefaultColor = .black
+        calendar.appearance.eventSelectionColor = .black
     }
     
 }

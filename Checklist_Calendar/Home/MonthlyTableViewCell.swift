@@ -8,6 +8,11 @@
 import UIKit
 
 class MonthlyTableViewCell: BaseTableViewCell {
+    let collectionView: UICollectionView = {
+        let view = UICollectionView() 
+        return view
+    }()
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
