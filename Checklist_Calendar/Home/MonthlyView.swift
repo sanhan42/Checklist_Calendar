@@ -46,6 +46,7 @@ class MonthlyView: BaseView {
     
     let tableView: UITableView = {
         let view = UITableView(frame: .null, style: .grouped)
+        view.backgroundColor = .shGrayColor // TODO: 임시 색상 => 수정 필요
         return view
     }()
     
@@ -62,7 +63,7 @@ class MonthlyView: BaseView {
     override func configureUI() {
         [calHeaderView, calendar, tableView].forEach { v in addSubview(v) }
     
-        self.backgroundColor = .systemBackground
+        self.backgroundColor = .bgColor // TODO: 달력 배경색 수정 필요
     }
     
     override func setConstraints() {
@@ -93,7 +94,7 @@ class MonthlyView: BaseView {
         tableView.snp.makeConstraints { make in
             make.top.equalTo(calendar.snp.bottom)
             make.horizontalEdges.equalToSuperview()
-            make.bottomMargin.equalTo(0)
+            make.bottomMargin.equalTo(self.safeAreaLayoutGuide)
         }
     }
     

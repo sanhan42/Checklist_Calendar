@@ -1,26 +1,24 @@
 //
-//  BaseView.swift
+//  BaseCollectionViewCell.swift
 //  Checklist_Calendar
 //
-//  Created by 한상민 on 2022/09/13.
+//  Created by 한상민 on 2022/09/15.
 //
 
 import UIKit
-import SnapKit
 
-class BaseView: UIView {
+class BaseCollectionViewCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        configureUI()
-        setConstraints()
     }
     
     required init?(coder: NSCoder) {
-        fatalError()
+        fatalError("init(coder:) has not been implemented")
     }
     
-    func configureUI() {}
+    func configure() {}
     
     func setConstraints() {}
 }
+

@@ -8,13 +8,23 @@
 import UIKit
 
 class MonthlyTableViewCell: BaseTableViewCell {
+    public static var reuseIdentifier: String {
+        return String(describing: self)
+    }
+    
     let collectionView: UICollectionView = {
-        let view = UICollectionView() 
+        let view = UICollectionView(frame: .zero, collectionViewLayout: MonthlyCollectionViewLayout())
+        view.backgroundColor = .clear
+        view.isPagingEnabled = false
+        view.decelerationRate = .fast
+        view.contentInset = UIEdgeInsets(top: 0, left: 22, bottom: 0, right: 22)
         return view
     }()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        configure()
+        setConstraints()
         
     }
     
@@ -22,10 +32,24 @@ class MonthlyTableViewCell: BaseTableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
+    override func configure() {
+        collectionView.register(MonthlyCollectionViewCell.self, forCellWithReuseIdentifier: MonthlyCollectionViewCell.reuseIdentifier)
+        contentView.addSubview(collectionView)
     }
-
+    
+    override func setConstraints() {
+        collectionView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+    }
+    
+    static func MonthlyCollectionViewLayout() -> UICollectionViewFlowLayout {
+        let layout = UICollectionViewFlowLayout()
+        let deviceWidth: CGFloat = UIScreen.main.bounds.width
+        let itemWidth: CGFloat = deviceWidth - 44
+        layout.scrollDirection = .horizontal
+        layout.minimumInteritemSpacing = 8.0
+        layout.itemSize = CGSize(width: itemWidth, height: 60)
+        return layout
+    }
 }

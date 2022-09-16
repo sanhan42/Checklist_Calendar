@@ -20,11 +20,12 @@ class BaseViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        configure()
     }
     
     
-    func configure() {}
+    func configure() {
+        view.backgroundColor = .bgColor
+    }
     
     func setNavi() {}
     

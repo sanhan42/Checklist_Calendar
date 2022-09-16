@@ -11,6 +11,7 @@ import FSCalendar
 class MonthlyViewController: BaseViewController {
 
     let mainView = MonthlyView()
+    private var collectionViewLayout: UICollectionViewFlowLayout?
     
     fileprivate lazy var scopeGesture: UIPanGestureRecognizer = {
         [unowned self] in
@@ -27,6 +28,7 @@ class MonthlyViewController: BaseViewController {
     }
     
     override func configure() {
+        super.configure()
         self.view = mainView
         mainView.calendar.dataSource = self
         mainView.calendar.delegate = self
@@ -35,6 +37,10 @@ class MonthlyViewController: BaseViewController {
         
         mainView.addGestureRecognizer(scopeGesture)
         mainView.tableView.panGestureRecognizer.require(toFail: scopeGesture)
+        
+        mainView.tableView.delegate = self
+        mainView.tableView.dataSource = self
+        mainView.tableView.register(MonthlyTableViewCell.self, forCellReuseIdentifier: MonthlyTableViewCell.reuseIdentifier)
     }
     
   
@@ -87,4 +93,55 @@ extension MonthlyViewController: FSCalendarDataSource, FSCalendarDelegate {
 //    func calendar(_ calendar: FSCalendar, numberOfEventsFor date: Date) -> Int {
 //    }
 //  
+}
+
+extension MonthlyViewController: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 60
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 3
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: MonthlyTableViewCell.reuseIdentifier, for: indexPath) as? MonthlyTableViewCell else { return UITableViewCell() }
+        cell.collectionView.delegate = self
+        cell.collectionView.dataSource = self
+        collectionViewLayout = cell.collectionView.collectionViewLayout as? UICollectionViewFlowLayout
+        
+        return cell
+    }
+}
+
+extension MonthlyViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 4
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MonthlyCollectionViewCell.reuseIdentifier, for: indexPath) as? MonthlyCollectionViewCell else { return UICollectionViewCell() }
+        return cell
+    }
+    
+    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+            guard let layout = collectionViewLayout else { return }
+        // collectionView의 item에 마진이 있기 때문에, item의 width와 item 사이의 간격을 포함한 offset에서 left Inset을 뺸 만큼 스크롤
+            let cellWidthIncludingSpacing = layout.itemSize.width + layout.minimumLineSpacing
+            var offset = targetContentOffset.pointee
+            let index = (offset.x + scrollView.contentInset.left) / cellWidthIncludingSpacing
+            var roundedIndex = round(index)
+            if scrollView.contentOffset.x > targetContentOffset.pointee.x {
+                roundedIndex = floor(index)
+            } else if scrollView.contentOffset.x < targetContentOffset.pointee.x {
+                roundedIndex = ceil(index)
+            } else {
+                roundedIndex = round(index)
+            }
+        
+            offset = CGPoint(x: roundedIndex * cellWidthIncludingSpacing - scrollView.contentInset.left,
+                                y: scrollView.contentInset.top)
+            targetContentOffset.pointee = offset
+    }
+    
 }
