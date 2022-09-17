@@ -46,7 +46,7 @@ class MonthlyView: BaseView {
     
     let tableView: UITableView = {
         let view = UITableView(frame: .null, style: .grouped)
-        view.backgroundColor = .shGrayColor // TODO: 임시 색상 => 수정 필요
+        view.backgroundColor = .GrayColor // TODO: 임시 색상 => 수정 필요
         view.separatorColor = .clear
         return view
     }()

@@ -8,9 +8,6 @@
 import UIKit
 
 class MonthlyTableViewCell: BaseTableViewCell {
-    public static var reuseIdentifier: String {
-        return String(describing: self)
-    }
     
     let collectionView: UICollectionView = {
         let view = UICollectionView(frame: .zero, collectionViewLayout: MonthlyCollectionViewLayout())
@@ -58,9 +55,6 @@ class MonthlyTableViewCell: BaseTableViewCell {
 
 class TableViewAddEventCell: BaseTableViewCell {
     var vc: MonthlyViewController?
-    public static var reuseIdentifier: String {
-        return String(describing: self)
-    }
     
     lazy var addNewEventBtn: UIButton = {
         let btn = UIButton()

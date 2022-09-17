@@ -11,13 +11,24 @@ class TitleTableViewCell: BaseTableViewCell {
     let titleTextField: UITextField = {
         let tf = UITextField()
         tf.textColor = .textColor
+        tf.placeholder = "제목"
+        tf.font = .systemFont(ofSize: 20, weight: .black)
         tf.textAlignment = .left
         return tf
     }()
     
-    let colorButton: UIButton = {
-        let btn = UIButton()
-        btn.backgroundColor = .systemPink // TODO: 임시로 색을 넣어둠
+    lazy var textNumLabel: UILabel = {
+        let label = UILabel()
+        label.text = "\(titleTextField.text?.count ?? 0)/25"
+        label.font = .systemFont(ofSize: 13)
+        label.textColor = .textColor.withAlphaComponent(0.8)
+        label.textAlignment = .left
+        return label
+    }()
+    
+    let colorButton: UIColorWell = {
+        let btn = UIColorWell(frame: CGRect(x: 100, y: 100, width: 100, height: 100))
+        btn.selectedColor = .systemPink // TODO: 기본색 설정 때 수정 필요
         return btn
     }()
     
@@ -32,23 +43,27 @@ class TitleTableViewCell: BaseTableViewCell {
     }
     
     override func configure() {
-        [titleTextField, colorButton].forEach { v in
+        [titleTextField, textNumLabel, colorButton].forEach { v in
             contentView.addSubview(v)
         }
     }
     
     override func setConstraints() {
         titleTextField.snp.makeConstraints { make in
-            make.width.equalToSuperview().inset(50)
-            make.leading.verticalEdges.equalToSuperview()
+            make.width.equalToSuperview().inset(65)
+            make.verticalEdges.equalToSuperview()
+            make.leading.equalToSuperview().inset(20)
+        }
+        
+        textNumLabel.snp.makeConstraints { make in
+            make.width.equalTo(40)
+            make.leading.equalTo(titleTextField.snp.trailing).offset(8)
+            make.verticalEdges.equalToSuperview()
         }
         
         colorButton.snp.makeConstraints { make in
-            make.leading.equalToSuperview().inset(20)
-            make.width.equalTo(20)
+            make.trailing.equalToSuperview().inset(20)
             make.centerY.equalToSuperview()
         }
-        
-        colorButton.layer.cornerRadius = 8
     }
 }

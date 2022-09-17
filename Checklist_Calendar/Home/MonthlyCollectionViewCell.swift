@@ -8,9 +8,6 @@
 import UIKit
 
 class MonthlyCollectionViewCell: BaseCollectionViewCell {
-    public static var reuseIdentifier: String {
-        return String(describing: self)
-    }
     
     let dateLabel: UILabel = {
         let view = UILabel()
