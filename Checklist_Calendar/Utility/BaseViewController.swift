@@ -26,9 +26,8 @@ class BaseViewController: UIViewController {
     func configure() {
         view.backgroundColor = .bgColor
     }
-    
-    func setNavi() {}
-    
+   
+    // TODO: 수정 필요
     func getDateStr(date: Date) -> String {
         let dateFormatter = DateFormatter()
         let current = Calendar.current
@@ -43,8 +42,6 @@ class BaseViewController: UIViewController {
     }
     
     func setDatePickerPopup(okBtnHandler: ((UIAlertAction) -> Void)? = nil) {
-       
-        
         let dateChooserAlert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         dateChooserAlert.view.addSubview(datePicker)
         let ok = UIAlertAction(title: "선택완료", style: .cancel, handler: okBtnHandler)

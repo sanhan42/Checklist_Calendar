@@ -10,4 +10,5 @@ import UIKit
 extension UIColor {
     class var bgColor: UIColor? { return UIColor(named: "BgColor")}
     class var shGrayColor: UIColor? { return UIColor(named: "GreyColor")}
+    class var textColor: UIColor? { return UIColor.black.withAlphaComponent(0.9)}
 }

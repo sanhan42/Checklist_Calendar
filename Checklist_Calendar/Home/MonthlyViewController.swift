@@ -9,8 +9,9 @@ import UIKit
 import FSCalendar
 
 class MonthlyViewController: BaseViewController {
-
+    
     let mainView = MonthlyView()
+    private var selectIndexPath: IndexPath?
     private var collectionViewLayout: UICollectionViewFlowLayout?
     
     fileprivate lazy var scopeGesture: UIPanGestureRecognizer = {
@@ -32,7 +33,7 @@ class MonthlyViewController: BaseViewController {
         self.view = mainView
         mainView.calendar.dataSource = self
         mainView.calendar.delegate = self
-
+        
         mainView.titleButton.addTarget(self, action: #selector(showDatePicker), for: .touchUpInside)
         
         mainView.addGestureRecognizer(scopeGesture)
@@ -41,9 +42,10 @@ class MonthlyViewController: BaseViewController {
         mainView.tableView.delegate = self
         mainView.tableView.dataSource = self
         mainView.tableView.register(MonthlyTableViewCell.self, forCellReuseIdentifier: MonthlyTableViewCell.reuseIdentifier)
+        mainView.tableView.register(TableViewAddEventCell.self, forCellReuseIdentifier: TableViewAddEventCell.reuseIdentifier)
     }
     
-  
+    
     
     @objc func showDatePicker() {
         setDatePickerPopup { _ in
@@ -77,7 +79,7 @@ extension MonthlyViewController: FSCalendarDataSource, FSCalendarDelegate {
     }
     
     func calendar(_ calendar: FSCalendar, boundingRectWillChange bounds: CGRect, animated: Bool) {
-//        mainView.calendar.removeConstraint(mainView.calendar.constraints.last!)
+        //        mainView.calendar.removeConstraint(mainView.calendar.constraints.last!)
         mainView.calendar.snp.remakeConstraints { make in
             make.top.equalTo(mainView.calHeaderView.snp.bottom)
             make.width.equalTo(UIScreen.main.bounds.width)
@@ -90,9 +92,9 @@ extension MonthlyViewController: FSCalendarDataSource, FSCalendarDelegate {
         }
     }
     
-//    func calendar(_ calendar: FSCalendar, numberOfEventsFor date: Date) -> Int {
-//    }
-//  
+    //    func calendar(_ calendar: FSCalendar, numberOfEventsFor date: Date) -> Int {
+    //    }
+    //
 }
 
 extension MonthlyViewController: UITableViewDelegate, UITableViewDataSource {
@@ -100,17 +102,31 @@ extension MonthlyViewController: UITableViewDelegate, UITableViewDataSource {
         return 60
     }
     
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 2
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
+        switch section {
+        case 0 : return 3 // TODO: 해당 날짜에 등록된 이벤드 개수로 수정하기
+        default : return 1
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: MonthlyTableViewCell.reuseIdentifier, for: indexPath) as? MonthlyTableViewCell else { return UITableViewCell() }
-        cell.collectionView.delegate = self
-        cell.collectionView.dataSource = self
-        collectionViewLayout = cell.collectionView.collectionViewLayout as? UICollectionViewFlowLayout
+        if indexPath.section == 0 {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: MonthlyTableViewCell.reuseIdentifier, for: indexPath) as? MonthlyTableViewCell else { return UITableViewCell() }
+            cell.collectionView.delegate = self
+            cell.collectionView.dataSource = self
+            cell.collectionView.tag = indexPath.row
+            collectionViewLayout = cell.collectionView.collectionViewLayout as? UICollectionViewFlowLayout
+            return cell
+        } else {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: TableViewAddEventCell.reuseIdentifier, for: indexPath) as? TableViewAddEventCell else { return UITableViewCell() }
+            cell.vc = self
+            return cell
+        }
         
-        return cell
     }
 }
 
@@ -125,23 +141,23 @@ extension MonthlyViewController: UICollectionViewDelegate, UICollectionViewDataS
     }
     
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-            guard let layout = collectionViewLayout else { return }
+        guard let layout = collectionViewLayout else { return }
         // collectionView의 item에 마진이 있기 때문에, item의 width와 item 사이의 간격을 포함한 offset에서 left Inset을 뺸 만큼 스크롤
-            let cellWidthIncludingSpacing = layout.itemSize.width + layout.minimumLineSpacing
-            var offset = targetContentOffset.pointee
-            let index = (offset.x + scrollView.contentInset.left) / cellWidthIncludingSpacing
-            var roundedIndex = round(index)
-            if scrollView.contentOffset.x > targetContentOffset.pointee.x {
-                roundedIndex = floor(index)
-            } else if scrollView.contentOffset.x < targetContentOffset.pointee.x {
-                roundedIndex = ceil(index)
-            } else {
-                roundedIndex = round(index)
-            }
+        let cellWidthIncludingSpacing = layout.itemSize.width + layout.minimumLineSpacing
+        var offset = targetContentOffset.pointee
+        let index = (offset.x + scrollView.contentInset.left) / cellWidthIncludingSpacing
+        var roundedIndex = round(index)
+        if scrollView.contentOffset.x > targetContentOffset.pointee.x {
+            roundedIndex = floor(index)
+        } else if scrollView.contentOffset.x < targetContentOffset.pointee.x {
+            roundedIndex = ceil(index)
+        } else {
+            roundedIndex = round(index)
+        }
         
-            offset = CGPoint(x: roundedIndex * cellWidthIncludingSpacing - scrollView.contentInset.left,
-                                y: scrollView.contentInset.top)
-            targetContentOffset.pointee = offset
+        offset = CGPoint(x: roundedIndex * cellWidthIncludingSpacing - scrollView.contentInset.left,
+                         y: scrollView.contentInset.top)
+        targetContentOffset.pointee = offset
     }
     
 }

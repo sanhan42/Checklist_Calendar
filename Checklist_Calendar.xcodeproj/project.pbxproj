@@ -27,6 +27,11 @@
 		BFDDC9B528D059BC0047F22E /* MonthlyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFDDC9B428D059BC0047F22E /* MonthlyViewController.swift */; };
 		BFDDC9B728D05A3C0047F22E /* MonthlyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFDDC9B628D05A3C0047F22E /* MonthlyView.swift */; };
 		BFDDC9BB28D05B380047F22E /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFDDC9BA28D05B380047F22E /* BaseViewController.swift */; };
+		BFF02C5B28D44D1200F0D6AA /* WriteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF02C5A28D44D1200F0D6AA /* WriteViewController.swift */; };
+		BFF02C5D28D45CBC00F0D6AA /* WriteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF02C5C28D45CBC00F0D6AA /* WriteView.swift */; };
+		BFF02C5F28D462B900F0D6AA /* TitleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF02C5E28D462B900F0D6AA /* TitleTableViewCell.swift */; };
+		BFF02C6128D4633C00F0D6AA /* DateTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF02C6028D4633C00F0D6AA /* DateTableViewCell.swift */; };
+		BFF02C6328D4635800F0D6AA /* TodoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF02C6228D4635800F0D6AA /* TodoTableViewCell.swift */; };
 		BFFDE20228D34BC000090E8A /* MonthlyCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFFDE20128D34BC000090E8A /* MonthlyCollectionViewCell.swift */; };
 		BFFDE20728D3658C00090E8A /* BaseCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFFDE20628D3658C00090E8A /* BaseCollectionViewCell.swift */; };
 /* End PBXBuildFile section */
@@ -52,6 +57,11 @@
 		BFDDC9B628D05A3C0047F22E /* MonthlyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthlyView.swift; sourceTree = "<group>"; };
 		BFDDC9BA28D05B380047F22E /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		BFF02C5828D3F3A500F0D6AA /* .gitignore.exp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.exports; path = .gitignore.exp; sourceTree = "<group>"; };
+		BFF02C5A28D44D1200F0D6AA /* WriteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteViewController.swift; sourceTree = "<group>"; };
+		BFF02C5C28D45CBC00F0D6AA /* WriteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteView.swift; sourceTree = "<group>"; };
+		BFF02C5E28D462B900F0D6AA /* TitleTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleTableViewCell.swift; sourceTree = "<group>"; };
+		BFF02C6028D4633C00F0D6AA /* DateTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateTableViewCell.swift; sourceTree = "<group>"; };
+		BFF02C6228D4635800F0D6AA /* TodoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoTableViewCell.swift; sourceTree = "<group>"; };
 		BFFDE20128D34BC000090E8A /* MonthlyCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthlyCollectionViewCell.swift; sourceTree = "<group>"; };
 		BFFDE20628D3658C00090E8A /* BaseCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCollectionViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -114,6 +124,7 @@
 				BF7C140B28D1B5D900DF1EEE /* Extension */,
 				BFDDC9B828D05A5E0047F22E /* Utility */,
 				BFDDC9B328D059860047F22E /* Home */,
+				BFF02C5928D44CE200F0D6AA /* Write */,
 				BFDDC99728D0572D0047F22E /* AppDelegate.swift */,
 				BFDDC99928D0572D0047F22E /* SceneDelegate.swift */,
 				BFDDC99B28D0572D0047F22E /* ViewController.swift */,
@@ -145,6 +156,18 @@
 				BFFDE20628D3658C00090E8A /* BaseCollectionViewCell.swift */,
 			);
 			path = Utility;
+			sourceTree = "<group>";
+		};
+		BFF02C5928D44CE200F0D6AA /* Write */ = {
+			isa = PBXGroup;
+			children = (
+				BFF02C5A28D44D1200F0D6AA /* WriteViewController.swift */,
+				BFF02C5C28D45CBC00F0D6AA /* WriteView.swift */,
+				BFF02C5E28D462B900F0D6AA /* TitleTableViewCell.swift */,
+				BFF02C6028D4633C00F0D6AA /* DateTableViewCell.swift */,
+				BFF02C6228D4635800F0D6AA /* TodoTableViewCell.swift */,
+			);
+			path = Write;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -232,18 +255,23 @@
 				BF0B57DE28D05C38005A090B /* BaseTableViewCell.swift in Sources */,
 				BFB1052728D3153200D24376 /* Event.swift in Sources */,
 				BFDDC9B528D059BC0047F22E /* MonthlyViewController.swift in Sources */,
+				BFF02C6328D4635800F0D6AA /* TodoTableViewCell.swift in Sources */,
 				BFDDC99C28D0572D0047F22E /* ViewController.swift in Sources */,
 				BFDDC99828D0572D0047F22E /* AppDelegate.swift in Sources */,
 				BFFDE20728D3658C00090E8A /* BaseCollectionViewCell.swift in Sources */,
 				BFDDC99A28D0572D0047F22E /* SceneDelegate.swift in Sources */,
 				BF0B57DC28D05BE9005A090B /* BaseView.swift in Sources */,
+				BFF02C6128D4633C00F0D6AA /* DateTableViewCell.swift in Sources */,
 				BFB1052928D31B8F00D24376 /* Todo.swift in Sources */,
 				BFDDC9B728D05A3C0047F22E /* MonthlyView.swift in Sources */,
 				BFDDC9BB28D05B380047F22E /* BaseViewController.swift in Sources */,
 				BF27397C28D3476500441B7F /* UIColor+Extension.swift in Sources */,
 				BF7C140D28D1B60B00DF1EEE /* Date+Extension.swift in Sources */,
 				BFFDE20228D34BC000090E8A /* MonthlyCollectionViewCell.swift in Sources */,
+				BFF02C5B28D44D1200F0D6AA /* WriteViewController.swift in Sources */,
 				BF7C141128D1F8A100DF1EEE /* MonthlyTableViewCell.swift in Sources */,
+				BFF02C5F28D462B900F0D6AA /* TitleTableViewCell.swift in Sources */,
+				BFF02C5D28D45CBC00F0D6AA /* WriteView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
