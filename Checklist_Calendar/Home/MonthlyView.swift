@@ -24,6 +24,7 @@ class MonthlyView: BaseView {
         let view = UIButton()
         view.setTitle(self.calendar.currentPage.toString(format: "yyyy년 MM월"), for: .normal)
         view.setTitleColor(.black.withAlphaComponent(0.9), for: .normal)
+        view.titleLabel?.font = .systemFont(ofSize: 20)
         return view
     }()
     
@@ -63,23 +64,27 @@ class MonthlyView: BaseView {
     
     override func configureUI() {
         [calHeaderView, calendar, tableView].forEach { v in addSubview(v) }
-    
         self.backgroundColor = .bgColor // TODO: 달력 배경색 수정 필요
     }
     
     override func setConstraints() {
         prevButton.snp.makeConstraints { make in
-            make.width.equalTo(30)
+            make.width.equalTo(24)
         }
         
         nextButton.snp.makeConstraints { make in
-            make.width.equalTo(30)
+            make.width.equalTo(24)
+        }
+        
+        titleButton.snp.makeConstraints { make in
+            make.width.equalTo(120)
         }
         
         calHeaderView.snp.makeConstraints { make in
             make.topMargin.equalTo(12)
-            make.horizontalEdges.equalToSuperview().inset(4)
+            make.width.equalTo(170)
             make.height.equalTo(48)
+            make.leading.equalToSuperview().inset(4)
         }
         
         calendar.snp.makeConstraints { make in
@@ -95,7 +100,8 @@ class MonthlyView: BaseView {
         tableView.snp.makeConstraints { make in
             make.top.equalTo(calendar.snp.bottom)
             make.horizontalEdges.equalToSuperview()
-            make.bottomMargin.equalTo(self.safeAreaLayoutGuide)
+//            make.bottomMargin.equalTo(self.safeAreaLayoutGuide)
+            make.bottom.equalTo(self.safeAreaLayoutGuide)
         }
     }
     

@@ -38,7 +38,7 @@ class DateTableViewCell: BaseTableViewCell {
         let btn = UIButton()
         btn.setTitle("22/09/17(토)", for: .normal) // TODO: 임시값
         btn.setTitleColor(UIColor.textColor, for: .normal)
-        btn.titleLabel?.font = .systemFont(ofSize: 18, weight: .bold)
+        btn.titleLabel?.font = .systemFont(ofSize: 17, weight: .bold)
         return btn
     }()
     
@@ -46,7 +46,7 @@ class DateTableViewCell: BaseTableViewCell {
         let btn = UIButton()
         btn.setTitle("22/09/17(토)", for: .normal) // TODO: 임시값
         btn.setTitleColor(UIColor.textColor, for: .normal)
-        btn.titleLabel?.font = .systemFont(ofSize: 18, weight: .bold)
+        btn.titleLabel?.font = .systemFont(ofSize: 17, weight: .bold)
         return btn
     }()
     
@@ -54,7 +54,7 @@ class DateTableViewCell: BaseTableViewCell {
         let btn = UIButton()
         btn.setTitle("오전 09:00", for: .normal) // TODO: 임시값
         btn.setTitleColor(UIColor.textColor, for: .normal)
-        btn.titleLabel?.font = .systemFont(ofSize: 18, weight: .bold)
+        btn.titleLabel?.font = .systemFont(ofSize: 17, weight: .bold)
         return btn
     }()
     
@@ -62,7 +62,7 @@ class DateTableViewCell: BaseTableViewCell {
         let btn = UIButton()
         btn.setTitle("오전 10:00", for: .normal) // TODO: 임시값
         btn.setTitleColor(UIColor.textColor, for: .normal)
-        btn.titleLabel?.font = .systemFont(ofSize: 18, weight: .bold)
+        btn.titleLabel?.font = .systemFont(ofSize: 17, weight: .bold)
         return btn
     }()
     
@@ -133,13 +133,13 @@ class DateTableViewCell: BaseTableViewCell {
         }
         
         dateView.snp.makeConstraints { make in
-            make.horizontalEdges.equalToSuperview().inset(40)
-            make.top.equalTo(titleView.snp.bottom)
+            make.horizontalEdges.equalToSuperview().inset(10)
+            make.top.equalTo(titleView.snp.bottom).inset(-10)
             make.height.equalTo(height)
         }
         
         timeView.snp.makeConstraints { make in
-            make.horizontalEdges.equalToSuperview().inset(40)
+            make.horizontalEdges.equalToSuperview().inset(10)
             make.top.equalTo(dateView.snp.bottom)
             make.height.equalTo(28)
 //            make.width.equalToSuperview().inset(40)
@@ -163,13 +163,13 @@ class DateTableViewCell: BaseTableViewCell {
         
         [startDateBtn, startTimeBtn].forEach({ item in
             item.snp.makeConstraints { make in
-                make.leading.equalToSuperview().inset(20)
+                make.leading.equalToSuperview().inset(10)
             }
         })
         
         [endDateBtn, endTimeBtn].forEach({ item in
             item.snp.makeConstraints { make in
-                make.trailing.equalToSuperview().inset(20)
+                make.trailing.equalToSuperview().inset(10)
             }
         })
         

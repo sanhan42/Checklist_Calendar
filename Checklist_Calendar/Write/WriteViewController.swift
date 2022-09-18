@@ -49,7 +49,7 @@ extension WriteViewController: UITableViewDelegate, UITableViewDataSource {
         switch indexPath.row {
         case 0: return 50
         case 1:
-            return isAllDay ? 80 : 120 // TODO: 수정 필요!
+            return isAllDay ? 90 : 130 // TODO: 수정 필요!
         default: return 50
         }
     }
