@@ -45,7 +45,6 @@ class BaseViewController: UIViewController {
     
     func showDatePickerPopup(mode: UIDatePicker.Mode = .date, okBtnHandler: ((UIAlertAction) -> Void)? = nil) {
         datePicker.datePickerMode = mode
-        print(datePicker.locale)
         let dateChooserAlert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         dateChooserAlert.view.addSubview(datePicker)
         let ok = UIAlertAction(title: "선택완료", style: .cancel, handler: okBtnHandler)

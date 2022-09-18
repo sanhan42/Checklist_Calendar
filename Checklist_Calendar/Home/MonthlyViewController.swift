@@ -39,6 +39,9 @@ class MonthlyViewController: BaseViewController {
     
     override func configure() {
         super.configure()
+        self.navigationController?.isNavigationBarHidden = true
+        setToolbar()
+        
         self.view = mainView
         mainView.calendar.dataSource = self
         mainView.calendar.delegate = self
@@ -51,7 +54,6 @@ class MonthlyViewController: BaseViewController {
         mainView.tableView.delegate = self
         mainView.tableView.dataSource = self
         mainView.tableView.register(MonthlyTableViewCell.self, forCellReuseIdentifier: MonthlyTableViewCell.reuseIdentifier)
-        mainView.tableView.register(TableViewAddEventCell.self, forCellReuseIdentifier: TableViewAddEventCell.reuseIdentifier)
     }
     
     @objc func setDate() {
@@ -59,6 +61,25 @@ class MonthlyViewController: BaseViewController {
             self.mainView.titleButton.setTitle(self.datePicker.date.toString(format: "yyyy년 MM월"), for: .normal)
             self.mainView.calendar.select(self.datePicker.date, scrollToDate: true)
         }
+    }
+    
+    func setToolbar() {
+        self.navigationController?.isToolbarHidden = false
+        self.navigationController?.toolbar.backgroundColor = .bgColor
+        
+        let btn = UIButton()
+        btn.setTitle("새로운 일정 추가", for: .normal)
+        btn.setTitleColor(.black.withAlphaComponent(0.9), for: .normal)
+        btn.titleLabel?.font = .systemFont(ofSize: 20, weight: .bold)
+        btn.layer.cornerRadius = 16
+        btn.backgroundColor = .bgColor // TODO: 버튼 색 바꾸기
+        btn.addTarget(self, action: #selector(addNewEventBtnClicked), for: .touchUpInside)
+        let addNewEventBtn = UIBarButtonItem(customView: btn)
+        toolbarItems = [addNewEventBtn]
+    }
+    
+    @objc func addNewEventBtnClicked() {
+        self.present(WriteViewController(), animated: true)
     }
 }
 
@@ -120,7 +141,7 @@ extension MonthlyViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3 // TODO: 해당 날짜에 등록된 이벤드 개수로 수정하기
+        return 10 // TODO: 해당 날짜에 등록된 이벤드 시간 종류 개수로 수정하기
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
