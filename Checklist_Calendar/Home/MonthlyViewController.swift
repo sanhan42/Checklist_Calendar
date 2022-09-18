@@ -72,7 +72,7 @@ class MonthlyViewController: BaseViewController {
         btn.setTitleColor(.black.withAlphaComponent(0.9), for: .normal)
         btn.titleLabel?.font = .systemFont(ofSize: 20, weight: .bold)
         btn.layer.cornerRadius = 4
-        btn.layer.borderWidth = 1
+//        btn.layer.borderWidth = 1
 //        btn.layer.borderColor = UIColor.textColor.withAlphaComponent(0.9).cgColor
         btn.backgroundColor = .clear
         btn.addTarget(self, action: #selector(addNewEventBtnClicked), for: .touchUpInside)
