@@ -32,6 +32,12 @@ class TitleTableViewCell: BaseTableViewCell {
         return btn
     }()
     
+    let separatorView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .GrayColor.withAlphaComponent(0.8)
+        return view
+    }()
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         configure()
@@ -43,9 +49,10 @@ class TitleTableViewCell: BaseTableViewCell {
     }
     
     override func configure() {
-        [titleTextField, textNumLabel, colorButton].forEach { v in
+        [titleTextField, textNumLabel, colorButton, separatorView].forEach { v in
             contentView.addSubview(v)
         }
+        contentView.backgroundColor = .bgColor
     }
     
     override func setConstraints() {
@@ -64,6 +71,11 @@ class TitleTableViewCell: BaseTableViewCell {
         colorButton.snp.makeConstraints { make in
             make.trailing.equalToSuperview().inset(25)
             make.centerY.equalToSuperview()
+        }
+        
+        separatorView.snp.makeConstraints { make in
+            make.height.equalTo(1)
+            make.leading.trailing.bottom.equalToSuperview()
         }
     }
 }

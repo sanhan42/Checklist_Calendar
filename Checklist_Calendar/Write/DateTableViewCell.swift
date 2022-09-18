@@ -84,6 +84,12 @@ class DateTableViewCell: BaseTableViewCell {
         return view
     }()
     
+    let separatorView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .GrayColor.withAlphaComponent(0.8)
+        return view
+    }()
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         configure()
@@ -95,7 +101,8 @@ class DateTableViewCell: BaseTableViewCell {
     }
     
     override func configure() {
-        [titleView, dateView, timeView].forEach{ contentView.addSubview($0) }
+        [titleView, dateView, timeView, separatorView].forEach{ contentView.addSubview($0) }
+        contentView.backgroundColor = .bgColor
     }
     
     override func setConstraints() {
@@ -129,7 +136,6 @@ class DateTableViewCell: BaseTableViewCell {
             make.horizontalEdges.equalToSuperview().inset(40)
             make.top.equalTo(titleView.snp.bottom)
             make.height.equalTo(height)
-//            make.width.equalToSuperview().inset(40)
         }
         
         timeView.snp.makeConstraints { make in
@@ -168,9 +174,13 @@ class DateTableViewCell: BaseTableViewCell {
         })
         
         arrowImageView.snp.makeConstraints { make in
-            make.width.height.equalTo(28)
-            make.centerX.equalToSuperview()
-            make.bottom.equalToSuperview()
+            make.width.height.equalTo(18)
+            make.center.equalToSuperview()
+        }
+        
+        separatorView.snp.makeConstraints { make in
+            make.height.equalTo(1)
+            make.leading.trailing.bottom.equalToSuperview()
         }
     }
 }
