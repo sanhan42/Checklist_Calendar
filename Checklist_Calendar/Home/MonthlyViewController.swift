@@ -71,8 +71,10 @@ class MonthlyViewController: BaseViewController {
         btn.setTitle("새로운 일정 추가", for: .normal)
         btn.setTitleColor(.black.withAlphaComponent(0.9), for: .normal)
         btn.titleLabel?.font = .systemFont(ofSize: 20, weight: .bold)
-        btn.layer.cornerRadius = 16
-        btn.backgroundColor = .bgColor // TODO: 버튼 색 바꾸기
+        btn.layer.cornerRadius = 4
+        btn.layer.borderWidth = 1
+//        btn.layer.borderColor = UIColor.textColor.withAlphaComponent(0.9).cgColor
+        btn.backgroundColor = .clear
         btn.addTarget(self, action: #selector(addNewEventBtnClicked), for: .touchUpInside)
         let addNewEventBtn = UIBarButtonItem(customView: btn)
         toolbarItems = [addNewEventBtn]
