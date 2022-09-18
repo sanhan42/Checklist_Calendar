@@ -55,7 +55,7 @@ extension WriteViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 2
+        return tableView.tag == 0 ? 3 : 2 // TODO: 여기서 2는 추후 todo 개수로 바꿔줘야 함.
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -74,6 +74,10 @@ extension WriteViewController: UITableViewDelegate, UITableViewDataSource {
             cell.startTimeBtn.addTarget(self, action: #selector(setStartTime), for: .touchUpInside)
             cell.endTimeBtn.addTarget(self, action: #selector(setEndTime), for: .touchUpInside)
             cell.startDateBtn.setTitle(startDate.toString(format: "yy/MM/dd(E)"), for: .normal)
+            return cell
+        case 2:
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: TodoTableViewCell.reuseIdentifier, for: indexPath) as? TodoTableViewCell else { return UITableViewCell()}
+            cell.selectionStyle = .none
             return cell
         default:
             return UITableViewCell()

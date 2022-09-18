@@ -29,6 +29,7 @@
 		BFDDC9B528D059BC0047F22E /* MonthlyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFDDC9B428D059BC0047F22E /* MonthlyViewController.swift */; };
 		BFDDC9B728D05A3C0047F22E /* MonthlyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFDDC9B628D05A3C0047F22E /* MonthlyView.swift */; };
 		BFDDC9BB28D05B380047F22E /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFDDC9BA28D05B380047F22E /* BaseViewController.swift */; };
+		BFEA3A3328D7DC1200003E81 /* CheckListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFEA3A3228D7DC1200003E81 /* CheckListTableViewCell.swift */; };
 		BFF02C5B28D44D1200F0D6AA /* WriteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF02C5A28D44D1200F0D6AA /* WriteViewController.swift */; };
 		BFF02C5D28D45CBC00F0D6AA /* WriteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF02C5C28D45CBC00F0D6AA /* WriteView.swift */; };
 		BFF02C5F28D462B900F0D6AA /* TitleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF02C5E28D462B900F0D6AA /* TitleTableViewCell.swift */; };
@@ -60,6 +61,7 @@
 		BFDDC9B428D059BC0047F22E /* MonthlyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthlyViewController.swift; sourceTree = "<group>"; };
 		BFDDC9B628D05A3C0047F22E /* MonthlyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthlyView.swift; sourceTree = "<group>"; };
 		BFDDC9BA28D05B380047F22E /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
+		BFEA3A3228D7DC1200003E81 /* CheckListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckListTableViewCell.swift; sourceTree = "<group>"; };
 		BFF02C5828D3F3A500F0D6AA /* .gitignore.exp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.exports; path = .gitignore.exp; sourceTree = "<group>"; };
 		BFF02C5A28D44D1200F0D6AA /* WriteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteViewController.swift; sourceTree = "<group>"; };
 		BFF02C5C28D45CBC00F0D6AA /* WriteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteView.swift; sourceTree = "<group>"; };
@@ -172,6 +174,7 @@
 				BFF02C5E28D462B900F0D6AA /* TitleTableViewCell.swift */,
 				BFF02C6028D4633C00F0D6AA /* DateTableViewCell.swift */,
 				BFF02C6228D4635800F0D6AA /* TodoTableViewCell.swift */,
+				BFEA3A3228D7DC1200003E81 /* CheckListTableViewCell.swift */,
 			);
 			path = Write;
 			sourceTree = "<group>";
@@ -279,6 +282,7 @@
 				BFF02C5B28D44D1200F0D6AA /* WriteViewController.swift in Sources */,
 				BF7C141128D1F8A100DF1EEE /* MonthlyTableViewCell.swift in Sources */,
 				BFF02C5F28D462B900F0D6AA /* TitleTableViewCell.swift in Sources */,
+				BFEA3A3328D7DC1200003E81 /* CheckListTableViewCell.swift in Sources */,
 				BFF02C5D28D45CBC00F0D6AA /* WriteView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

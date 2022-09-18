@@ -12,6 +12,7 @@ class WriteView: BaseView {
         let view = UITableView(frame: .null, style: .insetGrouped)
         view.backgroundColor = .tableBgColor //.bgColor // TODO: 임시 색상 => 수정 필요
         view.separatorStyle = .none
+        view.tag = 0
         return view
     }()
     
@@ -30,6 +31,7 @@ class WriteView: BaseView {
         addSubview(tableView)
         tableView.register(TitleTableViewCell.self, forCellReuseIdentifier: TitleTableViewCell.reuseIdentifier)
         tableView.register(DateTableViewCell.self, forCellReuseIdentifier: DateTableViewCell.reuseIdentifier)
+        tableView.register(TodoTableViewCell.self, forCellReuseIdentifier:TodoTableViewCell.reuseIdentifier)
     }
     
     override func setConstraints() {
