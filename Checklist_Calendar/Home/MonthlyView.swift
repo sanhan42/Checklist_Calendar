@@ -166,11 +166,10 @@ class MonthlyView: BaseView {
         // 캘린더 숫자와 subtitle간의 간격 조정
         calendar.appearance.subtitleOffset = CGPoint(x: 0, y: 4)
         
-        // 날짜 다중 선택
-        calendar.allowsMultipleSelection = true
-        
-        // 스와이프 선택 제스처
-        calendar.swipeToChooseGesture.isEnabled = true
+//        // 날짜 다중 선택
+//        calendar.allowsMultipleSelection = true
+//        // 스와이프 선택 제스처
+//        calendar.swipeToChooseGesture.isEnabled = true
         
 //        // 이벤트 컬러 마크
 //        calendar.appearance.eventDefaultColor = .black

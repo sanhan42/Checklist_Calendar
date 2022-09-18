@@ -11,6 +11,15 @@ import FSCalendar
 class MonthlyViewController: BaseViewController {
     
     let mainView = MonthlyView()
+    lazy var lunarDate: String = {
+        let chineseCalendar = Calendar(identifier: .chinese)
+        let formatter = DateFormatter()
+        formatter.dateFormat = "음력 MM월 dd일"
+        formatter.calendar = chineseCalendar
+        let date = mainView.calendar.selectedDate ?? Date()
+        return formatter.string(from: date)
+    }()
+    
     private var selectIndexPath: IndexPath?
     private var collectionViewLayout: UICollectionViewFlowLayout?
     
@@ -44,8 +53,6 @@ class MonthlyViewController: BaseViewController {
         mainView.tableView.register(MonthlyTableViewCell.self, forCellReuseIdentifier: MonthlyTableViewCell.reuseIdentifier)
         mainView.tableView.register(TableViewAddEventCell.self, forCellReuseIdentifier: TableViewAddEventCell.reuseIdentifier)
     }
-    
-    
     
     @objc func setDate() {
         showDatePickerPopup { _ in
@@ -98,23 +105,26 @@ extension MonthlyViewController: FSCalendarDataSource, FSCalendarDelegate {
 }
 
 extension MonthlyViewController: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let header = MonthlyTableViewHeaderView()
+        header.titleLabel.text = lunarDate
+        return header
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 34
+    }
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 60
     }
     
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
-    }
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        switch section {
-        case 0 : return 3 // TODO: 해당 날짜에 등록된 이벤드 개수로 수정하기
-        default : return 1
-        }
+        return 3 // TODO: 해당 날짜에 등록된 이벤드 개수로 수정하기
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if indexPath.section == 0 {
+       
             guard let cell = tableView.dequeueReusableCell(withIdentifier: MonthlyTableViewCell.reuseIdentifier, for: indexPath) as? MonthlyTableViewCell else { return UITableViewCell() }
             cell.selectionStyle = .none
             cell.collectionView.delegate = self
@@ -122,12 +132,6 @@ extension MonthlyViewController: UITableViewDelegate, UITableViewDataSource {
             cell.collectionView.tag = indexPath.row
             collectionViewLayout = cell.collectionView.collectionViewLayout as? UICollectionViewFlowLayout
             return cell
-        } else {
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: TableViewAddEventCell.reuseIdentifier, for: indexPath) as? TableViewAddEventCell else { return UITableViewCell() }
-            cell.vc = self
-            return cell
-        }
-        
     }
 }
 
