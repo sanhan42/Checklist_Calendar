@@ -15,7 +15,7 @@ class MonthlyView: BaseView {
     private lazy var prevButton: UIButton = {
         let view = UIButton()
         view.setTitle(nil, for: .normal)
-        view.setImage(UIImage(named: "icon_prev")?.withTintColor(.black.withAlphaComponent(0.9)), for: .normal)
+        view.setImage(UIImage(named: "icon_prev")?.withTintColor(.textColor), for: .normal)
         view.addTarget(self, action: #selector(prevBtnClicked), for: .touchUpInside)
         return view
     }()
@@ -23,7 +23,7 @@ class MonthlyView: BaseView {
     lazy var titleButton: UIButton = {
         let view = UIButton()
         view.setTitle(self.calendar.currentPage.toString(format: "yyyy년 MM월"), for: .normal)
-        view.setTitleColor(.black.withAlphaComponent(0.9), for: .normal)
+        view.setTitleColor(.textColor, for: .normal)
         view.titleLabel?.font = .systemFont(ofSize: 20)
         return view
     }()
@@ -31,7 +31,7 @@ class MonthlyView: BaseView {
     private lazy var nextButton: UIButton = {
        let view = UIButton()
         view.setTitle(nil, for: .normal)
-        view.setImage(UIImage(named: "icon_next")?.withTintColor(.black.withAlphaComponent(0.9)), for: .normal)
+        view.setImage(UIImage(named: "icon_next")?.withTintColor(.textColor), for: .normal)
         view.addTarget(self, action: #selector(nextBtnClicked), for: .touchUpInside)
         return view
     }()
@@ -43,6 +43,20 @@ class MonthlyView: BaseView {
         view.alignment = .center
         view.distribution = .equalSpacing
         return view
+    }()
+    
+    let todayBtn: UIButton = {
+        let btn = UIButton()
+        btn.setTitle("오늘", for: .normal)
+        btn.setImage(UIImage(named: "cherry"), for: .normal)
+        btn.translatesAutoresizingMaskIntoConstraints = false
+        btn.setTitleColor(.textColor, for: .normal)
+        btn.imageView?.contentMode = .scaleAspectFit
+        btn.titleLabel?.font = .boldSystemFont(ofSize: 14)
+        btn.contentHorizontalAlignment = .center
+        btn.semanticContentAttribute = .forceRightToLeft //<- 중요
+        btn.imageEdgeInsets = .init(top: 10, left: 15, bottom: 15, right: 15) //<- 중요
+        return btn
     }()
     
     let tableView: UITableView = {
@@ -63,7 +77,7 @@ class MonthlyView: BaseView {
     }
     
     override func configureUI() {
-        [calHeaderView, calendar, tableView].forEach { v in addSubview(v) }
+        [calHeaderView, todayBtn, calendar, tableView].forEach { v in addSubview(v) }
         self.backgroundColor = .bgColor // TODO: 달력 배경색 수정 필요
     }
     
@@ -82,9 +96,16 @@ class MonthlyView: BaseView {
         
         calHeaderView.snp.makeConstraints { make in
             make.topMargin.equalTo(12)
-            make.width.equalTo(170)
+            make.width.equalTo(180)
             make.height.equalTo(48)
-            make.leading.equalToSuperview().inset(4)
+            make.leading.equalToSuperview().inset(8)
+        }
+        
+        todayBtn.snp.makeConstraints { make in
+            make.width.equalTo(60)
+            make.height.equalTo(48)
+            make.trailing.equalToSuperview().inset(8)
+            make.centerY.equalTo(calHeaderView)
         }
         
         calendar.snp.makeConstraints { make in
