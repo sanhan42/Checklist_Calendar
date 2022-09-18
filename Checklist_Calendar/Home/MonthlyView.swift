@@ -189,6 +189,7 @@ class MonthlyView: BaseView {
 //        calendar.appearance.titleTodayColor //Today에 표시되는 특정 글자색
         calendar.appearance.todayColor = UIColor(named: "PinkColor") // Today에 표시되는 동그라미 색
        
+        calendar.appearance.selectionColor = UIColor(named: "SkyColor")
         
         // 캘린더 숫자와 subtitle간의 간격 조정
         calendar.appearance.subtitleOffset = CGPoint(x: 0, y: 4)
