@@ -12,8 +12,11 @@ class BaseViewController: UIViewController {
     lazy var datePicker: UIDatePicker = {
         let dp = UIDatePicker()
         dp.datePickerMode = .date
+        dp.preferredDatePickerStyle = .wheels
         
-        dp.locale = NSLocale(localeIdentifier: "ko_KO") as Locale // datePicker의 default 값이 영어이기 때문에 한글로 바꿔줘야한다.
+        dp.locale = NSLocale(localeIdentifier: "ko_KR") as Locale // datePicker의 default 값이 영어이기 때문에 한글로 바꿔줌.
+//        dp.locale = NSLocale.current
+        dp.timeZone = .autoupdatingCurrent
         // TODO: 글로벌 대응
         return dp
     }()
@@ -21,7 +24,6 @@ class BaseViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
     }
-    
     
     func configure() {
         view.backgroundColor = .bgColor
@@ -41,13 +43,19 @@ class BaseViewController: UIViewController {
         return dateFormatter.string(from: date)
     }
     
-    func setDatePickerPopup(okBtnHandler: ((UIAlertAction) -> Void)? = nil) {
+    func showDatePickerPopup(mode: UIDatePicker.Mode = .date, okBtnHandler: ((UIAlertAction) -> Void)? = nil) {
+        datePicker.datePickerMode = mode
+        print(datePicker.locale)
         let dateChooserAlert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         dateChooserAlert.view.addSubview(datePicker)
         let ok = UIAlertAction(title: "선택완료", style: .cancel, handler: okBtnHandler)
         ok.setValue(UIColor.black, forKey: "titleTextColor")
         dateChooserAlert.addAction(ok)
     
+        datePicker.snp.makeConstraints { make in
+            make.top.horizontalEdges.equalToSuperview()
+        }
+        
         dateChooserAlert.view.snp.makeConstraints { make in
             make.height.equalTo(300)
         }

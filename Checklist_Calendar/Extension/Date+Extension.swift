@@ -8,9 +8,9 @@
 import Foundation
 
 extension String {
-    func toDate() -> Date? {
+    func toDate(format: String) -> Date? {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy년 MM월"
+        dateFormatter.dateFormat = format
         dateFormatter.locale = Locale(identifier:"ko_KR")
         dateFormatter.timeZone = TimeZone(identifier: "KST")
         return dateFormatter.date(from: self)
@@ -18,9 +18,9 @@ extension String {
 }
 
 extension Date {
-    func toString() -> String {
+    func toString(format: String) -> String {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy년 MM월"
+        dateFormatter.dateFormat = format
         dateFormatter.locale = Locale(identifier:"ko_KR")
         dateFormatter.timeZone = TimeZone(identifier: "KST")
         return dateFormatter.string(from: self)

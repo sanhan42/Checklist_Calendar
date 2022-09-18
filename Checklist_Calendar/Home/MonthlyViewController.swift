@@ -34,7 +34,7 @@ class MonthlyViewController: BaseViewController {
         mainView.calendar.dataSource = self
         mainView.calendar.delegate = self
         
-        mainView.titleButton.addTarget(self, action: #selector(showDatePicker), for: .touchUpInside)
+        mainView.titleButton.addTarget(self, action: #selector(setDate), for: .touchUpInside)
         
         mainView.addGestureRecognizer(scopeGesture)
         mainView.tableView.panGestureRecognizer.require(toFail: scopeGesture)
@@ -47,9 +47,9 @@ class MonthlyViewController: BaseViewController {
     
     
     
-    @objc func showDatePicker() {
-        setDatePickerPopup { _ in
-            self.mainView.titleButton.setTitle(self.datePicker.date.toString(), for: .normal)
+    @objc func setDate() {
+        showDatePickerPopup { _ in
+            self.mainView.titleButton.setTitle(self.datePicker.date.toString(format: "yyyy년 MM월"), for: .normal)
             self.mainView.calendar.select(self.datePicker.date, scrollToDate: true)
         }
     }
@@ -75,7 +75,7 @@ extension MonthlyViewController: UIGestureRecognizerDelegate {
 
 extension MonthlyViewController: FSCalendarDataSource, FSCalendarDelegate {
     func calendarCurrentPageDidChange(_ calendar: FSCalendar) {
-        mainView.titleButton.setTitle(mainView.calendar.currentPage.toString(), for: .normal)
+        mainView.titleButton.setTitle(mainView.calendar.currentPage.toString(format: "yyyy년 MM월"), for: .normal)
     }
     
     func calendar(_ calendar: FSCalendar, boundingRectWillChange bounds: CGRect, animated: Bool) {

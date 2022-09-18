@@ -28,6 +28,7 @@ class WriteView: BaseView {
     override func configureUI() {
         addSubview(tableView)
         tableView.register(TitleTableViewCell.self, forCellReuseIdentifier: TitleTableViewCell.reuseIdentifier)
+        tableView.register(DateTableViewCell.self, forCellReuseIdentifier: DateTableViewCell.reuseIdentifier)
     }
     
     override func setConstraints() {

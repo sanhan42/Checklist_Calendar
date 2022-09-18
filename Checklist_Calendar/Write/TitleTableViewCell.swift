@@ -21,7 +21,7 @@ class TitleTableViewCell: BaseTableViewCell {
         let label = UILabel()
         label.text = "\(titleTextField.text?.count ?? 0)/25"
         label.font = .systemFont(ofSize: 13)
-        label.textColor = .textColor.withAlphaComponent(0.8)
+        label.textColor = .placeholderText
         label.textAlignment = .left
         return label
     }()
@@ -62,7 +62,7 @@ class TitleTableViewCell: BaseTableViewCell {
         }
         
         colorButton.snp.makeConstraints { make in
-            make.trailing.equalToSuperview().inset(20)
+            make.trailing.equalToSuperview().inset(25)
             make.centerY.equalToSuperview()
         }
     }

@@ -9,9 +9,9 @@ import UIKit
 
 extension UIColor {
     // 사용자 정의 색
-    class var bgColor: UIColor { return UIColor(named: "BgColor")!}
+    class var bgColor: UIColor { return UIColor(named: "BgColor-3")!}
     class var GrayColor: UIColor { return UIColor(named: "GrayColor-1")!}
-    class var tableBgColor: UIColor { return UIColor(named: "GrayColor-3")!}
+    class var tableBgColor: UIColor { return UIColor(named: "TableBgColor")!}
     class var textColor: UIColor { return UIColor.black.withAlphaComponent(0.9)}
 
     // UIColor <-> String (DB에 color를 저장하기 위해 String으로 바꿔줄 필요가 있음.) (비트연산 사용.)

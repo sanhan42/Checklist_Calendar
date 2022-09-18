@@ -22,7 +22,7 @@ class MonthlyView: BaseView {
     
     lazy var titleButton: UIButton = {
         let view = UIButton()
-        view.setTitle(self.calendar.currentPage.toString(), for: .normal)
+        view.setTitle(self.calendar.currentPage.toString(format: "yyyy년 MM월"), for: .normal)
         view.setTitleColor(.black.withAlphaComponent(0.9), for: .normal)
         return view
     }()
@@ -46,7 +46,7 @@ class MonthlyView: BaseView {
     
     let tableView: UITableView = {
         let view = UITableView(frame: .null, style: .grouped)
-        view.backgroundColor = .GrayColor // TODO: 임시 색상 => 수정 필요
+        view.backgroundColor = .tableBgColor//.GrayColor // TODO: 임시 색상 => 수정 필요
         view.separatorColor = .clear
         return view
     }()
@@ -88,7 +88,7 @@ class MonthlyView: BaseView {
             if UIDevice.current.model.hasPrefix("iPad") {
                 make.height.equalTo(400)
             } else {
-                make.height.equalTo(300)
+                make.height.equalTo(250)
             }
         }
         
@@ -129,10 +129,10 @@ class MonthlyView: BaseView {
         calendar.calendarWeekdayView.weekdayLabels[6].text = "토"
        
         // 월 ~ 일 요일 글자색 변경
-        calendar.appearance.weekdayTextColor = .black.withAlphaComponent(0.6)
+        calendar.appearance.weekdayTextColor = .black.withAlphaComponent(0.66)
         
         // 토,일 날짜 색상
-        calendar.appearance.titleWeekendColor = .systemRed.withAlphaComponent(0.8)
+        calendar.appearance.titleWeekendColor = .systemRed.withAlphaComponent(0.95)
         // 기본 날짜 색상
         calendar.appearance.titleDefaultColor = .black.withAlphaComponent(0.9)
         
@@ -158,12 +158,23 @@ class MonthlyView: BaseView {
         // 달에 유효하지않은 날짜 채우기 방식
         calendar.placeholderType = .fillHeadTail
         
+        // Today
+//        calendar.appearance.titleTodayColor //Today에 표시되는 특정 글자색
+        calendar.appearance.todayColor = UIColor(named: "PinkColor") // Today에 표시되는 동그라미 색
+       
+        
         // 캘린더 숫자와 subtitle간의 간격 조정
         calendar.appearance.subtitleOffset = CGPoint(x: 0, y: 4)
         
-        // 이벤트 컬러 마크
-        calendar.appearance.eventDefaultColor = .black
-        calendar.appearance.eventSelectionColor = .black
+        // 날짜 다중 선택
+        calendar.allowsMultipleSelection = true
+        
+        // 스와이프 선택 제스처
+        calendar.swipeToChooseGesture.isEnabled = true
+        
+//        // 이벤트 컬러 마크
+//        calendar.appearance.eventDefaultColor = .black
+//        calendar.appearance.eventSelectionColor = .black
     }
     
 }
