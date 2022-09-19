@@ -81,7 +81,8 @@ class MonthlyViewController: BaseViewController {
     }
     
     @objc func addNewEventBtnClicked() {
-        self.present(WriteViewController(), animated: true)
+        let navi = UINavigationController(rootViewController: WriteViewController())
+        self.present(navi, animated: true)
     }
 }
 

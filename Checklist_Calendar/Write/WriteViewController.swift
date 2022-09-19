@@ -22,6 +22,10 @@ class WriteViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configure()
+        title = "새로운 이벤트"
+        let naviItem = UIBarButtonItem(title: "취소", style: .plain, target: self, action: nil)
+        naviItem.tintColor = UIColor(named: "RedColor")
+        navigationController?.navigationBar.topItem?.leftBarButtonItem = naviItem
     }
     
     override func configure() {
@@ -42,7 +46,7 @@ extension WriteViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 8//CGFloat.leastNormalMagnitude
+        return CGFloat.leastNormalMagnitude
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

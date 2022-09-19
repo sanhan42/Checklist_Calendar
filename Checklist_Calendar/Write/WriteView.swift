@@ -16,6 +16,38 @@ class WriteView: BaseView {
         return view
     }()
     
+    let cancelBtn: UIButton = {
+        let btn = UIButton()
+        btn.setTitle("취소", for: .normal)
+        btn.setTitleColor(.black.withAlphaComponent(0.9), for: .normal)
+        btn.titleLabel?.font = .systemFont(ofSize: 20, weight: .bold)
+        btn.layer.cornerRadius = 4
+        btn.layer.borderWidth = 1
+        btn.layer.borderColor = UIColor.textColor.withAlphaComponent(0.9).cgColor
+        btn.backgroundColor = .bgColor.withAlphaComponent(0.5)
+        return btn
+    }()
+    
+    let okBtn: UIButton = {
+        let btn = UIButton()
+        btn.setTitle("확인", for: .normal)
+        btn.setTitleColor(.black.withAlphaComponent(0.9), for: .normal)
+        btn.titleLabel?.font = .systemFont(ofSize: 20, weight: .bold)
+        btn.layer.cornerRadius = 4
+        btn.layer.borderWidth = 1
+        btn.layer.borderColor = UIColor.textColor.withAlphaComponent(0.9).cgColor
+        btn.backgroundColor = .bgColor
+        return btn
+    }()
+    
+    lazy var btnStackView: UIStackView = {
+        let view = UIStackView(arrangedSubviews: [cancelBtn, okBtn])
+        view.axis = .horizontal
+        view.distribution = .fillEqually
+        view.spacing = 20
+        return view
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureUI()
@@ -28,7 +60,9 @@ class WriteView: BaseView {
     
     
     override func configureUI() {
+        backgroundColor = .tableBgColor
         addSubview(tableView)
+        addSubview(btnStackView)
         tableView.register(TitleTableViewCell.self, forCellReuseIdentifier: TitleTableViewCell.reuseIdentifier)
         tableView.register(DateTableViewCell.self, forCellReuseIdentifier: DateTableViewCell.reuseIdentifier)
         tableView.register(TodoTableViewCell.self, forCellReuseIdentifier:TodoTableViewCell.reuseIdentifier)
@@ -36,7 +70,13 @@ class WriteView: BaseView {
     
     override func setConstraints() {
         tableView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+            make.top.horizontalEdges.equalToSuperview()
+            make.bottom.equalTo(btnStackView.snp.top)
+        }
+        
+        btnStackView.snp.makeConstraints { make in
+            make.bottom.equalTo(self.safeAreaLayoutGuide)
+            make.horizontalEdges.equalToSuperview().inset(20)
         }
     }
 }
