@@ -93,7 +93,7 @@ extension WriteViewController: UITableViewDelegate, UITableViewDataSource {
             default: return tableView.frame.height - (navigationController?.navigationBar.frame.height ?? 0) - (isAllDay ? 90 : 130) - 70
             }
         } else {
-            return 25
+            return 32
         }
     }
     
@@ -133,6 +133,7 @@ extension WriteViewController: UITableViewDelegate, UITableViewDataSource {
             case 2:
                 guard let cell = tableView.dequeueReusableCell(withIdentifier: TodoTableViewCell.reuseIdentifier, for: indexPath) as? TodoTableViewCell else { return UITableViewCell()}
                 cell.selectionStyle = .none
+                cell.checkListTableView.sectionHeaderHeight = CGFloat.leastNormalMagnitude
                 
                 cell.checkListTableView.delegate = self
                 cell.checkListTableView.dataSource = self
@@ -149,6 +150,7 @@ extension WriteViewController: UITableViewDelegate, UITableViewDataSource {
                 let img = event.todos[indexPath.row].isDone ? UIImage(systemName: "checkmark.square") : UIImage(systemName: "square")
                 cell.checkButton.setImage(img, for: .normal)
             } else {
+                cell.textField.delegate = self
                 cell.textField.tag = -1
             }
             return cell
@@ -191,7 +193,12 @@ extension WriteViewController {
 extension WriteViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if textField.tag == -1 { // 새로운 TODO 입력란
-            
+            let todo = Todo(title: textField.text ?? "")
+            event.todos.append(todo)
+            guard let todoTablecell = mainView.tableView.cellForRow(at: [0, 2]) as? TodoTableViewCell else { return false }
+            todoTablecell.checkListTableView.reloadData()
+//            becomeFirstResponder()
+            dump(event.todos)
         } else {
             textField.endEditing(true)
         }
