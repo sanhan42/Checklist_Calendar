@@ -68,8 +68,8 @@ class MonthlyViewController: BaseViewController {
         self.navigationController?.toolbar.backgroundColor = .bgColor
         
         let btn = UIButton()
-        btn.setTitle("새로운 일정 추가", for: .normal)
-        btn.setTitleColor(.black.withAlphaComponent(0.9), for: .normal)
+        btn.setTitle("새로운 이벤트 추가", for: .normal)
+        btn.setTitleColor(.black.withAlphaComponent(0.75), for: .normal)
         btn.titleLabel?.font = .systemFont(ofSize: 20, weight: .bold)
         btn.layer.cornerRadius = 4
 //        btn.layer.borderWidth = 1

@@ -75,7 +75,7 @@ class WriteView: BaseView {
         }
         
         btnStackView.snp.makeConstraints { make in
-            make.bottom.equalTo(self.safeAreaLayoutGuide)
+            make.bottom.equalTo(self.safeAreaLayoutGuide).inset(12)
             make.horizontalEdges.equalToSuperview().inset(20)
         }
     }

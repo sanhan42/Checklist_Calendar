@@ -23,8 +23,9 @@ class DateTableViewCell: BaseTableViewCell {
     }()
     
     let allDaySwitch: UISwitch = {
-        let btn = UISwitch(frame: CGRect(x: 0, y: 0, width: 300, height: 150))
-        btn.onTintColor = UIColor(named: "PinkColor")
+        let btn = UISwitch(frame: CGRect(x: 0, y: 0, width: 250, height: 28))
+        btn.transform = CGAffineTransform(scaleX: 0.75, y: 0.8)
+        btn.onTintColor = .cherryColor.withAlphaComponent(0.8)
         return btn
     }()
     
@@ -36,7 +37,7 @@ class DateTableViewCell: BaseTableViewCell {
     
     let startDateBtn: UIButton = {
         let btn = UIButton()
-        btn.setTitle("22/09/17(토)", for: .normal) // TODO: 임시값
+        btn.setTitle("22/09/17 (토)", for: .normal) // TODO: 임시값
         btn.setTitleColor(UIColor.textColor, for: .normal)
         btn.titleLabel?.font = .systemFont(ofSize: 17, weight: .bold)
         return btn
@@ -44,7 +45,7 @@ class DateTableViewCell: BaseTableViewCell {
     
     let endDateBtn: UIButton = {
         let btn = UIButton()
-        btn.setTitle("22/09/17(토)", for: .normal) // TODO: 임시값
+        btn.setTitle("22/09/17 (토)", for: .normal) // TODO: 임시값
         btn.setTitleColor(UIColor.textColor, for: .normal)
         btn.titleLabel?.font = .systemFont(ofSize: 17, weight: .bold)
         return btn
@@ -109,26 +110,26 @@ class DateTableViewCell: BaseTableViewCell {
         let height = 36
         
         titleView.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(8)
+            make.top.equalToSuperview().inset(16)
             make.horizontalEdges.equalToSuperview()
-            make.height.equalTo(height)
+            make.height.equalTo(height - 16)
         }
         
         clockImageView.snp.makeConstraints { make in
-            make.width.height.equalTo(30)
-            make.centerY.equalToSuperview()
+            make.width.height.equalTo(28)
+            make.bottom.equalToSuperview().inset(-4)
             make.leading.equalToSuperview().inset(20)
         }
         
         allDayLabel.snp.makeConstraints { make in
-            make.height.equalTo(height)
+            make.height.equalToSuperview()
             make.width.equalTo(100)
             make.top.equalToSuperview()
-            make.leading.equalTo(clockImageView.snp.trailing).offset(20)
+            make.leading.equalTo(clockImageView.snp.trailing).offset(12)
         }
         
         allDaySwitch.snp.makeConstraints { make in
-            make.top.equalToSuperview()
+            make.centerY.equalToSuperview()
             make.trailing.equalToSuperview().inset(20)
         }
         
@@ -141,7 +142,7 @@ class DateTableViewCell: BaseTableViewCell {
         timeView.snp.makeConstraints { make in
             make.horizontalEdges.equalToSuperview().inset(10)
             make.top.equalTo(dateView.snp.bottom)
-            make.height.equalTo(28)
+            make.height.equalTo(30)
 //            make.width.equalToSuperview().inset(40)
         }
         
@@ -155,9 +156,9 @@ class DateTableViewCell: BaseTableViewCell {
         
         [startTimeBtn, endTimeBtn].forEach({ item in
             item.snp.makeConstraints { make in
-                make.top.equalToSuperview()
+                make.top.equalToSuperview().inset(-6)
                 make.width.equalTo(120)
-                make.height.equalTo(28)
+                make.height.equalTo(30)
             }
         })
         

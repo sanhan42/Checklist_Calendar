@@ -15,16 +15,28 @@ class WriteViewController: BaseViewController {
             mainView.tableView.reloadRows(at:[[0,1]], with: .automatic)
         }
     }
-    var endDate = Date()
-    var startTime: Date?
-    var endTime: Date?
+    var endDate = Date() {
+        didSet {
+            mainView.tableView.reloadRows(at:[[0,1]], with: .automatic)
+        }
+    }
+    var startTime = Date() {
+        didSet {
+            mainView.tableView.reloadRows(at:[[0,1]], with: .automatic)
+        }
+    }
+    var endTime = Date() {
+        didSet {
+            mainView.tableView.reloadRows(at:[[0,1]], with: .automatic)
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         configure()
         title = "새로운 이벤트"
         let naviItem = UIBarButtonItem(title: "취소", style: .plain, target: self, action: nil)
-        naviItem.tintColor = UIColor(named: "RedColor")
+        naviItem.tintColor = .cherryColor
         navigationController?.navigationBar.topItem?.leftBarButtonItem = naviItem
     }
     
@@ -77,7 +89,10 @@ extension WriteViewController: UITableViewDelegate, UITableViewDataSource {
             cell.endDateBtn.addTarget(self, action: #selector(setEndDate), for: .touchUpInside)
             cell.startTimeBtn.addTarget(self, action: #selector(setStartTime), for: .touchUpInside)
             cell.endTimeBtn.addTarget(self, action: #selector(setEndTime), for: .touchUpInside)
-            cell.startDateBtn.setTitle(startDate.toString(format: "yy/MM/dd(E)"), for: .normal)
+            cell.startDateBtn.setTitle(startDate.toString(format: "yy/MM/dd (E)"), for: .normal)
+            cell.endDateBtn.setTitle(endDate.toString(format: "yy/MM/dd (E)"), for: .normal)
+            cell.startTimeBtn.setTitle(startTime.toString(format: "a hh:mm"), for: .normal)
+            cell.endTimeBtn.setTitle(endTime.toString(format: "a hh:mm"), for: .normal)
             return cell
         case 2:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: TodoTableViewCell.reuseIdentifier, for: indexPath) as? TodoTableViewCell else { return UITableViewCell()}
