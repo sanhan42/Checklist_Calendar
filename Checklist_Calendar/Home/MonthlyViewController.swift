@@ -13,7 +13,6 @@ class MonthlyViewController: BaseViewController {
     let mainView = MonthlyView()
     lazy var lunarDate = calLunarDate()
     
-    private var selectIndexPath: IndexPath?
     private var collectionViewLayout: UICollectionViewFlowLayout?
     
     fileprivate lazy var scopeGesture: UIPanGestureRecognizer = {

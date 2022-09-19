@@ -11,6 +11,8 @@ class TodoTableViewCell: BaseTableViewCell {
     let checkListTableView: UITableView = {
         let view = UITableView()
         view.backgroundColor = .bgColor
+        view.separatorStyle = .none
+        view.tag = 1
         return view
     }()
     
@@ -26,6 +28,7 @@ class TodoTableViewCell: BaseTableViewCell {
     
     override func configure() {
         contentView.addSubview(checkListTableView)
+        checkListTableView.register(CheckListTableViewCell.self, forCellReuseIdentifier: CheckListTableViewCell.reuseIdentifier)
     }
     
     override func setConstraints() {

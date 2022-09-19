@@ -10,6 +10,9 @@ import UIKit
 class WriteViewController: BaseViewController {
     let mainView = WriteView()
     var isAllDay = false
+    var event = Event(title: "", color: "", startDate: Date(), starTime: nil, endDate: Date(), endTime: nil, isAllDay: false)
+    var newTodo = ""
+    
     lazy var startDate = datePicker.date {
         didSet {
             mainView.tableView.reloadRows(at:[[0,1]], with: .automatic)
@@ -73,46 +76,82 @@ extension WriteViewController: UITableViewDelegate, UITableViewDataSource {
         return CGFloat.leastNormalMagnitude
     }
     
+    func numberOfSections(in tableView: UITableView) -> Int {
+        if tableView.tag != 0 && !event.todos.isEmpty {
+            return 2
+        } else {
+            return 1
+        }
+    }
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        switch indexPath.row {
-        case 0: return 50
-        case 1:
-            return isAllDay ? 90 : 130 // TODO: 수정 필요!
-        default: return tableView.frame.height - (navigationController?.navigationBar.frame.height ?? 0) - (isAllDay ? 90 : 130) - 70
+        if tableView.tag == 0 {
+            switch indexPath.row {
+            case 0: return 50
+            case 1:
+                return isAllDay ? 90 : 130 // TODO: 수정 필요!
+            default: return tableView.frame.height - (navigationController?.navigationBar.frame.height ?? 0) - (isAllDay ? 90 : 130) - 70
+            }
+        } else {
+            return 25
         }
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return tableView.tag == 0 ? 3 : 2 // TODO: 여기서 2는 추후 todo 개수로 바꿔줘야 함.
+        if tableView.tag == 0 {
+            return 3
+        } else{
+            switch section {
+            case 0: return event.todos.count == 0 ? 1 : event.todos.count
+            default : return 1
+            }
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        switch indexPath.row {
-        case 0:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: TitleTableViewCell.reuseIdentifier, for: indexPath) as? TitleTableViewCell else { return UITableViewCell()}
+        if tableView.tag == 0 {
+            switch indexPath.row {
+            case 0:
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: TitleTableViewCell.reuseIdentifier, for: indexPath) as? TitleTableViewCell else { return UITableViewCell()}
+                cell.selectionStyle = .none
+                return cell
+            case 1:
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: DateTableViewCell.reuseIdentifier, for: indexPath) as? DateTableViewCell else { return UITableViewCell()}
+                cell.selectionStyle = .none
+                cell.timeView.isHidden = isAllDay // cell.allDaySwitch.isOn // TODO: Realm Data 반영하기
+                cell.allDaySwitch.setOn(isAllDay, animated: false)
+                cell.allDaySwitch.addTarget(self, action: #selector(onClickSwitch(_:)), for: .valueChanged)
+                cell.startDateBtn.addTarget(self, action: #selector(setStartDate), for: .touchUpInside)
+                cell.endDateBtn.addTarget(self, action: #selector(setEndDate), for: .touchUpInside)
+                cell.startTimeBtn.addTarget(self, action: #selector(setStartTime), for: .touchUpInside)
+                cell.endTimeBtn.addTarget(self, action: #selector(setEndTime), for: .touchUpInside)
+                cell.startDateBtn.setTitle(startDate.toString(format: "yy/MM/dd (E)"), for: .normal)
+                cell.endDateBtn.setTitle(endDate.toString(format: "yy/MM/dd (E)"), for: .normal)
+                cell.startTimeBtn.setTitle(startTime.toString(format: "a hh:mm"), for: .normal)
+                cell.endTimeBtn.setTitle(endTime.toString(format: "a hh:mm"), for: .normal)
+                return cell
+            case 2:
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: TodoTableViewCell.reuseIdentifier, for: indexPath) as? TodoTableViewCell else { return UITableViewCell()}
+                cell.selectionStyle = .none
+                
+                cell.checkListTableView.delegate = self
+                cell.checkListTableView.dataSource = self
+                
+                return cell
+            default:
+                return UITableViewCell()
+            }
+        } else {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: CheckListTableViewCell.reuseIdentifier, for: indexPath) as? CheckListTableViewCell else { return UITableViewCell()}
             cell.selectionStyle = .none
+            if indexPath.section == 0 && !event.todos.isEmpty {
+                cell.textField.text = event.todos[indexPath.row].title
+                let img = event.todos[indexPath.row].isDone ? UIImage(systemName: "checkmark.square") : UIImage(systemName: "square")
+                cell.checkButton.setImage(img, for: .normal)
+            } else {
+                cell.textField.tag = -1
+            }
             return cell
-        case 1:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: DateTableViewCell.reuseIdentifier, for: indexPath) as? DateTableViewCell else { return UITableViewCell()}
-            cell.selectionStyle = .none
-            cell.timeView.isHidden = isAllDay // cell.allDaySwitch.isOn // TODO: Realm Data 반영하기
-            cell.allDaySwitch.setOn(isAllDay, animated: false)
-            cell.allDaySwitch.addTarget(self, action: #selector(onClickSwitch(_:)), for: .valueChanged)
-            cell.startDateBtn.addTarget(self, action: #selector(setStartDate), for: .touchUpInside)
-            cell.endDateBtn.addTarget(self, action: #selector(setEndDate), for: .touchUpInside)
-            cell.startTimeBtn.addTarget(self, action: #selector(setStartTime), for: .touchUpInside)
-            cell.endTimeBtn.addTarget(self, action: #selector(setEndTime), for: .touchUpInside)
-            cell.startDateBtn.setTitle(startDate.toString(format: "yy/MM/dd (E)"), for: .normal)
-            cell.endDateBtn.setTitle(endDate.toString(format: "yy/MM/dd (E)"), for: .normal)
-            cell.startTimeBtn.setTitle(startTime.toString(format: "a hh:mm"), for: .normal)
-            cell.endTimeBtn.setTitle(endTime.toString(format: "a hh:mm"), for: .normal)
-            return cell
-        case 2:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: TodoTableViewCell.reuseIdentifier, for: indexPath) as? TodoTableViewCell else { return UITableViewCell()}
-            cell.selectionStyle = .none
-            return cell
-        default:
-            return UITableViewCell()
         }
     }
 }
@@ -146,5 +185,16 @@ extension WriteViewController {
         showDatePickerPopup(mode: .time) { _ in
             self.endTime = self.datePicker.date
         }
+    }
+}
+
+extension WriteViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if textField.tag == -1 { // 새로운 TODO 입력란
+            
+        } else {
+            textField.endEditing(true)
+        }
+        return true
     }
 }
