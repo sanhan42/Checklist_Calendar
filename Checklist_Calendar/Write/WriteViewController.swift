@@ -34,14 +34,7 @@ class WriteViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configure()
-        title = "새로운 이벤트"
-        let cancleItem = UIBarButtonItem(title: "취소", style: .plain, target: self, action: nil)
-        cancleItem.tintColor = .cherryColor
-        let okItem = UIBarButtonItem(title: "확인", style: .done, target: self, action: nil)
-        okItem.tintColor = .cherryColor.withAlphaComponent(0.9)
-        
-        navigationController?.navigationBar.topItem?.leftBarButtonItem = cancleItem
-        navigationController?.navigationBar.topItem?.rightBarButtonItem = okItem
+        setNavigationBar()
     }
     
     override func configure() {
@@ -49,6 +42,21 @@ class WriteViewController: BaseViewController {
         view = mainView
         mainView.tableView.delegate = self
         mainView.tableView.dataSource = self
+    }
+    
+    @objc func cancleItemClicked() {
+        dismiss(animated: true)
+    }
+    
+    private func setNavigationBar() {
+        title = "새로운 이벤트"
+        let cancleItem = UIBarButtonItem(title: "취소", style: .plain, target: self, action: #selector(cancleItemClicked))
+        cancleItem.tintColor = .cherryColor
+        let okItem = UIBarButtonItem(title: "확인", style: .done, target: self, action: nil)
+        okItem.tintColor = .cherryColor.withAlphaComponent(0.9)
+        
+        navigationController?.navigationBar.topItem?.leftBarButtonItem = cancleItem
+        navigationController?.navigationBar.topItem?.rightBarButtonItem = okItem
     }
     
 }
@@ -87,7 +95,8 @@ extension WriteViewController: UITableViewDelegate, UITableViewDataSource {
         case 1:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: DateTableViewCell.reuseIdentifier, for: indexPath) as? DateTableViewCell else { return UITableViewCell()}
             cell.selectionStyle = .none
-            cell.timeView.isHidden = cell.allDaySwitch.isOn // TODO: Realm Data 반영하기
+            cell.timeView.isHidden = isAllDay // cell.allDaySwitch.isOn // TODO: Realm Data 반영하기
+            cell.allDaySwitch.setOn(isAllDay, animated: false)
             cell.allDaySwitch.addTarget(self, action: #selector(onClickSwitch(_:)), for: .valueChanged)
             cell.startDateBtn.addTarget(self, action: #selector(setStartDate), for: .touchUpInside)
             cell.endDateBtn.addTarget(self, action: #selector(setEndDate), for: .touchUpInside)
@@ -111,9 +120,7 @@ extension WriteViewController: UITableViewDelegate, UITableViewDataSource {
 extension WriteViewController {
     @objc func onClickSwitch(_ sender: UISwitch) {
         isAllDay = sender.isOn
-//        mainView.tableView.reloadRows(at:[[0,1]], with: .automatic)
-        mainView.tableView.reloadData()
-//        sender.setOn(sender.isOn, animated: true)
+        mainView.tableView.reloadRows(at:[[0,1]], with: .automatic)
     }
     
     @objc func setStartDate() {
