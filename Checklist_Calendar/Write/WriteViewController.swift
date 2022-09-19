@@ -35,9 +35,13 @@ class WriteViewController: BaseViewController {
         super.viewDidLoad()
         configure()
         title = "새로운 이벤트"
-        let naviItem = UIBarButtonItem(title: "취소", style: .plain, target: self, action: nil)
-        naviItem.tintColor = .cherryColor
-        navigationController?.navigationBar.topItem?.leftBarButtonItem = naviItem
+        let cancleItem = UIBarButtonItem(title: "취소", style: .plain, target: self, action: nil)
+        cancleItem.tintColor = .cherryColor
+        let okItem = UIBarButtonItem(title: "확인", style: .done, target: self, action: nil)
+        okItem.tintColor = .cherryColor.withAlphaComponent(0.9)
+        
+        navigationController?.navigationBar.topItem?.leftBarButtonItem = cancleItem
+        navigationController?.navigationBar.topItem?.rightBarButtonItem = okItem
     }
     
     override func configure() {
