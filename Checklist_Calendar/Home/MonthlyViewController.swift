@@ -89,7 +89,9 @@ class MonthlyViewController: BaseViewController {
     }
     
     @objc func addNewEventBtnClicked() {
-        let navi = UINavigationController(rootViewController: WriteViewController())
+        let vc = WriteViewController()
+        vc.datePicker.date = mainView.calendar.selectedDate ?? Date()
+        let navi = UINavigationController(rootViewController: vc)
         self.present(navi, animated: true)
     }
 }

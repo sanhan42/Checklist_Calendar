@@ -10,12 +10,12 @@ import UIKit
 class WriteViewController: BaseViewController {
     let mainView = WriteView()
     var isAllDay = false
-    var startDate = Date() {
+    lazy var startDate = datePicker.date {
         didSet {
             mainView.tableView.reloadRows(at:[[0,1]], with: .automatic)
         }
     }
-    var endDate = Date() {
+    lazy var endDate = datePicker.date {
         didSet {
             mainView.tableView.reloadRows(at:[[0,1]], with: .automatic)
         }
