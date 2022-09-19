@@ -9,7 +9,7 @@ import UIKit
 
 class TodoTableViewCell: BaseTableViewCell {
     let checkListTableView: UITableView = {
-        let view = UITableView()
+        let view = UITableView(frame: .null, style: .grouped)
         view.backgroundColor = .bgColor
         view.separatorStyle = .none
         view.tag = 1

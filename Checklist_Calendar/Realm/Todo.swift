@@ -9,12 +9,12 @@ import Foundation
 import RealmSwift
 
 class Todo: Object {
-    @Persisted var title: String
+    @Persisted var title: String?
     @Persisted var isDone: Bool
     @Persisted(primaryKey: true) var id: ObjectId
     let forEvent = LinkingObjects(fromType: Event.self, property: "todos")
    
-    convenience init(title: String) {
+    convenience init(title: String?) {
         self.init()
         self.title = title
         self.isDone = false

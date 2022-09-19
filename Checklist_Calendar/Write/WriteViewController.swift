@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SwiftUI
 
 class WriteViewController: BaseViewController {
     let mainView = WriteView()
@@ -33,6 +34,9 @@ class WriteViewController: BaseViewController {
             mainView.tableView.reloadRows(at:[[0,1]], with: .automatic)
         }
     }
+    
+    var todoTableViewCell: TodoTableViewCell?
+    //            guard let cell = todoTableViewCell?.checkListTableView.cellForRow(at: [0, textField.tag]) as? CheckListTableViewCell else { return false }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -67,9 +71,10 @@ class WriteViewController: BaseViewController {
 extension WriteViewController: UITableViewDelegate, UITableViewDataSource {
    
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = UIView()
-        headerView.backgroundColor = .clear
-        return headerView
+//        let headerView = UIView()
+//        headerView.backgroundColor = .clear
+//        return headerView
+        return nil
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -93,7 +98,7 @@ extension WriteViewController: UITableViewDelegate, UITableViewDataSource {
             default: return tableView.frame.height - (navigationController?.navigationBar.frame.height ?? 0) - (isAllDay ? 90 : 130) - 70
             }
         } else {
-            return 32
+            return 38
         }
     }
     
@@ -133,11 +138,9 @@ extension WriteViewController: UITableViewDelegate, UITableViewDataSource {
             case 2:
                 guard let cell = tableView.dequeueReusableCell(withIdentifier: TodoTableViewCell.reuseIdentifier, for: indexPath) as? TodoTableViewCell else { return UITableViewCell()}
                 cell.selectionStyle = .none
-                cell.checkListTableView.sectionHeaderHeight = CGFloat.leastNormalMagnitude
-                
                 cell.checkListTableView.delegate = self
                 cell.checkListTableView.dataSource = self
-                
+                todoTableViewCell = cell
                 return cell
             default:
                 return UITableViewCell()
@@ -145,17 +148,29 @@ extension WriteViewController: UITableViewDelegate, UITableViewDataSource {
         } else {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: CheckListTableViewCell.reuseIdentifier, for: indexPath) as? CheckListTableViewCell else { return UITableViewCell()}
             cell.selectionStyle = .none
+            cell.contentView.layer.borderColor = UIColor.clear.cgColor
             if indexPath.section == 0 && !event.todos.isEmpty {
+                cell.textField.tag = indexPath.row
+                cell.checkButton.tag = indexPath.row
                 cell.textField.text = event.todos[indexPath.row].title
                 let img = event.todos[indexPath.row].isDone ? UIImage(systemName: "checkmark.square") : UIImage(systemName: "square")
                 cell.checkButton.setImage(img, for: .normal)
             } else {
                 cell.textField.delegate = self
                 cell.textField.tag = -1
+                cell.contentView.layer.borderWidth = 0.3
+                cell.contentView.layer.borderColor = UIColor.placeholderText.cgColor
             }
             return cell
         }
     }
+
+//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+//        if tableView.tag == 1 && !event.todos.isEmpty {
+//            guard let cell = tableView.cellForRow(at: [0, indexPath.row]) as? CheckListTableViewCell else { return }
+//            cell.textField.tag = indexPath.row
+//        }
+//    }
 }
 
 extension WriteViewController {
@@ -192,15 +207,16 @@ extension WriteViewController {
 
 extension WriteViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+//        guard let todoTablecell = mainView.tableView.cellForRow(at: [0, 2]) as? TodoTableViewCell else { return false }
         if textField.tag == -1 { // 새로운 TODO 입력란
-            let todo = Todo(title: textField.text ?? "")
+            let todo = Todo(title: textField.text)
             event.todos.append(todo)
-            guard let todoTablecell = mainView.tableView.cellForRow(at: [0, 2]) as? TodoTableViewCell else { return false }
-            todoTablecell.checkListTableView.reloadData()
-//            becomeFirstResponder()
-            dump(event.todos)
-        } else {
-            textField.endEditing(true)
+            todoTableViewCell?.checkListTableView.reloadData()
+            return true
+        }
+        
+        if 0..<event.todos.count ~= textField.tag {
+            event.todos[textField.tag].title = textField.text
         }
         return true
     }
