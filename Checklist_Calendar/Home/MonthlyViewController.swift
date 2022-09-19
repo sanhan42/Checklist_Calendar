@@ -46,7 +46,8 @@ class MonthlyViewController: BaseViewController {
         mainView.calendar.dataSource = self
         mainView.calendar.delegate = self
         
-        mainView.titleButton.addTarget(self, action: #selector(setDate), for: .touchUpInside)
+        mainView.titleButton.addTarget(self, action: #selector(setTitleDate), for: .touchUpInside)
+        mainView.todayBtn.addTarget(self, action: #selector(moveToToday), for: .touchUpInside)
         
         mainView.addGestureRecognizer(scopeGesture)
         mainView.tableView.panGestureRecognizer.require(toFail: scopeGesture)
@@ -56,12 +57,19 @@ class MonthlyViewController: BaseViewController {
         mainView.tableView.register(MonthlyTableViewCell.self, forCellReuseIdentifier: MonthlyTableViewCell.reuseIdentifier)
     }
     
-    @objc func setDate() {
+    @objc func setTitleDate() {
+        datePicker.date = mainView.calendar.selectedDate ?? Date()
         showDatePickerPopup { _ in
             self.mainView.titleButton.setTitle(self.datePicker.date.toString(format: "yyyy년 MM월"), for: .normal)
             self.mainView.calendar.select(self.datePicker.date, scrollToDate: true)
         }
     }
+    
+    @objc func moveToToday() {
+        mainView.calendar.select(Date())
+        mainView.tableView.reloadData()
+    }
+    
     
     func setToolbar() {
         self.navigationController?.isToolbarHidden = false
