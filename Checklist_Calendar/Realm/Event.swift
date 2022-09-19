@@ -11,15 +11,15 @@ import RealmSwift
 class Event: Object {
     @Persisted var title: String
     @Persisted var color: String
-    @Persisted var startDate = Date()
-    @Persisted var startTime: Date?
-    @Persisted var endDate = Date()
-    @Persisted var endTime: Date?
+    @Persisted var startDate: String
+    @Persisted var startTime: String?
+    @Persisted var endDate: String
+    @Persisted var endTime: String?
     @Persisted var isAllDay: Bool
     @Persisted(primaryKey: true) var id: ObjectId
     let todos = List<Todo>()
     
-    convenience init(title: String, color: String, startDate: Date, starTime: Date?, endDate: Date, endTime: Date?, isAllDay: Bool) {
+    convenience init(title: String, color: String, startDate: String, starTime: String?, endDate: String, endTime: String?, isAllDay: Bool) {
         self.init()
         self.title = title
         self.color = color
