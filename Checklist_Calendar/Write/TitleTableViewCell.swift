@@ -12,7 +12,7 @@ class TitleTableViewCell: BaseTableViewCell {
         let tf = UITextField()
         tf.textColor = .textColor
         tf.placeholder = "제목"
-        tf.font = .systemFont(ofSize: 20, weight: .black)
+        tf.font = .systemFont(ofSize: 18.5, weight: .black)
         tf.textAlignment = .left
         return tf
     }()
@@ -28,7 +28,7 @@ class TitleTableViewCell: BaseTableViewCell {
     
     let colorButton: UIColorWell = {
         let btn = UIColorWell(frame: CGRect(x: 100, y: 100, width: 100, height: 100))
-        btn.selectedColor = .systemPink // TODO: 기본색 설정 때 수정 필요
+        btn.selectedColor = .cherryColor.withAlphaComponent(0.8) // TODO: 기본색 설정 때 수정 필요
         return btn
     }()
     

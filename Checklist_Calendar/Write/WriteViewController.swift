@@ -78,7 +78,7 @@ extension WriteViewController: UITableViewDelegate, UITableViewDataSource {
         case 0: return 50
         case 1:
             return isAllDay ? 90 : 130 // TODO: 수정 필요!
-        default: return 50
+        default: return tableView.frame.height - (navigationController?.navigationBar.frame.height ?? 0) - (isAllDay ? 90 : 130) - 70
         }
     }
     
@@ -136,6 +136,7 @@ extension WriteViewController {
     }
     
     @objc func setStartTime() {
+        datePicker.minimumDate = nil
         showDatePickerPopup(mode: .time) { _ in
             self.startTime = self.datePicker.date
         }
