@@ -11,14 +11,7 @@ import FSCalendar
 class MonthlyViewController: BaseViewController {
     
     let mainView = MonthlyView()
-    lazy var lunarDate: String = {
-        let chineseCalendar = Calendar(identifier: .chinese)
-        let formatter = DateFormatter()
-        formatter.dateFormat = "음력 MM월 dd일"
-        formatter.calendar = chineseCalendar
-        let date = mainView.calendar.selectedDate ?? Date()
-        return formatter.string(from: date)
-    }()
+    lazy var lunarDate = calLunarDate()
     
     private var selectIndexPath: IndexPath?
     private var collectionViewLayout: UICollectionViewFlowLayout?
@@ -31,6 +24,15 @@ class MonthlyViewController: BaseViewController {
         panGesture.maximumNumberOfTouches = 2
         return panGesture
     }()
+    
+    func calLunarDate() -> String {
+        let chineseCalendar = Calendar(identifier: .chinese)
+        let formatter = DateFormatter()
+        formatter.dateFormat = "음력 MM월 dd일"
+        formatter.calendar = chineseCalendar
+        let date = mainView.calendar.selectedDate ?? Date()
+        return formatter.string(from: date)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -62,12 +64,13 @@ class MonthlyViewController: BaseViewController {
         showDatePickerPopup { _ in
             self.mainView.titleButton.setTitle(self.datePicker.date.toString(format: "yyyy년 MM월"), for: .normal)
             self.mainView.calendar.select(self.datePicker.date, scrollToDate: true)
+            self.calendar(self.mainView.calendar, didSelect: self.datePicker.date, at: .current)
         }
     }
     
     @objc func moveToToday() {
         mainView.calendar.select(Date())
-        mainView.tableView.reloadData()
+        calendar(mainView.calendar, didSelect: Date(), at: .current)
     }
     
     
@@ -131,6 +134,11 @@ extension MonthlyViewController: FSCalendarDataSource, FSCalendarDelegate {
             self.view.layoutIfNeeded()
             // TODO: layoutIfNeeded 메서드 검색
         }
+    }
+    
+    func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
+        lunarDate = calLunarDate()
+        mainView.tableView.reloadData()
     }
     
     //    func calendar(_ calendar: FSCalendar, numberOfEventsFor date: Date) -> Int {
