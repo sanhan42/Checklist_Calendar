@@ -12,11 +12,17 @@ import RealmSwift
 class WriteViewController: BaseViewController {
     let mainView = WriteView()
     let repository = EventRepository()
-    lazy var writeDate: Date = {
-        return calStartDate(date: Date())
-    }()
-    
-    lazy var event = Event(title: "", color: UIColor.cherryColor.toHexString(), startDate: writeDate, endDate: calEndDate(date: writeDate))
+    var hasChanges = false { // View의 변화를 감지하기 위한 변수
+        didSet {
+            self.navigationController?.isModalInPresentation = self.hasChanges // 모달 방식으로 dissmiss 못하게 막아줌.
+        }
+    }
+    lazy var writeDate = Date()
+    lazy var event = Event(title: "", color: UIColor.cherryColor.toHexString(), date: calMidnight(date: writeDate), startTime: writeDate, endTime: Calendar.current.date(byAdding: .hour, value: 1, to: writeDate) ?? writeDate) {
+        didSet {
+            hasChanges = true
+        }
+    }
     
     var todoTableViewCell: TodoTableViewCell?
     
@@ -32,17 +38,19 @@ class WriteViewController: BaseViewController {
         view = mainView
         mainView.tableView.delegate = self
         mainView.tableView.dataSource = self
+        
+        navigationController?.presentationController?.delegate = self
     }
     
     private func setNavigationBar() {
         title = "새로운 이벤트"
         let cancleItem = UIBarButtonItem(title: "취소", style: .plain, target: self, action: #selector(cancleItemClicked))
         cancleItem.tintColor = .cherryColor
-        let okItem = UIBarButtonItem(title: "확인", style: .done, target: self, action: #selector(okButtonClicked))
-        okItem.tintColor = .cherryColor.withAlphaComponent(0.9)
+        let saveItem = UIBarButtonItem(title: "저장", style: .done, target: self, action: #selector(okButtonClicked))
+        saveItem.tintColor = .cherryColor.withAlphaComponent(0.9)
         
         navigationController?.navigationBar.topItem?.leftBarButtonItem = cancleItem
-        navigationController?.navigationBar.topItem?.rightBarButtonItem = okItem
+        navigationController?.navigationBar.topItem?.rightBarButtonItem = saveItem
     }
     
 }
@@ -153,18 +161,24 @@ extension WriteViewController: UITableViewDelegate, UITableViewDataSource {
             return cell
         }
     }
-
-//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        if tableView.tag == 1 && !event.todos.isEmpty {
-//            guard let cell = tableView.cellForRow(at: [0, indexPath.row]) as? CheckListTableViewCell else { return }
-//            cell.textField.tag = indexPath.row
-//        }
-//    }
 }
 
 extension WriteViewController {
+    func calMidnight(date: Date) -> Date {
+        guard let calDate = Calendar.current.date(bySettingHour: 0, minute: 0, second: 0, of: date) else {
+            return Date().toString(format: DateForm.date.str()).toDate(format: DateForm.date.str())!
+        }
+        return calDate
+    }
+    
+    func calNextMidnight(date: Date) -> Date {
+        let today = calMidnight(date: date)
+        return Calendar.current.date(byAdding: .day, value: 1, to: today)!
+    }
+    
     @objc func cancleItemClicked() {
-        dismiss(animated: true)
+        let controller = navigationController?.presentationController ?? UIPresentationController(presentedViewController: self, presenting: nil)
+        presentationControllerDidAttemptToDismiss(controller)
     }
     
     @objc func okButtonClicked() {
@@ -173,7 +187,16 @@ extension WriteViewController {
         if event.title == "" {
             print("제목을 입력해주세요")
             return
+        } else if event.startTime > event.endTime {
+            print("이벤트의 시작이 종료보다 늦을 수 없습니다")
+            return
         }
+        
+        if event.isAllDay {
+            event.startTime = calMidnight(date: event.startTime)
+            event.endTime = calNextMidnight(date: event.endDate)
+        }
+        
         repository.addItem(item: event)
         dismiss(animated: true)
     }
@@ -181,43 +204,44 @@ extension WriteViewController {
     @objc func colorWellChanged(_ sender: UIColorWell) {
         let color = sender.selectedColor ?? .cherryColor
         event.color = color.toHexString()
+        self.hasChanges = true
     }
     
     @objc func checkButtonClicked(sender: UIButton) {
         event.todos[sender.tag].isDone.toggle()
         todoTableViewCell?.checkListTableView.reloadRows(at: [[0, sender.tag]], with: .automatic)
+        self.hasChanges = true
     }
     
     @objc func onClickSwitch(_ sender: UISwitch) {
         event.isAllDay = sender.isOn
         mainView.tableView.reloadRows(at:[[0,1]], with: .automatic)
-    }
-    
-    func calStartDate(date: Date) -> Date {
-        guard let calDate = Calendar.current.date(bySettingHour: 0, minute: 0, second: 0, of: date) else {
-            return Date().toString(format: DateForm.date.str()).toDate(format: DateForm.date.str())!
-        }
-        return calDate
+        self.hasChanges = true
     }
     
     @objc func setStartDate() {
         showDatePickerPopup { _ in
-            let date = self.calStartDate(date: self.datePicker.date)
+            let date = self.calMidnight(date: self.datePicker.date)
             self.event.startDate = date
-            self.setStartTime()
+            if !self.event.isAllDay {
+                self.setStartTime()
+            } else {
+                self.mainView.tableView.reloadRows(at:[[0,1]], with: .automatic)
+            }
+            self.hasChanges = true
         }
-    }
-    
-    func calEndDate(date: Date) -> Date {
-        let today = calStartDate(date: date)
-        return Calendar.current.date(byAdding: .day, value: 1, to: today)!
     }
     
     @objc func setEndDate() {
         showDatePickerPopup { _ in
-            let date = self.calEndDate(date: self.datePicker.date)
+            let date = self.calMidnight(date: self.datePicker.date)
             self.event.endDate = date
-            self.setEndTime()
+            if !self.event.isAllDay {
+                self.setEndTime()
+            } else {
+                self.mainView.tableView.reloadRows(at:[[0,1]], with: .automatic)
+            }
+            self.hasChanges = true
         }
     }
     
@@ -228,6 +252,7 @@ extension WriteViewController {
             guard let date = Calendar.current.date(bySettingHour: components.hour!, minute: components.minute!, second: 0, of: self.event.startDate) else { return }
             self.event.startTime = date
             self.mainView.tableView.reloadRows(at:[[0,1]], with: .automatic)
+            self.hasChanges = true
         }
     }
     
@@ -237,14 +262,21 @@ extension WriteViewController {
             guard let date = Calendar.current.date(bySettingHour: components.hour!, minute: components.minute!, second: 0, of: self.event.endDate) else { return }
             self.event.endTime = date
             self.mainView.tableView.reloadRows(at:[[0,1]], with: .automatic)
+            self.hasChanges = true
         }
     }
 }
 
 extension WriteViewController: UITextFieldDelegate {
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        if textField.tag >= 0 || (textField.tag == -2 && textField.text != "") {
+            self.hasChanges = true
+        }
+    }
+    
     func textFieldDidChangeSelection(_ textField: UITextField) {
         let content = textField.text == nil ? "" : textField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
-       if textField.tag == -2 { // 이벤트 제목 입력란
+        if textField.tag == -2 { // 이벤트 제목 입력란
             event.title = content
         }
         
@@ -267,9 +299,14 @@ extension WriteViewController: UITextFieldDelegate {
             event.todos.append(todo)
             todoTableViewCell?.checkListTableView.reloadData()
             todoTableViewCell?.checkListTableView.scrollToRow(at: [1, 0], at: .bottom, animated: true)
+            self.hasChanges = true
             return true
         } else if textField.tag == -2 { // 이벤트 제목 입력란
             event.title = content
+            self.hasChanges = true
+            let indexPath: IndexPath = event.todos.isEmpty ? [0, 0] : [1, 0]
+            guard let checklistCell = todoTableViewCell?.checkListTableView.cellForRow(at: indexPath) as? CheckListTableViewCell else { return false }
+            checklistCell.textField.becomeFirstResponder()
             return true
         }
         
@@ -277,5 +314,24 @@ extension WriteViewController: UITextFieldDelegate {
             event.todos[textField.tag].title = content
         }
         return true
+    }
+}
+
+extension WriteViewController: UIAdaptivePresentationControllerDelegate {
+    func presentationControllerDidAttemptToDismiss(_ presentationController: UIPresentationController) {
+        if hasChanges {
+            let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+            let dismiss = UIAlertAction(title: "저장 하지 않음", style: .destructive) { _ in
+                //Hide keyboard
+                self.resignFirstResponder()
+                self.dismiss(animated: true, completion: nil)
+            }
+            let cancel = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+            alert.addAction(dismiss)
+            alert.addAction(cancel)
+            present(alert, animated: true, completion: nil)
+        } else {
+            dismiss(animated: true, completion: nil)
+        }
     }
 }
