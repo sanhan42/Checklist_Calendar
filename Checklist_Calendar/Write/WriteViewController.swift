@@ -7,11 +7,18 @@
 
 import UIKit
 import SwiftUI
+import RealmSwift
 
 class WriteViewController: BaseViewController {
     let mainView = WriteView()
     let repository = EventRepository()
-    var event = Event(title: "", color: UIColor.cherryColor.toHexString(), startDate: Date(), starTime: nil, endDate: Date(), endTime: nil)
+    lazy var writeDate: Date = {
+        guard let date = Calendar.current.date(bySettingHour: 0, minute: 0, second: 0, of: Date()) else {
+            return Date().toString(format: DateForm.date.str()).toDate(format: DateForm.date.str())!
+        }
+        return date
+    }()
+    var event = Event(title: "", color: UIColor.cherryColor.toHexString(), date: writeDate)
     
     var todoTableViewCell: TodoTableViewCell?
     
@@ -110,10 +117,8 @@ extension WriteViewController: UITableViewDelegate, UITableViewDataSource {
                 cell.endTimeBtn.addTarget(self, action: #selector(setEndTime), for: .touchUpInside)
                 cell.startDateBtn.setTitle(event.startDate.toString(format: "yy/MM/dd (E)"), for: .normal)
                 cell.endDateBtn.setTitle(event.endDate.toString(format: "yy/MM/dd (E)"), for: .normal)
-                var time = event.startTime ?? Date()
-                cell.startTimeBtn.setTitle(time.toString(format: "a hh:mm"), for: .normal)
-                time = event.endTime ?? Date()
-                cell.endTimeBtn.setTitle(time.toString(format: "a hh:mm"), for: .normal)
+                cell.startTimeBtn.setTitle(event.startTime.toString(format: "a hh:mm"), for: .normal)
+                cell.endTimeBtn.setTitle(event.endTime.toString(format: "a hh:mm"), for: .normal)
                 return cell
             case 2:
                 guard let cell = tableView.dequeueReusableCell(withIdentifier: TodoTableViewCell.reuseIdentifier, for: indexPath) as? TodoTableViewCell else { return UITableViewCell()}
@@ -169,6 +174,7 @@ extension WriteViewController {
         titleCell.titleTextField.endEditing(true)
         if event.title == "" {
             print("제목을 입력해주세요")
+            return
         }
         repository.addItem(item: event)
         dismiss(animated: true)
@@ -191,29 +197,35 @@ extension WriteViewController {
     
     @objc func setStartDate() {
         showDatePickerPopup { _ in
-            self.event.startDate = self.datePicker.date
-            self.mainView.tableView.reloadRows(at:[[0,1]], with: .automatic)
+            guard let date = Calendar.current.date(bySettingHour: 0, minute: 0, second: 0, of: self.datePicker.date) else { return }
+            self.event.startDate = date
+            self.setStartTime()
         }
     }
     
     @objc func setEndDate() {
         showDatePickerPopup { _ in
-            self.event.endDate = self.datePicker.date
-            self.mainView.tableView.reloadRows(at:[[0,1]], with: .automatic)
+            guard let date = Calendar.current.date(bySettingHour: 0, minute: 0, second: 0, of: self.datePicker.date) else { return }
+            self.event.endDate = date
+            self.setEndTime()
         }
     }
     
     @objc func setStartTime() {
         datePicker.minimumDate = nil
         showDatePickerPopup(mode: .time) { _ in
-            self.event.startTime = self.datePicker.date
+            let components = Calendar.current.dateComponents([.hour, .minute], from: self.datePicker.date)
+            guard let date = Calendar.current.date(bySettingHour: components.hour!, minute: components.minute!, second: 0, of: self.event.startDate) else { return }
+            self.event.startTime = date
             self.mainView.tableView.reloadRows(at:[[0,1]], with: .automatic)
         }
     }
     
     @objc func setEndTime() {
         showDatePickerPopup(mode: .time) { _ in
-            self.event.endTime = self.datePicker.date
+            let components = Calendar.current.dateComponents([.hour, .minute], from: self.datePicker.date)
+            guard let date = Calendar.current.date(bySettingHour: components.hour!, minute: components.minute!, second: 0, of: self.event.endDate) else { return }
+            self.event.endTime = date
             self.mainView.tableView.reloadRows(at:[[0,1]], with: .automatic)
         }
     }

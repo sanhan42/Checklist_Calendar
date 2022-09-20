@@ -12,21 +12,21 @@ class Event: Object {
     @Persisted var title: String
     @Persisted var color: String
     @Persisted var startDate: Date
-    @Persisted var startTime: Date?
+    @Persisted var startTime: Date
     @Persisted var endDate: Date
-    @Persisted var endTime: Date?
+    @Persisted var endTime: Date
     @Persisted var isAllDay: Bool
     @Persisted(primaryKey: true) var id: ObjectId
     @Persisted var todos: List<Todo>
     
-    convenience init(title: String, color: String, startDate: Date, starTime: Date?, endDate: Date, endTime: Date?, isAllDay: Bool = false) {
+    convenience init(title: String, color: String, date: Date, isAllDay: Bool = false) {
         self.init()
         self.title = title
         self.color = color
-        self.startDate = startDate
-        self.startTime = startTime
-        self.endDate = endDate
-        self.endTime = endTime
+        self.startDate = date
+        self.startTime = date
+        self.endDate = date
+        self.endTime = date
         self.isAllDay = isAllDay
     }
     
