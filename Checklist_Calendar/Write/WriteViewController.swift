@@ -8,6 +8,7 @@
 import UIKit
 import SwiftUI
 import RealmSwift
+import Toast
 
 class WriteViewController: BaseViewController {
     let mainView = WriteView()
@@ -184,11 +185,15 @@ extension WriteViewController {
     @objc func okButtonClicked() {
         guard let titleCell = mainView.tableView.cellForRow(at: [0,0]) as? TitleTableViewCell else { return }
         titleCell.titleTextField.endEditing(true)
+        var style = ToastStyle()
+        style.messageColor = .cherryColor
+        style.titleFont = .systemFont(ofSize: 24, weight: .semibold)
+        style.backgroundColor = .GrayColor
         if event.title == "" {
-            print("제목을 입력해주세요")
+            view.makeToast("제목을 입력해주세요", duration: 0.8, position: .center, style: style)
             return
         } else if event.startTime > event.endTime {
-            print("이벤트의 시작이 종료보다 늦을 수 없습니다")
+            view.makeToast("이벤트의 시작이 종료보다 늦을 수 없습니다", duration: 1, position: .center, style: style)
             return
         }
         
@@ -217,6 +222,14 @@ extension WriteViewController {
         event.isAllDay = sender.isOn
         mainView.tableView.reloadRows(at:[[0,1]], with: .automatic)
         self.hasChanges = true
+        if sender.isOn {
+            guard let dateCell = mainView.tableView.cellForRow(at: [0, 1]) as? DateTableViewCell else { return }
+            guard let start = dateCell.startDateBtn.titleLabel?.text?.toDate(format: DateForm.date.str()) else { return }
+            guard let end = dateCell.endDateBtn.titleLabel?.text?.toDate(format: DateForm.date.str()) else { return }
+            event.startTime = start
+            event.endTime = end
+            mainView.tableView.reloadRows(at: [[0, 1]], with: .automatic)
+        }
     }
     
     @objc func setStartDate() {

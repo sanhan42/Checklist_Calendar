@@ -11,6 +11,7 @@
 		BF0B57DE28D05C38005A090B /* BaseTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0B57DD28D05C38005A090B /* BaseTableViewCell.swift */; };
 		BF0B57E128D05F9C005A090B /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = BF0B57E028D05F9C005A090B /* SnapKit */; };
 		BF27397C28D3476500441B7F /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF27397B28D3476500441B7F /* UIColor+Extension.swift */; };
+		BF497FA028D9E194007D1527 /* Toast in Frameworks */ = {isa = PBXBuildFile; productRef = BF497F9F28D9E194007D1527 /* Toast */; };
 		BF70765828D6F2DA003506C0 /* MonthlyTableViewHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF70765728D6F2DA003506C0 /* MonthlyTableViewHeaderView.swift */; };
 		BF7C140D28D1B60B00DF1EEE /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF7C140C28D1B60B00DF1EEE /* Date+Extension.swift */; };
 		BF7C141128D1F8A100DF1EEE /* MonthlyTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF7C141028D1F8A100DF1EEE /* MonthlyTableViewCell.swift */; };
@@ -84,6 +85,7 @@
 				BFDDC9B228D059350047F22E /* RealmSwift in Frameworks */,
 				BF0B57E128D05F9C005A090B /* SnapKit in Frameworks */,
 				BFDDC9B028D059350047F22E /* Realm in Frameworks */,
+				BF497FA028D9E194007D1527 /* Toast in Frameworks */,
 				BFDDC9AD28D058950047F22E /* FSCalendar in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -214,6 +216,7 @@
 				BFDDC9AF28D059350047F22E /* Realm */,
 				BFDDC9B128D059350047F22E /* RealmSwift */,
 				BF0B57E028D05F9C005A090B /* SnapKit */,
+				BF497F9F28D9E194007D1527 /* Toast */,
 			);
 			productName = Checklist_Calendar;
 			productReference = BFDDC99428D0572D0047F22E /* Checklist_Calendar.app */;
@@ -247,6 +250,7 @@
 				BFDDC9AB28D058950047F22E /* XCRemoteSwiftPackageReference "FSCalendar" */,
 				BFDDC9AE28D059350047F22E /* XCRemoteSwiftPackageReference "realm-swift" */,
 				BF0B57DF28D05F9C005A090B /* XCRemoteSwiftPackageReference "SnapKit" */,
+				BF497F9E28D9E194007D1527 /* XCRemoteSwiftPackageReference "Toast-Swift" */,
 			);
 			productRefGroup = BFDDC99528D0572D0047F22E /* Products */;
 			projectDirPath = "";
@@ -531,6 +535,14 @@
 				minimumVersion = 5.0.0;
 			};
 		};
+		BF497F9E28D9E194007D1527 /* XCRemoteSwiftPackageReference "Toast-Swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/scalessec/Toast-Swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
 		BFDDC9AB28D058950047F22E /* XCRemoteSwiftPackageReference "FSCalendar" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/WenchaoD/FSCalendar.git";
@@ -554,6 +566,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = BF0B57DF28D05F9C005A090B /* XCRemoteSwiftPackageReference "SnapKit" */;
 			productName = SnapKit;
+		};
+		BF497F9F28D9E194007D1527 /* Toast */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BF497F9E28D9E194007D1527 /* XCRemoteSwiftPackageReference "Toast-Swift" */;
+			productName = Toast;
 		};
 		BFDDC9AC28D058950047F22E /* FSCalendar */ = {
 			isa = XCSwiftPackageProductDependency;
