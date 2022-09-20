@@ -209,9 +209,8 @@ extension WriteViewController {
     }
     
     func calEndDate(date: Date) -> Date {
-        let today = Calendar.current.date(bySettingHour: 0, minute: 0, second: 0, of: date)!
-        let nextDate = Calendar.current.date(byAdding: .day, value: 1, to: today)!
-        return Calendar.current.date(byAdding: .nanosecond, value: -1, to: nextDate)!
+        let today = calStartDate(date: date)
+        return Calendar.current.date(byAdding: .day, value: 1, to: today)!
     }
     
     @objc func setEndDate() {
