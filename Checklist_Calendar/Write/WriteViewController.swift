@@ -227,7 +227,7 @@ extension WriteViewController {
             guard let start = dateCell.startDateBtn.titleLabel?.text?.toDate(format: DateForm.date.str()) else { return }
             guard let end = dateCell.endDateBtn.titleLabel?.text?.toDate(format: DateForm.date.str()) else { return }
             event.startTime = start
-            event.endTime = end
+            event.endTime = calNextMidnight(date: end)
             mainView.tableView.reloadRows(at: [[0, 1]], with: .automatic)
         }
     }
@@ -237,8 +237,9 @@ extension WriteViewController {
             let date = self.calMidnight(date: self.datePicker.date)
             self.event.startDate = date
             if !self.event.isAllDay {
-                self.setStartTime()
+                self.setStartTime() // TODO: 이 방식이 불편하면, 대신 여기에 stardTime을 설정해주는 코드가 들어가야 함.
             } else {
+                self.event.startTime = date
                 self.mainView.tableView.reloadRows(at:[[0,1]], with: .automatic)
             }
             self.hasChanges = true
@@ -252,6 +253,7 @@ extension WriteViewController {
             if !self.event.isAllDay {
                 self.setEndTime()
             } else {
+                self.event.endTime = self.calNextMidnight(date: self.datePicker.date)
                 self.mainView.tableView.reloadRows(at:[[0,1]], with: .automatic)
             }
             self.hasChanges = true
@@ -259,7 +261,6 @@ extension WriteViewController {
     }
     
     @objc func setStartTime() {
-        datePicker.minimumDate = nil
         showDatePickerPopup(mode: .time) { _ in
             let components = Calendar.current.dateComponents([.hour, .minute], from: self.datePicker.date)
             guard let date = Calendar.current.date(bySettingHour: components.hour!, minute: components.minute!, second: 0, of: self.event.startDate) else { return }
