@@ -17,9 +17,9 @@ class Event: Object {
     @Persisted var endTime: Date?
     @Persisted var isAllDay: Bool
     @Persisted(primaryKey: true) var id: ObjectId
-    let todos = List<Todo>()
+    @Persisted var todos: List<Todo>
     
-    convenience init(title: String, color: String, startDate: Date, starTime: Date?, endDate: Date, endTime: Date?, isAllDay: Bool) {
+    convenience init(title: String, color: String, startDate: Date, starTime: Date?, endDate: Date, endTime: Date?, isAllDay: Bool = false) {
         self.init()
         self.title = title
         self.color = color

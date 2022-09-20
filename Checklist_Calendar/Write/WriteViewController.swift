@@ -10,38 +10,16 @@ import SwiftUI
 
 class WriteViewController: BaseViewController {
     let mainView = WriteView()
-    var isAllDay = false
-    var event = Event(title: "", color: "", startDate: Date(), starTime: nil, endDate: Date(), endTime: nil, isAllDay: false)
-    var newTodo = ""
-    
-    lazy var startDate = datePicker.date {
-        didSet {
-            mainView.tableView.reloadRows(at:[[0,1]], with: .automatic)
-        }
-    }
-    lazy var endDate = datePicker.date {
-        didSet {
-            mainView.tableView.reloadRows(at:[[0,1]], with: .automatic)
-        }
-    }
-    var startTime = Date() {
-        didSet {
-            mainView.tableView.reloadRows(at:[[0,1]], with: .automatic)
-        }
-    }
-    var endTime = Date() {
-        didSet {
-            mainView.tableView.reloadRows(at:[[0,1]], with: .automatic)
-        }
-    }
+    let repository = EventRepository()
+    var event = Event(title: "", color: UIColor.cherryColor.toHexString(), startDate: Date(), starTime: nil, endDate: Date(), endTime: nil)
     
     var todoTableViewCell: TodoTableViewCell?
-    //            guard let cell = todoTableViewCell?.checkListTableView.cellForRow(at: [0, textField.tag]) as? CheckListTableViewCell else { return false }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         configure()
         setNavigationBar()
+        print(repository.fileUrl)
     }
     
     override func configure() {
@@ -51,15 +29,11 @@ class WriteViewController: BaseViewController {
         mainView.tableView.dataSource = self
     }
     
-    @objc func cancleItemClicked() {
-        dismiss(animated: true)
-    }
-    
     private func setNavigationBar() {
         title = "새로운 이벤트"
         let cancleItem = UIBarButtonItem(title: "취소", style: .plain, target: self, action: #selector(cancleItemClicked))
         cancleItem.tintColor = .cherryColor
-        let okItem = UIBarButtonItem(title: "확인", style: .done, target: self, action: nil)
+        let okItem = UIBarButtonItem(title: "확인", style: .done, target: self, action: #selector(okButtonClicked))
         okItem.tintColor = .cherryColor.withAlphaComponent(0.9)
         
         navigationController?.navigationBar.topItem?.leftBarButtonItem = cancleItem
@@ -71,14 +45,11 @@ class WriteViewController: BaseViewController {
 extension WriteViewController: UITableViewDelegate, UITableViewDataSource {
    
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-//        let headerView = UIView()
-//        headerView.backgroundColor = .clear
-//        return headerView
         return nil
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return CGFloat.leastNormalMagnitude
+        return tableView.tag == 1 ? 8 : CGFloat.leastNormalMagnitude
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -94,8 +65,8 @@ extension WriteViewController: UITableViewDelegate, UITableViewDataSource {
             switch indexPath.row {
             case 0: return 50
             case 1:
-                return isAllDay ? 90 : 130 // TODO: 수정 필요!
-            default: return tableView.frame.height - (navigationController?.navigationBar.frame.height ?? 0) - (isAllDay ? 90 : 130) - 70
+                return event.isAllDay ? 90 : 130 // TODO: 수정 필요!
+            default: return tableView.frame.height - (navigationController?.navigationBar.frame.height ?? 0) - (event.isAllDay ? 90 : 130) - 70
             }
         } else {
             return 38
@@ -119,21 +90,30 @@ extension WriteViewController: UITableViewDelegate, UITableViewDataSource {
             case 0:
                 guard let cell = tableView.dequeueReusableCell(withIdentifier: TitleTableViewCell.reuseIdentifier, for: indexPath) as? TitleTableViewCell else { return UITableViewCell()}
                 cell.selectionStyle = .none
+                cell.titleTextField.tag = -2
+                cell.titleTextField.delegate = self
+                cell.colorButton.selectedColor = UIColor(hexAlpha: event.color)
+                cell.colorButton.addTarget(self, action: #selector(colorWellChanged(_:)), for: .valueChanged)
+                if event.todos.isEmpty {
+                    cell.titleTextField.becomeFirstResponder()
+                }
                 return cell
             case 1:
                 guard let cell = tableView.dequeueReusableCell(withIdentifier: DateTableViewCell.reuseIdentifier, for: indexPath) as? DateTableViewCell else { return UITableViewCell()}
                 cell.selectionStyle = .none
-                cell.timeView.isHidden = isAllDay // cell.allDaySwitch.isOn // TODO: Realm Data 반영하기
-                cell.allDaySwitch.setOn(isAllDay, animated: false)
+                cell.timeView.isHidden = event.isAllDay
+                cell.allDaySwitch.setOn(event.isAllDay, animated: false)
                 cell.allDaySwitch.addTarget(self, action: #selector(onClickSwitch(_:)), for: .valueChanged)
                 cell.startDateBtn.addTarget(self, action: #selector(setStartDate), for: .touchUpInside)
                 cell.endDateBtn.addTarget(self, action: #selector(setEndDate), for: .touchUpInside)
                 cell.startTimeBtn.addTarget(self, action: #selector(setStartTime), for: .touchUpInside)
                 cell.endTimeBtn.addTarget(self, action: #selector(setEndTime), for: .touchUpInside)
-                cell.startDateBtn.setTitle(startDate.toString(format: "yy/MM/dd (E)"), for: .normal)
-                cell.endDateBtn.setTitle(endDate.toString(format: "yy/MM/dd (E)"), for: .normal)
-                cell.startTimeBtn.setTitle(startTime.toString(format: "a hh:mm"), for: .normal)
-                cell.endTimeBtn.setTitle(endTime.toString(format: "a hh:mm"), for: .normal)
+                cell.startDateBtn.setTitle(event.startDate.toString(format: "yy/MM/dd (E)"), for: .normal)
+                cell.endDateBtn.setTitle(event.endDate.toString(format: "yy/MM/dd (E)"), for: .normal)
+                var time = event.startTime ?? Date()
+                cell.startTimeBtn.setTitle(time.toString(format: "a hh:mm"), for: .normal)
+                time = event.endTime ?? Date()
+                cell.endTimeBtn.setTitle(time.toString(format: "a hh:mm"), for: .normal)
                 return cell
             case 2:
                 guard let cell = tableView.dequeueReusableCell(withIdentifier: TodoTableViewCell.reuseIdentifier, for: indexPath) as? TodoTableViewCell else { return UITableViewCell()}
@@ -148,18 +128,24 @@ extension WriteViewController: UITableViewDelegate, UITableViewDataSource {
         } else {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: CheckListTableViewCell.reuseIdentifier, for: indexPath) as? CheckListTableViewCell else { return UITableViewCell()}
             cell.selectionStyle = .none
-            cell.contentView.layer.borderColor = UIColor.clear.cgColor
+            cell.bgView.layer.borderColor = UIColor.clear.cgColor
             if indexPath.section == 0 && !event.todos.isEmpty {
                 cell.textField.tag = indexPath.row
                 cell.checkButton.tag = indexPath.row
+                cell.checkButton.addTarget(self, action: #selector(checkButtonClicked(sender:)), for: .touchUpInside)
+                cell.textField.placeholder = "내용을 입력해주세요"
                 cell.textField.text = event.todos[indexPath.row].title
                 let img = event.todos[indexPath.row].isDone ? UIImage(systemName: "checkmark.square") : UIImage(systemName: "square")
                 cell.checkButton.setImage(img, for: .normal)
             } else {
+                if !event.todos.isEmpty {
+                    cell.textField.becomeFirstResponder()
+                }
                 cell.textField.delegate = self
                 cell.textField.tag = -1
-                cell.contentView.layer.borderWidth = 0.3
-                cell.contentView.layer.borderColor = UIColor.placeholderText.cgColor
+                cell.bgView.layer.borderWidth = 0.5
+                cell.bgView.layer.cornerRadius = 12
+                cell.bgView.layer.borderColor = UIColor.placeholderText.cgColor
             }
             return cell
         }
@@ -174,49 +160,99 @@ extension WriteViewController: UITableViewDelegate, UITableViewDataSource {
 }
 
 extension WriteViewController {
+    @objc func cancleItemClicked() {
+        dismiss(animated: true)
+    }
+    
+    @objc func okButtonClicked() {
+        guard let titleCell = mainView.tableView.cellForRow(at: [0,0]) as? TitleTableViewCell else { return }
+        titleCell.titleTextField.endEditing(true)
+        if event.title == "" {
+            print("제목을 입력해주세요")
+        }
+        repository.addItem(item: event)
+        dismiss(animated: true)
+    }
+    
+    @objc func colorWellChanged(_ sender: UIColorWell) {
+        let color = sender.selectedColor ?? .cherryColor
+        event.color = color.toHexString()
+    }
+    
+    @objc func checkButtonClicked(sender: UIButton) {
+        event.todos[sender.tag].isDone.toggle()
+        todoTableViewCell?.checkListTableView.reloadRows(at: [[0, sender.tag]], with: .automatic)
+    }
+    
     @objc func onClickSwitch(_ sender: UISwitch) {
-        isAllDay = sender.isOn
+        event.isAllDay = sender.isOn
         mainView.tableView.reloadRows(at:[[0,1]], with: .automatic)
     }
     
     @objc func setStartDate() {
         showDatePickerPopup { _ in
-            self.startDate = self.datePicker.date
+            self.event.startDate = self.datePicker.date
+            self.mainView.tableView.reloadRows(at:[[0,1]], with: .automatic)
         }
     }
     
     @objc func setEndDate() {
         showDatePickerPopup { _ in
-            self.endDate = self.datePicker.date
+            self.event.endDate = self.datePicker.date
+            self.mainView.tableView.reloadRows(at:[[0,1]], with: .automatic)
         }
     }
     
     @objc func setStartTime() {
         datePicker.minimumDate = nil
         showDatePickerPopup(mode: .time) { _ in
-            self.startTime = self.datePicker.date
+            self.event.startTime = self.datePicker.date
+            self.mainView.tableView.reloadRows(at:[[0,1]], with: .automatic)
         }
     }
     
     @objc func setEndTime() {
         showDatePickerPopup(mode: .time) { _ in
-            self.endTime = self.datePicker.date
+            self.event.endTime = self.datePicker.date
+            self.mainView.tableView.reloadRows(at:[[0,1]], with: .automatic)
         }
     }
 }
 
 extension WriteViewController: UITextFieldDelegate {
+    func textFieldDidChangeSelection(_ textField: UITextField) {
+        let content = textField.text == nil ? "" : textField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
+       if textField.tag == -2 { // 이벤트 제목 입력란
+            event.title = content
+        }
+        
+        if 0..<event.todos.count ~= textField.tag {
+            event.todos[textField.tag].title = content
+        }
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        if textField.tag == -2 {
+            let content = textField.text == nil ? "" : textField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
+            event.title = content
+        }
+    }
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-//        guard let todoTablecell = mainView.tableView.cellForRow(at: [0, 2]) as? TodoTableViewCell else { return false }
+        let content = textField.text == nil ? "" : textField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
         if textField.tag == -1 { // 새로운 TODO 입력란
-            let todo = Todo(title: textField.text)
+            let todo = Todo(title: content)
             event.todos.append(todo)
             todoTableViewCell?.checkListTableView.reloadData()
+            todoTableViewCell?.checkListTableView.scrollToRow(at: [1, 0], at: .bottom, animated: true)
+            return true
+        } else if textField.tag == -2 { // 이벤트 제목 입력란
+            event.title = content
             return true
         }
         
         if 0..<event.todos.count ~= textField.tag {
-            event.todos[textField.tag].title = textField.text
+            event.todos[textField.tag].title = content
         }
         return true
     }

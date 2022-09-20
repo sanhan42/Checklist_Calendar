@@ -28,7 +28,7 @@ class TitleTableViewCell: BaseTableViewCell {
     
     let colorButton: UIColorWell = {
         let btn = UIColorWell(frame: CGRect(x: 100, y: 100, width: 100, height: 100))
-        btn.selectedColor = .cherryColor.withAlphaComponent(0.8) // TODO: 기본색 설정 때 수정 필요
+        btn.selectedColor = .cherryColor
         return btn
     }()
     
@@ -75,7 +75,8 @@ class TitleTableViewCell: BaseTableViewCell {
         
         separatorView.snp.makeConstraints { make in
             make.height.equalTo(1)
-            make.leading.trailing.bottom.equalToSuperview()
+            make.bottom.equalToSuperview()
+            make.leading.trailing.equalToSuperview().inset(6)
         }
     }
 }

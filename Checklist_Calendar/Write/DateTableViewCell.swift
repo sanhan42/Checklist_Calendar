@@ -181,7 +181,8 @@ class DateTableViewCell: BaseTableViewCell {
         
         separatorView.snp.makeConstraints { make in
             make.height.equalTo(1)
-            make.leading.trailing.bottom.equalToSuperview()
+            make.bottom.equalToSuperview()
+            make.leading.trailing.equalToSuperview().inset(6)
         }
     }
 }

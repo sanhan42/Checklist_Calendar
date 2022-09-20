@@ -14,10 +14,17 @@ protocol EventRepositoryType {
 }
 
 class EventRepository: EventRepositoryType {
+    let fileUrl = Realm.Configuration.defaultConfiguration.fileURL!
     let localRealm = try! Realm()
     
     func addItem(item: Event) {
-        
+        do {
+            try localRealm.write({
+                localRealm.add(item)
+            })
+        } catch let error {
+            print(error)
+        }
     }
     
     func tasksFetch(date: Date) -> Results<Event> {

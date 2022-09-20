@@ -18,9 +18,16 @@ class CheckListTableViewCell: BaseTableViewCell {
     
     let textField: UITextField = {
         let tf = UITextField()
-        tf.placeholder = "할 일을 입력해주세요"
+        tf.placeholder = "새로운 할 일 추가"
         tf.textColor = .textColor
         return tf
+    }()
+    
+    lazy var bgView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .clear
+        [checkButton, textField].forEach{ view.addSubview($0) }
+        return view
     }()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -34,22 +41,28 @@ class CheckListTableViewCell: BaseTableViewCell {
     }
     
     override func configure() {
-        [checkButton, textField].forEach { v in
-            contentView.addSubview(v)
-        }
+        contentView.addSubview(bgView)
+//        [checkButton, textField].forEach { v in
+//            contentView.addSubview(v)
+//        }
     }
     
     override func setConstraints() {
+        bgView.snp.makeConstraints { make in
+            make.verticalEdges.equalToSuperview()
+            make.horizontalEdges.equalToSuperview().inset(12)
+        }
+        
         checkButton.snp.makeConstraints { make in
             make.width.height.equalTo(22)
-            make.leading.equalToSuperview().inset(20)
+            make.leading.equalToSuperview().inset(8)
             make.centerY.equalToSuperview()
         }
         
         textField.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
             make.leading.equalTo(checkButton.snp.trailing).offset(8)
-            make.trailing.equalToSuperview().inset(20)
+            make.trailing.equalToSuperview().inset(8)
         }
     }
 }
