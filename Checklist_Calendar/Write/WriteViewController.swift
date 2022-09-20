@@ -13,12 +13,10 @@ class WriteViewController: BaseViewController {
     let mainView = WriteView()
     let repository = EventRepository()
     lazy var writeDate: Date = {
-        guard let date = Calendar.current.date(bySettingHour: 0, minute: 0, second: 0, of: Date()) else {
-            return Date().toString(format: DateForm.date.str()).toDate(format: DateForm.date.str())!
-        }
-        return date
+        return calStartDate(date: Date())
     }()
-    var event = Event(title: "", color: UIColor.cherryColor.toHexString(), date: writeDate)
+    
+    lazy var event = Event(title: "", color: UIColor.cherryColor.toHexString(), startDate: writeDate, endDate: calEndDate(date: writeDate))
     
     var todoTableViewCell: TodoTableViewCell?
     
@@ -195,17 +193,30 @@ extension WriteViewController {
         mainView.tableView.reloadRows(at:[[0,1]], with: .automatic)
     }
     
+    func calStartDate(date: Date) -> Date {
+        guard let calDate = Calendar.current.date(bySettingHour: 0, minute: 0, second: 0, of: date) else {
+            return Date().toString(format: DateForm.date.str()).toDate(format: DateForm.date.str())!
+        }
+        return calDate
+    }
+    
     @objc func setStartDate() {
         showDatePickerPopup { _ in
-            guard let date = Calendar.current.date(bySettingHour: 0, minute: 0, second: 0, of: self.datePicker.date) else { return }
+            let date = self.calStartDate(date: self.datePicker.date)
             self.event.startDate = date
             self.setStartTime()
         }
     }
     
+    func calEndDate(date: Date) -> Date {
+        let today = Calendar.current.date(bySettingHour: 0, minute: 0, second: 0, of: date)!
+        let nextDate = Calendar.current.date(byAdding: .day, value: 1, to: today)!
+        return Calendar.current.date(byAdding: .nanosecond, value: -1, to: nextDate)!
+    }
+    
     @objc func setEndDate() {
         showDatePickerPopup { _ in
-            guard let date = Calendar.current.date(bySettingHour: 0, minute: 0, second: 0, of: self.datePicker.date) else { return }
+            let date = self.calEndDate(date: self.datePicker.date)
             self.event.endDate = date
             self.setEndTime()
         }

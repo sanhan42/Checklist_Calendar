@@ -19,14 +19,14 @@ class Event: Object {
     @Persisted(primaryKey: true) var id: ObjectId
     @Persisted var todos: List<Todo>
     
-    convenience init(title: String, color: String, date: Date, isAllDay: Bool = false) {
+    convenience init(title: String, color: String, startDate: Date, endDate:Date, isAllDay: Bool = false) {
         self.init()
         self.title = title
         self.color = color
-        self.startDate = date
-        self.startTime = date
-        self.endDate = date
-        self.endTime = date
+        self.startDate = startDate
+        self.startTime = startDate
+        self.endDate = endDate
+        self.endTime = endDate
         self.isAllDay = isAllDay
     }
     
