@@ -12,7 +12,7 @@ protocol EventRepositoryType {
     func addItem(item: Event)
     func dayTasksFetch(date: Date) -> Results<Event>
     func allDayTasksFetch(date: Date) -> Results<Event>
-    func notAllDayTasksFetch(date: Date) -> Results<Event>
+    func notAllDayTasksFetch(date: Date, isHiding: Bool) -> Results<Event>
 }
 
 class EventRepository: EventRepositoryType {
@@ -30,23 +30,25 @@ class EventRepository: EventRepositoryType {
     }
     
     func dayTasksFetch(date: Date) -> Results<Event> {
+        let todayStart = date.calMidnight() // 만약 매개변수 값으로 들어오는 Date가 00시 00분의 형태로 들어오는게 보장된다면, 이 작업은 필요 없음.
         return localRealm.objects(Event.self).where {
-            ($0.start <= date && $0.end > date)
+            ($0.start <= todayStart && $0.end > todayStart)
         }
     }
     
     func allDayTasksFetch(date: Date) -> Results<Event> {
-        let todayStart = date.calMidnight() // 만약 매개변수 값으로 들어오는 Date가 00시 00분의 형태로 들어온다면 이 작업은 필요 없음.
+        let todayStart = date.calMidnight()
         let todayEnd = date.calNextMidnight()
         return localRealm.objects(Event.self).where {
             ($0.startTime <= todayStart && $0.endTime >= todayEnd)
         }
     }
     
-    func notAllDayTasksFetch(date: Date) -> Results<Event> {
+    func notAllDayTasksFetch(date: Date, isHiding: Bool) -> Results<Event> {
         let todayStart = date.calMidnight()
+        let today = isHiding ? date : todayStart
         return localRealm.objects(Event.self).where {
-            ($0.start <= date && $0.end > date && $0.startTime > todayStart)
+            ($0.start <= todayStart && $0.end > todayStart && $0.startTime > today)
         }
     }
     
