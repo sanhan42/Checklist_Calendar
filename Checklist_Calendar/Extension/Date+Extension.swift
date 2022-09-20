@@ -25,4 +25,15 @@ extension Date {
         dateFormatter.timeZone = TimeZone(identifier: "KST")
         return dateFormatter.string(from: self)
     }
+    
+    func calMidnight() -> Date {
+        guard let calDate = Calendar.current.date(bySettingHour: 0, minute: 0, second: 0, of: self) else {
+            return Date().toString(format: SHDate.date.str()).toDate(format: SHDate.date.str())!
+        }
+        return calDate
+    }
+    
+    func calNextMidnight() -> Date {
+        return Calendar.current.date(byAdding: .day, value: 1, to: self.calMidnight())!
+    }
 }

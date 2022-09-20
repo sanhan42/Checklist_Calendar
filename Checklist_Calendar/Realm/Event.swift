@@ -16,18 +16,24 @@ class Event: Object {
     @Persisted var endDate: Date
     @Persisted var endTime: Date
     @Persisted var isAllDay: Bool
+    @Persisted var start: Date
+    @Persisted var end: Date
     @Persisted(primaryKey: true) var id: ObjectId
     @Persisted var todos: List<Todo>
     
-    convenience init(title: String, color: String, date:Date, startTime: Date, endTime: Date, isAllDay: Bool = false) {
+    convenience init(title: String, color: String, start:Date, end: Date, startTime: Date, endTime: Date, isAllDay: Bool = false) {
         self.init()
+        let interval = Calendar.current.dateComponents([.day], from: startTime, to: endTime)
+        let endDate = Calendar.current.date(byAdding: interval, to: start) ?? start
         self.title = title
         self.color = color
-        self.startDate = date
+        self.startDate = start
         self.startTime = startTime
-        self.endDate = date
+        self.endDate = endDate
         self.endTime = endTime
         self.isAllDay = isAllDay
+        self.start = start
+        self.end = end
     }
     
     override class func primaryKey() -> String? {

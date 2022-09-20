@@ -19,7 +19,7 @@ class WriteViewController: BaseViewController {
         }
     }
     lazy var writeDate = Date()
-    lazy var event = Event(title: "", color: UIColor.cherryColor.toHexString(), date: calMidnight(date: writeDate), startTime: writeDate, endTime: Calendar.current.date(byAdding: .hour, value: 1, to: writeDate) ?? writeDate) {
+    lazy var event = Event(title: "", color: UIColor.cherryColor.toHexString(), start: writeDate.calMidnight(), end: writeDate.calNextMidnight(), startTime: writeDate, endTime: Calendar.current.date(byAdding: .hour, value: 1, to: writeDate) ?? writeDate) {
         didSet {
             hasChanges = true
         }
@@ -165,17 +165,6 @@ extension WriteViewController: UITableViewDelegate, UITableViewDataSource {
 }
 
 extension WriteViewController {
-    func calMidnight(date: Date) -> Date {
-        guard let calDate = Calendar.current.date(bySettingHour: 0, minute: 0, second: 0, of: date) else {
-            return Date().toString(format: DateForm.date.str()).toDate(format: DateForm.date.str())!
-        }
-        return calDate
-    }
-    
-    func calNextMidnight(date: Date) -> Date {
-        let today = calMidnight(date: date)
-        return Calendar.current.date(byAdding: .day, value: 1, to: today)!
-    }
     
     @objc func cancleItemClicked() {
         let controller = navigationController?.presentationController ?? UIPresentationController(presentedViewController: self, presenting: nil)
@@ -198,8 +187,8 @@ extension WriteViewController {
         }
         
         if event.isAllDay {
-            event.startTime = calMidnight(date: event.startTime)
-            event.endTime = calNextMidnight(date: event.endDate)
+            event.startTime = event.startTime.calMidnight()
+            event.endTime = event.endDate.calNextMidnight()
         }
         
         repository.addItem(item: event)
@@ -224,17 +213,17 @@ extension WriteViewController {
         self.hasChanges = true
         if sender.isOn {
             guard let dateCell = mainView.tableView.cellForRow(at: [0, 1]) as? DateTableViewCell else { return }
-            guard let start = dateCell.startDateBtn.titleLabel?.text?.toDate(format: DateForm.date.str()) else { return }
-            guard let end = dateCell.endDateBtn.titleLabel?.text?.toDate(format: DateForm.date.str()) else { return }
+            guard let start = dateCell.startDateBtn.titleLabel?.text?.toDate(format: SHDate.date.str()) else { return }
+            guard let end = dateCell.endDateBtn.titleLabel?.text?.toDate(format: SHDate.date.str()) else { return }
             event.startTime = start
-            event.endTime = calNextMidnight(date: end)
+            event.endTime = end.calNextMidnight()
             mainView.tableView.reloadRows(at: [[0, 1]], with: .automatic)
         }
     }
     
     @objc func setStartDate() {
         showDatePickerPopup { _ in
-            let date = self.calMidnight(date: self.datePicker.date)
+            let date = self.datePicker.date.calMidnight()
             self.event.startDate = date
             if !self.event.isAllDay {
                 self.setStartTime() // TODO: 이 방식이 불편하면, 대신 여기에 stardTime을 설정해주는 코드가 들어가야 함.
@@ -248,12 +237,12 @@ extension WriteViewController {
     
     @objc func setEndDate() {
         showDatePickerPopup { _ in
-            let date = self.calMidnight(date: self.datePicker.date)
+            let date = self.datePicker.date.calMidnight()
             self.event.endDate = date
             if !self.event.isAllDay {
                 self.setEndTime()
             } else {
-                self.event.endTime = self.calNextMidnight(date: self.datePicker.date)
+                self.event.endTime = self.datePicker.date.calNextMidnight()
                 self.mainView.tableView.reloadRows(at:[[0,1]], with: .automatic)
             }
             self.hasChanges = true

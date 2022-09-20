@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum DateForm {
+enum SHDate {
     case date
     case time
     
@@ -17,6 +17,5 @@ enum DateForm {
         case .time: return "a hh:mm"
         }
     }
-
 }
 
