@@ -135,6 +135,7 @@ extension WriteViewController: UITableViewDelegate, UITableViewDataSource {
                 guard let cell = tableView.dequeueReusableCell(withIdentifier: TitleTableViewCell.reuseIdentifier, for: indexPath) as? TitleTableViewCell else { return UITableViewCell()}
                 cell.selectionStyle = .none
                 cell.titleTextField.text = event.title
+                cell.textNumLabel.text = "\(event.title.count)/25"
                 cell.titleTextField.tag = -2
                 cell.titleTextField.delegate = self
                 cell.colorButton.selectedColor = UIColor(hexAlpha: event.color)
@@ -395,6 +396,19 @@ extension WriteViewController: UITextFieldDelegate {
             let indexPath: IndexPath = 0..<(event.todos.count - 1) ~= textField.tag ? [0, textField.tag + 1] : [1, 0]
             guard let checklistCell = todoTableViewCell?.checkListTableView.cellForRow(at: indexPath) as? CheckListTableViewCell else { return false }
             checklistCell.textField.becomeFirstResponder()
+        }
+        return true
+    }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        if textField.tag == -2 {
+            let currentText = textField.text ?? ""
+            guard let stringRange = Range(range, in: currentText) else { return false }
+            
+            let changeText = currentText.replacingCharacters(in: stringRange, with: string)
+            guard let cell = mainView.tableView.cellForRow(at: [0, 0]) as? TitleTableViewCell else { return false }
+            cell.textNumLabel.text = "\(changeText.count)/25"
+            return changeText.count <= 24
         }
         return true
     }
