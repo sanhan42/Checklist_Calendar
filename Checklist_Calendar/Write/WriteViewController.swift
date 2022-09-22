@@ -135,7 +135,7 @@ extension WriteViewController: UITableViewDelegate, UITableViewDataSource {
                 guard let cell = tableView.dequeueReusableCell(withIdentifier: TitleTableViewCell.reuseIdentifier, for: indexPath) as? TitleTableViewCell else { return UITableViewCell()}
                 cell.selectionStyle = .none
                 cell.titleTextField.text = event.title
-                cell.textNumLabel.text = "\(event.title.count)/25"
+                cell.textNumLabel.text = "\(event.title.count)/20"
                 cell.titleTextField.tag = -2
                 cell.titleTextField.delegate = self
                 cell.colorButton.selectedColor = UIColor(hexAlpha: event.color)
@@ -407,7 +407,7 @@ extension WriteViewController: UITextFieldDelegate {
             
             let changeText = currentText.replacingCharacters(in: stringRange, with: string)
             guard let cell = mainView.tableView.cellForRow(at: [0, 0]) as? TitleTableViewCell else { return false }
-            cell.textNumLabel.text = "\(changeText.count)/25"
+            cell.textNumLabel.text = "\(changeText.count)/20"
             return changeText.count <= 24
         }
         return true
@@ -419,7 +419,7 @@ extension WriteViewController: UIAdaptivePresentationControllerDelegate {
         if hasChanges {
             let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
             let dismiss = UIAlertAction(title: "변경 사항 폐기", style: .destructive) { _ in
-                self.resignFirstResponder() //Hide keyboard
+                self.resignFirstResponder() // 키보드를 숨겨주려고 추가
                 self.dismiss(animated: true, completion: nil)
             }
             let cancel = UIAlertAction(title: "계속 편집하기", style: .cancel, handler: nil)

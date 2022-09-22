@@ -101,18 +101,6 @@ class MonthlyViewController: BaseViewController {
     }
     
     // TODO: 작은 아이폰에서 레이아웃 확인 후 수정 필요
-    func getDateStr(date: Date, needOneLine: Bool = false) -> String {
-        let dateFormatter = DateFormatter()
-        let current = Calendar.current
-        if current.isDateInToday(date) {
-            dateFormatter.dateFormat = "a hh:mm"
-        } else if current.dateComponents([.year], from: date, to: Date()).year! == 0 {
-            dateFormatter.dateFormat  = needOneLine ? "(MM월 dd일 a hh:mm)" : "MM월 dd일\n a hh:mm"
-        } else {
-            dateFormatter.dateFormat = needOneLine ? "(yy년 MM월 dd일 a hh:mm)" : "yyyy년\nMM월 dd일\na hh:mm"
-        }
-        return dateFormatter.string(from: date)
-    }
     
     @objc func setTitleDate() {
         datePicker.date = mainView.calendar.selectedDate ?? Date()
@@ -153,12 +141,20 @@ class MonthlyViewController: BaseViewController {
     }
     
     @objc func hideBtnClicked(_ sender: UIButton) {
-        print(#function)
         isHiding.toggle()
         fetchRealm(date: mainView.calendar.selectedDate ?? Date())
         mainView.tableView.reloadData()
     }
     
+    @objc func checkListBtnClicked() {
+        let vc = CheckListViewController()
+        let date = mainView.calendar.selectedDate ?? Date()
+        vc.allDayTasks = isHiding ? repository.allDayTasksFetch(date: date, isHiding: false): allDayTasks
+        vc.notAllDayTasks = isHiding ? repository.notAllDayTasksFetch(date: date, isHiding: false) : notAllDayTasks
+        vc.selectedDate = date
+        let navigationVC = UINavigationController(rootViewController: vc)
+        self.present(navigationVC, animated: true)
+    }
 }
 
 extension MonthlyViewController: UIGestureRecognizerDelegate {
@@ -210,12 +206,14 @@ extension MonthlyViewController: FSCalendarDataSource, FSCalendarDelegate {
 }
 
 extension MonthlyViewController: UITableViewDelegate, UITableViewDataSource {
+    
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header = MonthlyTableViewHeaderView()
         header.titleLabel.text = lunarDate
         header.hideBtn.addTarget(self, action: #selector(hideBtnClicked(_:)), for: .touchUpInside)
         let title = isHiding ? "모든 일정 보기" : "지난 일정 숨기기"
         header.hideBtn.setTitle(title, for: .normal)
+        header.checkListBtn.addTarget(self, action: #selector(checkListBtnClicked), for: .touchUpInside)
         return header
     }
     
@@ -270,15 +268,15 @@ extension MonthlyViewController: UICollectionViewDelegate, UICollectionViewDataS
             } else {
                 let event = notAllDayArr[collectionView.tag][indexPath.row]
                 cell.titleLabel.text = event.title
-                cell.dateLabel.text = getDateStr(date: event.startTime)
-                cell.fullDateLabel.text = getDateStr(date: event.startTime, needOneLine: true) + " -> " + getDateStr(date: event.endTime, needOneLine: true)
+                cell.dateLabel.text = event.startTime.getDateStr()
+                cell.fullDateLabel.text = event.startTime.getDateStr(needOneLine: true) + " -> " + event.endTime.getDateStr(needOneLine: true)
                 cell.lineView.backgroundColor = UIColor(hexAlpha: event.color)
             }
         case 1...(notAllDayArr.count - 1 + allDayRowNum):
             let event = notAllDayArr[collectionView.tag - allDayRowNum][indexPath.row]
             cell.titleLabel.text = event.title
-            cell.dateLabel.text = getDateStr(date: event.startTime)
-            cell.fullDateLabel.text = getDateStr(date: event.startTime, needOneLine: true) + " -> " + getDateStr(date: event.endTime, needOneLine: true)
+            cell.dateLabel.text = event.startTime.getDateStr()
+            cell.fullDateLabel.text = event.startTime.getDateStr(needOneLine: true) + " -> " + event.endTime.getDateStr(needOneLine: true)
             cell.lineView.backgroundColor = UIColor(hexAlpha: event.color)
         default : return MonthlyCollectionViewCell()
         }

@@ -36,4 +36,17 @@ extension Date {
     func calNextMidnight() -> Date {
         return Calendar.current.date(byAdding: .day, value: 1, to: self.calMidnight())!
     }
+    
+    func getDateStr(needOneLine: Bool = false) -> String {
+        let dateFormatter = DateFormatter()
+        let current = Calendar.current
+        if current.isDateInToday(self) {
+            dateFormatter.dateFormat = "a hh:mm"
+        } else if current.dateComponents([.year], from: self, to: Date()).year! == 0 {
+            dateFormatter.dateFormat  = needOneLine ? "(MM월 dd일 a hh:mm)" : "MM월 dd일\n a hh:mm"
+        } else {
+            dateFormatter.dateFormat = needOneLine ? "(yy년 MM월 dd일 a hh:mm)" : "yyyy년\nMM월 dd일\na hh:mm"
+        }
+        return dateFormatter.string(from: self)
+    }
 }

@@ -15,6 +15,10 @@ protocol EventRepositoryType {
     func notAllDayTasksFetch(date: Date, isHiding: Bool) -> Results<Event>
     func updateEvent(old: Event, new: Event)
     func deleteEvent(event: Event)
+    
+    func deleteTodo(todo: Todo)
+    func updateTodoTitle(todo: Todo, title: String)
+    func updateTodoStatus(todo: Todo)
 }
 
 class EventRepository: EventRepositoryType {
@@ -95,4 +99,33 @@ class EventRepository: EventRepositoryType {
         }
     }
     
+    func deleteTodo(todo: Todo) {
+        do {
+            try localRealm.write({
+                localRealm.delete(todo)
+            })
+        } catch let error {
+            print(error)
+        }
+    }
+
+    func updateTodoTitle(todo: Todo, title: String) {
+        do {
+            try localRealm.write({
+                todo.title = title
+            })
+        } catch let error {
+            print(error)
+        }
+    }
+    
+    func updateTodoStatus(todo: Todo) {
+        do {
+            try localRealm.write({
+                todo.isDone.toggle()
+            })
+        } catch let error {
+            print(error)
+        }
+    }
 }

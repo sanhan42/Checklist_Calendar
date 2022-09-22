@@ -12,6 +12,7 @@ class TitleTableViewCell: BaseTableViewCell {
         let tf = UITextField()
         tf.textColor = .textColor
         tf.placeholder = "제목"
+        tf.adjustsFontSizeToFitWidth = true
         tf.font = .systemFont(ofSize: 18.5, weight: .black)
         tf.textAlignment = .left
         return tf
@@ -19,8 +20,8 @@ class TitleTableViewCell: BaseTableViewCell {
     
     lazy var textNumLabel: UILabel = {
         let label = UILabel()
-        label.text = "\(titleTextField.text?.count ?? 0)/25"
-        label.font = .systemFont(ofSize: 13)
+        label.text = "\(titleTextField.text?.count ?? 0)/20"
+        label.font = .systemFont(ofSize: 7.5)
         label.textColor = .placeholderText
         label.textAlignment = .left
         return label
@@ -57,19 +58,19 @@ class TitleTableViewCell: BaseTableViewCell {
     
     override func setConstraints() {
         titleTextField.snp.makeConstraints { make in
-            make.width.equalToSuperview().inset(65)
+            make.width.equalToSuperview().inset(48)
             make.verticalEdges.equalToSuperview()
             make.leading.equalToSuperview().inset(20)
         }
         
         textNumLabel.snp.makeConstraints { make in
-            make.width.equalTo(40)
-            make.leading.equalTo(titleTextField.snp.trailing).offset(8)
+            make.width.equalTo(32)
+            make.leading.equalTo(titleTextField.snp.trailing).offset(4)
             make.verticalEdges.equalToSuperview()
         }
         
         colorButton.snp.makeConstraints { make in
-            make.trailing.equalToSuperview().inset(25)
+            make.trailing.equalToSuperview().inset(18)
             make.centerY.equalToSuperview()
         }
         
