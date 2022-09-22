@@ -48,7 +48,7 @@ class MonthlyTableViewCell: BaseTableViewCell {
         let itemWidth: CGFloat = deviceWidth - 44
         layout.scrollDirection = .horizontal
         layout.minimumInteritemSpacing = 8.0
-        layout.itemSize = CGSize(width: itemWidth, height: 50)
+        layout.itemSize = CGSize(width: itemWidth, height: 46)
         return layout
     }
 }

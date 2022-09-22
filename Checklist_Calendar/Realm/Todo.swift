@@ -14,10 +14,10 @@ class Todo: Object {
     @Persisted(primaryKey: true) var id: ObjectId
     let forEvent = LinkingObjects(fromType: Event.self, property: "todos")
    
-    convenience init(title: String) {
+    convenience init(title: String, isDone: Bool = false) {
         self.init()
         self.title = title
-        self.isDone = false
+        self.isDone = isDone
     }
 }
 

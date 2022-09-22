@@ -12,11 +12,11 @@ class MonthlyCollectionViewCell: BaseCollectionViewCell {
     let dateLabel: UILabel = {
         let view = UILabel()
         view.text = "하루 종일"
-        view.textColor = .black
+        view.textColor = .textColor
         view.textAlignment = .center
-//        view.adjustsFontSizeToFitWidth = true
-        view.numberOfLines = 2
-        // TODO: 폰트 크기, 줄 수 => 분기 처리 해줘야 함.
+        view.adjustsFontSizeToFitWidth = true
+        view.numberOfLines = 3
+        view.font = .systemFont(ofSize: 13.5, weight: .semibold)
         return view
     }()
     
@@ -30,12 +30,23 @@ class MonthlyCollectionViewCell: BaseCollectionViewCell {
         let view = UILabel()
         view.text = "TEST!!!!!!!!"
         view.textColor = .black
+        view.font = .systemFont(ofSize: 15)
+        return view
+    }()
+    
+    let fullDateLabel: UILabel = {
+        let view = UILabel()
+        view.textColor = .placeholderText
+        view.textAlignment = .left
+        view.adjustsFontSizeToFitWidth = false
+        view.font = .systemFont(ofSize: 10)
+        view.numberOfLines = 1
         return view
     }()
     
     lazy var backView: UIView = {
         let view = UIView()
-        [dateLabel, lineView, titleLabel].forEach { view.addSubview($0) }
+        [dateLabel, lineView, titleLabel, fullDateLabel].forEach { view.addSubview($0) }
         view.layer.masksToBounds = true
         view.layer.cornerRadius = 10
         view.layer.borderWidth = 1
@@ -72,7 +83,7 @@ class MonthlyCollectionViewCell: BaseCollectionViewCell {
         dateLabel.snp.makeConstraints { make in
             make.leading.equalToSuperview().inset(4)
             make.verticalEdges.equalToSuperview().inset(4)
-            make.width.equalTo(80)
+            make.width.equalTo(50)
         }
         
         lineView.snp.makeConstraints { make in
@@ -83,7 +94,15 @@ class MonthlyCollectionViewCell: BaseCollectionViewCell {
         
         titleLabel.snp.makeConstraints { make in
             make.leading.equalTo(lineView.snp.trailing).offset(12)
-            make.verticalEdges.equalToSuperview().inset(4)
+            make.trailing.equalToSuperview().inset(8)
+            make.top.equalToSuperview().inset(6)
+        }
+        
+        fullDateLabel.snp.makeConstraints { make in
+            make.leading.equalTo(lineView.snp.trailing).offset(12)
+            make.trailing.equalToSuperview().inset(8)
+            make.top.equalTo(titleLabel.snp.bottom).offset(4)
+            make.bottom.equalToSuperview().inset(6)
         }
     }
 }

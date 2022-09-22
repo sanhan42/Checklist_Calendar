@@ -28,20 +28,6 @@ class BaseViewController: UIViewController {
     func configure() {
         view.backgroundColor = .bgColor
     }
-   
-    // TODO: 수정 필요
-    func getDateStr(date: Date) -> String {
-        let dateFormatter = DateFormatter()
-        let current = Calendar.current
-        if current.isDateInToday(date) {
-            dateFormatter.dateFormat = "a hh:mm"
-        } else if current.isDateInWeekend(date){
-            dateFormatter.dateFormat  = "EEEE"
-        } else {
-            dateFormatter.dateFormat = "yyyy. MM. dd a hh:mm"
-        }
-        return dateFormatter.string(from: date)
-    }
     
     func showDatePickerPopup(mode: UIDatePicker.Mode = .date, okBtnHandler: ((UIAlertAction) -> Void)? = nil) {
         datePicker.datePickerMode = mode

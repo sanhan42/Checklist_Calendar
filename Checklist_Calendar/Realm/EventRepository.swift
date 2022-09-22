@@ -9,20 +9,22 @@ import Foundation
 import RealmSwift
 
 protocol EventRepositoryType {
-    func addItem(item: Event)
+    func addEvent(event: Event)
     func dayTasksFetch(date: Date) -> Results<Event>
-    func allDayTasksFetch(date: Date) -> Results<Event>
+    func allDayTasksFetch(date: Date, isHiding: Bool) -> Results<Event>
     func notAllDayTasksFetch(date: Date, isHiding: Bool) -> Results<Event>
+    func updateEvent(old: Event, new: Event)
+    func deleteEvent(event: Event)
 }
 
 class EventRepository: EventRepositoryType {
     let fileUrl = Realm.Configuration.defaultConfiguration.fileURL!
     let localRealm = try! Realm()
     
-    func addItem(item: Event) {
+    func addEvent(event: Event) {
         do {
             try localRealm.write({
-                localRealm.add(item)
+                localRealm.add(event)
             })
         } catch let error {
             print(error)
@@ -30,28 +32,67 @@ class EventRepository: EventRepositoryType {
     }
     
     func dayTasksFetch(date: Date) -> Results<Event> {
-        let todayStart = date.calMidnight() // 만약 매개변수 값으로 들어오는 Date가 00시 00분의 형태로 들어오는게 보장된다면, 이 작업은 필요 없음.
-        return localRealm.objects(Event.self).where {
-            ($0.start <= todayStart && $0.end > todayStart)
-        }
-    }
-    
-    func allDayTasksFetch(date: Date) -> Results<Event> {
         let todayStart = date.calMidnight()
         let todayEnd = date.calNextMidnight()
         return localRealm.objects(Event.self).where {
-            ($0.startTime <= todayStart && $0.endTime >= todayEnd)
+            ($0.start <= todayEnd && $0.endTime > todayStart)
         }
+    }
+    
+    func allDayTasksFetch(date: Date, isHiding: Bool) -> Results<Event> {
+        let todayStart = date.calMidnight()
+        let todayEnd = date.calNextMidnight()
+        if isHiding {
+            return localRealm.objects(Event.self).sorted(byKeyPath: "endTime", ascending: true).where {
+                $0.endTime > Date() && ($0.startTime <= todayStart && $0.endTime >= todayEnd)
+            }
+        } else {
+            return localRealm.objects(Event.self).sorted(byKeyPath: "endTime", ascending: true).where {
+                ($0.startTime <= todayStart && $0.endTime >= todayEnd)
+            }
+        }
+        
     }
     
     func notAllDayTasksFetch(date: Date, isHiding: Bool) -> Results<Event> {
         let todayStart = date.calMidnight()
-        let today = isHiding ? date : todayStart
-        return localRealm.objects(Event.self).where {
-            ($0.start <= todayStart && $0.end > todayStart && $0.startTime > today)
+        let todayEnd = date.calNextMidnight()
+        let todayEventTasks = dayTasksFetch(date: date)
+        if isHiding {
+            return todayEventTasks.sorted(byKeyPath: "endTime", ascending: true).sorted(byKeyPath: "startTime", ascending: true).where {
+                $0.endTime > Date() && (($0.startTime <= todayStart && $0.endTime < todayEnd) || ($0.startTime > todayStart && $0.startTime < todayEnd))
+            }
+        } else {
+            return todayEventTasks.sorted(byKeyPath: "endTime", ascending: true).sorted(byKeyPath: "startTime", ascending: true).where {
+                ($0.startTime <= todayStart && $0.endTime < todayEnd) || ($0.startTime > todayStart && $0.startTime < todayEnd)
+            }
         }
     }
     
-   
+    func updateEvent(old: Event, new: Event) {
+        deleteEvent(event: old)
+        addEvent(event: new)
+    }
+    
+    func deleteEvent(event: Event) {
+        deleteTodos(todos: event.todos)
+        do {
+            try localRealm.write({
+                localRealm.delete(event)
+            })
+        } catch let error {
+            print(error)
+        }
+    }
+    
+    func deleteTodos(todos: List<Todo>) {
+        do {
+            try localRealm.write({
+                localRealm.delete(todos)
+            })
+        } catch let error {
+            print(error)
+        }
+    }
     
 }

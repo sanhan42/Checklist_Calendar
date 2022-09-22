@@ -22,6 +22,7 @@ class Event: Object {
     // startDate 와 endDate는 이벤트 시작일과 종료일의 날짜의 텍스트가 필요할 떄 사용.
     @Persisted var startDate: Date  /// 이벤트 시작 날짜 => 주의! 시간 부분은 잘못될 수 있음
     @Persisted var endDate: Date    /// 이벤트 종료 날짜 => 주의! 시간 부분은 잘못될 수 있음
+    @Persisted var startHour: Int   /// 시작 시간이 같은 이벤트들을 묶어줄 떄 사용
     @Persisted var isAllDay: Bool
     @Persisted var todos: List<Todo>
     
@@ -37,6 +38,7 @@ class Event: Object {
         self.end = end
         self.startDate = start
         self.endDate = endDate
+        self.startHour = Calendar.current.dateComponents([.hour], from: startTime).hour!
         self.isAllDay = isAllDay
     }
     

@@ -7,13 +7,31 @@
 
 import UIKit
 import FSCalendar
+import RealmSwift
 
 class MonthlyViewController: BaseViewController {
     
     let mainView = MonthlyView()
+    let repository = EventRepository()
+    
+    var allDayTasks: Results<Event>!
+    var notAllDayTasks: Results<Event>!
+    var notAllDayArr: [[Event]] = [] // [테이블셀 row][컬렉션뷰셀의 item]
+    
+    var dayEventCount: Int {
+        return allDayTasks.count + notAllDayTasks.count
+    }
+    
+    var isHiding = false
+    
     lazy var lunarDate = calLunarDate()
     
     private var collectionViewLayout: UICollectionViewFlowLayout?
+    
+    lazy var dismissHandler = {
+        self.fetchRealm(date: self.mainView.calendar.selectedDate ?? Date())
+        self.mainView.tableView.reloadData()
+    }
     
     fileprivate lazy var scopeGesture: UIPanGestureRecognizer = {
         [unowned self] in
@@ -36,6 +54,7 @@ class MonthlyViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configure()
+        fetchRealm(date: mainView.calendar.selectedDate ?? Date())
     }
     
     override func configure() {
@@ -56,6 +75,43 @@ class MonthlyViewController: BaseViewController {
         mainView.tableView.delegate = self
         mainView.tableView.dataSource = self
         mainView.tableView.register(MonthlyTableViewCell.self, forCellReuseIdentifier: MonthlyTableViewCell.reuseIdentifier)
+    }
+    
+    func fetchRealm(date: Date) {
+        allDayTasks = repository.allDayTasksFetch(date: date, isHiding:  isHiding)
+        notAllDayTasks = repository.notAllDayTasksFetch(date: date, isHiding: isHiding)
+        setNotAllDayArr()
+    }
+    
+    func setNotAllDayArr() {
+        var rtnArry: [[Event]] = []
+        var i = 0
+        while 0..<notAllDayTasks.count ~= i {
+            var array: [Event] = []
+            array.append(notAllDayTasks[i])
+            let hour = notAllDayTasks[i].startHour
+            i += 1
+            while i < notAllDayTasks.count && notAllDayTasks[i].startHour == hour {
+                array.append(notAllDayTasks[i])
+                i += 1
+            }
+            rtnArry.append(array)
+        }
+        notAllDayArr = rtnArry
+    }
+    
+    // TODO: 작은 아이폰에서 레이아웃 확인 후 수정 필요
+    func getDateStr(date: Date, needOneLine: Bool = false) -> String {
+        let dateFormatter = DateFormatter()
+        let current = Calendar.current
+        if current.isDateInToday(date) {
+            dateFormatter.dateFormat = "a hh:mm"
+        } else if current.dateComponents([.year], from: date, to: Date()).year! == 0 {
+            dateFormatter.dateFormat  = needOneLine ? "(MM월 dd일 a hh:mm)" : "MM월 dd일\n a hh:mm"
+        } else {
+            dateFormatter.dateFormat = needOneLine ? "(yy년 MM월 dd일 a hh:mm)" : "yyyy년\nMM월 dd일\na hh:mm"
+        }
+        return dateFormatter.string(from: date)
     }
     
     @objc func setTitleDate() {
@@ -80,10 +136,8 @@ class MonthlyViewController: BaseViewController {
         let btn = UIButton()
         btn.setTitle("새로운 이벤트 추가", for: .normal)
         btn.setTitleColor(.black.withAlphaComponent(0.75), for: .normal)
-        btn.titleLabel?.font = .systemFont(ofSize: 20, weight: .bold)
+        btn.titleLabel?.font = .systemFont(ofSize: 18, weight: .bold)
         btn.layer.cornerRadius = 4
-//        btn.layer.borderWidth = 1
-//        btn.layer.borderColor = UIColor.textColor.withAlphaComponent(0.9).cgColor
         btn.backgroundColor = .clear
         btn.addTarget(self, action: #selector(addNewEventBtnClicked), for: .touchUpInside)
         let addNewEventBtn = UIBarButtonItem(customView: btn)
@@ -94,8 +148,21 @@ class MonthlyViewController: BaseViewController {
         let vc = WriteViewController()
         vc.datePicker.date = mainView.calendar.selectedDate ?? Date()
         let navi = UINavigationController(rootViewController: vc)
+        vc.afterDissmiss = dismissHandler
+//        {
+//            self.fetchRealm(date: self.mainView.calendar.selectedDate ?? Date())
+//            self.mainView.tableView.reloadData()
+//        }
         self.present(navi, animated: true)
     }
+    
+    @objc func hideBtnClicked(_ sender: UIButton) {
+        print(#function)
+        isHiding.toggle()
+        fetchRealm(date: mainView.calendar.selectedDate ?? Date())
+        mainView.tableView.reloadData()
+    }
+    
 }
 
 extension MonthlyViewController: UIGestureRecognizerDelegate {
@@ -137,18 +204,22 @@ extension MonthlyViewController: FSCalendarDataSource, FSCalendarDelegate {
     
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
         lunarDate = calLunarDate()
+        fetchRealm(date: date)
         mainView.tableView.reloadData()
     }
-    
-    //    func calendar(_ calendar: FSCalendar, numberOfEventsFor date: Date) -> Int {
-    //    }
     //
+    //        func calendar(_ calendar: FSCalendar, numberOfEventsFor date: Date) -> Int {
+    //
+    //        }
 }
 
 extension MonthlyViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header = MonthlyTableViewHeaderView()
         header.titleLabel.text = lunarDate
+        header.hideBtn.addTarget(self, action: #selector(hideBtnClicked(_:)), for: .touchUpInside)
+        let title = isHiding ? "모든 일정 보기" : "지난 일정 숨기기"
+        header.hideBtn.setTitle(title, for: .normal)
         return header
     }
     
@@ -157,33 +228,86 @@ extension MonthlyViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 60
+        return 56
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10 // TODO: 해당 날짜에 등록된 이벤드 시간 종류 개수로 수정하기
+        return allDayTasks.isEmpty ? notAllDayArr.count : notAllDayArr.count + 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-       
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: MonthlyTableViewCell.reuseIdentifier, for: indexPath) as? MonthlyTableViewCell else { return UITableViewCell() }
-            cell.selectionStyle = .none
-            cell.collectionView.delegate = self
-            cell.collectionView.dataSource = self
-            cell.collectionView.tag = indexPath.row
-            collectionViewLayout = cell.collectionView.collectionViewLayout as? UICollectionViewFlowLayout
-            return cell
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: MonthlyTableViewCell.reuseIdentifier, for: indexPath) as? MonthlyTableViewCell else { return UITableViewCell() }
+        cell.selectionStyle = .none
+        cell.collectionView.delegate = self
+        cell.collectionView.dataSource = self
+        cell.collectionView.reloadData()
+        cell.collectionView.tag = indexPath.row
+        cell.collectionView.scrollToItem(at: [0, 0], at: .left, animated: false)
+        collectionViewLayout = cell.collectionView.collectionViewLayout as? UICollectionViewFlowLayout
+        return cell
     }
 }
 
 extension MonthlyViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 4
+        let allDayRowNum = allDayTasks.isEmpty ? 0 : 1
+        switch collectionView.tag {
+        case 0:
+            return allDayTasks.isEmpty ? notAllDayArr[0].count : allDayTasks.count
+        case 1...(notAllDayArr.count - 1 + allDayRowNum):
+            return notAllDayArr[collectionView.tag - allDayRowNum].count
+        default : return 0
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MonthlyCollectionViewCell.reuseIdentifier, for: indexPath) as? MonthlyCollectionViewCell else { return UICollectionViewCell() }
+        let allDayRowNum = allDayTasks.isEmpty ? 0 : 1
+        switch collectionView.tag {
+        case 0:
+            if !allDayTasks.isEmpty {
+                cell.titleLabel.text = allDayTasks[indexPath.row].title
+                cell.dateLabel.text = "하루 종일"
+                cell.fullDateLabel.text = "하루 종일"
+                cell.lineView.backgroundColor = UIColor(hexAlpha: allDayTasks[indexPath.row].color)
+            } else {
+                let event = notAllDayArr[collectionView.tag][indexPath.row]
+                cell.titleLabel.text = event.title
+                cell.dateLabel.text = getDateStr(date: event.startTime)
+                cell.fullDateLabel.text = getDateStr(date: event.startTime, needOneLine: true) + " -> " + getDateStr(date: event.endTime, needOneLine: true)
+                cell.lineView.backgroundColor = UIColor(hexAlpha: event.color)
+            }
+        case 1...(notAllDayArr.count - 1 + allDayRowNum):
+            let event = notAllDayArr[collectionView.tag - allDayRowNum][indexPath.row]
+            cell.titleLabel.text = event.title
+            cell.dateLabel.text = getDateStr(date: event.startTime)
+            cell.fullDateLabel.text = getDateStr(date: event.startTime, needOneLine: true) + " -> " + getDateStr(date: event.endTime, needOneLine: true)
+            cell.lineView.backgroundColor = UIColor(hexAlpha: event.color)
+        default : return MonthlyCollectionViewCell()
+        }
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        var event: Event!
+        let allDayRowNum = allDayTasks.isEmpty ? 0 : 1
+        switch collectionView.tag {
+        case 0:
+            if !allDayTasks.isEmpty {
+                event = allDayTasks[indexPath.row]
+            } else {
+                event = notAllDayArr[collectionView.tag][indexPath.row]
+            }
+        case 1...(notAllDayArr.count - 1 + allDayRowNum):
+            event = notAllDayArr[collectionView.tag - allDayRowNum][indexPath.row]
+        default : return
+        }
+        let vc = WriteViewController()
+        vc.realmEvent = event
+        vc.afterDissmiss = dismissHandler
+        let navi = UINavigationController(rootViewController: vc)
+        present(navi , animated: true)
     }
     
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
@@ -205,5 +329,4 @@ extension MonthlyViewController: UICollectionViewDelegate, UICollectionViewDataS
                          y: scrollView.contentInset.top)
         targetContentOffset.pointee = offset
     }
-    
 }
