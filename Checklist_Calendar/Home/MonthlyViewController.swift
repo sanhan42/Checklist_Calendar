@@ -149,10 +149,6 @@ class MonthlyViewController: BaseViewController {
         vc.datePicker.date = mainView.calendar.selectedDate ?? Date()
         let navi = UINavigationController(rootViewController: vc)
         vc.afterDissmiss = dismissHandler
-//        {
-//            self.fetchRealm(date: self.mainView.calendar.selectedDate ?? Date())
-//            self.mainView.tableView.reloadData()
-//        }
         self.present(navi, animated: true)
     }
     

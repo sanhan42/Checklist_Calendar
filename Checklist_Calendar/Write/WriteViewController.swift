@@ -29,6 +29,10 @@ class WriteViewController: BaseViewController {
     
     var afterDissmiss: (() -> ())?
     
+    override func loadView() {
+        view = mainView
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         if realmEvent != nil {
@@ -42,12 +46,12 @@ class WriteViewController: BaseViewController {
         configure()
         setNavigationBar()
         setToolbar()
+       
         print(repository.fileUrl)
     }
     
     override func configure() {
         super.configure()
-        view = mainView
         mainView.tableView.delegate = self
         mainView.tableView.dataSource = self
         
@@ -197,11 +201,12 @@ extension WriteViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        if tableView.tag == 0 { return nil }
+        if tableView.tag == 0 || indexPath.section == 1 || (event.todos.isEmpty && indexPath.section == 0) { return nil }
         
         let delete = UIContextualAction(style: .normal, title: nil) { action, view, completionHandler in
             let alert = UIAlertController(title: nil, message: "정말 삭제하시겠습니까?", preferredStyle: .alert)
             let cancel = UIAlertAction(title: "취소", style: .cancel)
+            cancel.setValue(UIColor.red, forKey: "titleTextColor")
             let ok = UIAlertAction(title: "확인", style: .destructive) { _ in
                 self.event.todos.remove(at: indexPath.row)
                 self.todoTableViewCell?.checkListTableView.reloadData()
@@ -240,6 +245,7 @@ extension WriteViewController {
     
     @objc func okButtonClicked() {
         guard let titleCell = mainView.tableView.cellForRow(at: [0,0]) as? TitleTableViewCell else { return }
+        titleCell.titleTextField.becomeFirstResponder()
         titleCell.titleTextField.endEditing(true)
         
         if event.isAllDay {
@@ -350,16 +356,16 @@ extension WriteViewController: UITextFieldDelegate {
         if textField.tag == -2 { // 이벤트 제목 입력란
             event.title = content
         }
-        
-        if 0..<event.todos.count ~= textField.tag {
-            event.todos[textField.tag].title = content
-        }
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
+        let content = textField.text == nil ? "" : textField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
         if textField.tag == -2 {
-            let content = textField.text == nil ? "" : textField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
             event.title = content
+        }
+        
+        if 0..<event.todos.count ~= textField.tag {
+            event.todos[textField.tag].title = content
         }
     }
     
