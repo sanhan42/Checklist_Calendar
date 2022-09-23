@@ -115,7 +115,7 @@ extension CheckListViewController {
         let section = allDayTasks.isEmpty || indexPath.section < allDayTasks.count ? indexPath.section : indexPath.section - allDayTasks.count
         let row = indexPath.row
         repository.updateTodoTitle(todo: tasks[section].todos[row], title: sender.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? "")
-        tableView.reloadRows(at: [indexPath], with: .automatic)
+        tableView.reloadRows(at: [indexPath], with: .none)
         sender.becomeFirstResponder()
     }
     
@@ -125,6 +125,6 @@ extension CheckListViewController {
         let section = allDayTasks.isEmpty || indexPath.section < allDayTasks.count ? indexPath.section : indexPath.section - allDayTasks.count
         let row = indexPath.row
         repository.updateTodoStatus(todo: tasks[section].todos[row])
-        tableView.reloadRows(at: [indexPath], with: .automatic)
+        tableView.reloadRows(at: [indexPath], with: .none)
     }
 }

@@ -22,7 +22,7 @@ class WriteViewController: BaseViewController {
     
     lazy var writeDate: Date = Date()
     
-    lazy var event: Event = Event(title: "", color: UIColor.cherryColor.toHexString(), start: writeDate.calMidnight(), end: writeDate.calNextMidnight(), startTime: writeDate, endTime: Calendar.current.date(byAdding: .hour, value: 1, to: writeDate) ?? writeDate) {
+    lazy var event: Event = Event(title: "", color: UIColor.cherryColor.toHexString(), startDate: writeDate.calMidnight(), endDate: writeDate.calMidnight(), startTime: writeDate, endTime: Calendar.current.date(byAdding: .hour, value: 1, to: writeDate) ?? writeDate) {
         didSet {
             hasChanges = true
         }
@@ -41,7 +41,7 @@ class WriteViewController: BaseViewController {
         super.viewDidLoad()
         if realmEvent != nil {
             let tempEvent = realmEvent!
-            self.event = Event(title: tempEvent.title, color: tempEvent.color, start: tempEvent.start, end: tempEvent.end, startTime: tempEvent.startTime, endTime: tempEvent.endTime, isAllDay: tempEvent.isAllDay)
+            self.event = Event(title: tempEvent.title, color: tempEvent.color, startDate: tempEvent.startDate, endDate: tempEvent.endDate, startTime: tempEvent.startTime, endTime: tempEvent.endTime, isAllDay: tempEvent.isAllDay)
             for todo in realmEvent!.todos {
                 let new = Todo(title: todo.title, isDone: todo.isDone)
                 event.todos.append(new)
