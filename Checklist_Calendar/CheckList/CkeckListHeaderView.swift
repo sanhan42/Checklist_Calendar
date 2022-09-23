@@ -18,7 +18,7 @@ class CheckListHeaderView: BaseView {
         let view = UILabel()
         view.text = "TEST!!!!!!!!"
         view.textColor = .black
-        view.font = .systemFont(ofSize: 13)
+        view.font = .systemFont(ofSize: 13, weight: .semibold)
         return view
     }()
     
@@ -55,10 +55,10 @@ class CheckListHeaderView: BaseView {
     }
     
     override func configureUI() {
-//        layer.masksToBounds = false
-//        layer.shadowOpacity = 0.5
-//        layer.shadowOffset = CGSize(width: 0, height: 0)
-//        layer.shadowRadius = 2
+        layer.masksToBounds = false
+        layer.shadowOpacity = 0.08
+        layer.shadowOffset = CGSize(width: 0, height: 0)
+        layer.shadowRadius = 1
         addSubview(backView)
     }
     
@@ -70,20 +70,21 @@ class CheckListHeaderView: BaseView {
         lineView.snp.makeConstraints { make in
             make.width.equalTo(4)
             make.leading.equalToSuperview().offset(4)
-            make.verticalEdges.equalToSuperview().inset(4)
+            make.top.equalToSuperview().inset(2.2)
+            make.bottom.equalToSuperview().offset(10)
         }
         
         titleLabel.snp.makeConstraints { make in
             make.leading.equalTo(lineView.snp.trailing).offset(12)
             make.trailing.equalToSuperview().inset(8)
-            make.top.equalToSuperview().inset(6)
+            make.top.equalToSuperview().inset(2)
         }
         
         fullDateLabel.snp.makeConstraints { make in
             make.leading.equalTo(lineView.snp.trailing).offset(12)
             make.trailing.equalToSuperview().inset(8)
             make.top.equalTo(titleLabel.snp.bottom).offset(4)
-            make.bottom.equalToSuperview().inset(6)
+            make.bottom.equalToSuperview().inset(2)
         }
     }
 }

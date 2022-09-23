@@ -13,7 +13,10 @@ class CheckListViewController: BaseViewController {
     let tableView: UITableView = {
         let view = UITableView(frame: .null, style: .insetGrouped)
         view.backgroundColor = .bgColor
+        view.separatorStyle = .none
         view.register(CheckListTableViewCell.self, forCellReuseIdentifier: CheckListTableViewCell.reuseIdentifier)
+        view.rowHeight = 38
+        view.sectionHeaderHeight = 38
         return view
     }()
     
@@ -69,19 +72,25 @@ extension CheckListViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: CheckListTableViewCell.reuseIdentifier, for: indexPath) as? CheckListTableViewCell else { return UITableViewCell() }
-//        if allDayTasks.isEmpty {
-//            cell.textField.text = notAllDayTasks[indexPath.section].todos[indexPath.row].title
-//            return cell
-//        }
+        cell.selectionStyle = .none
+        cell.checkButton.snp.remakeConstraints { make in
+            make.width.height.equalTo(15)
+            make.leading.equalToSuperview().inset(8)
+            make.centerY.equalToSuperview()
+        }
         
         let tagNum = setTagNum(section: indexPath.section, row: indexPath.row)
         let section = 0..<allDayTasks.count ~= indexPath.section ? indexPath.section : indexPath.section - allDayTasks.count
         let tasks: Results<Event> = 0..<allDayTasks.count ~= indexPath.section ? allDayTasks : notAllDayTasks
+        cell.textField.font = .systemFont(ofSize: 15)
+        cell.textField.adjustsFontSizeToFitWidth = true
+        cell.textField.textColor = .textColor.withAlphaComponent(0.9)
         cell.textField.text = tasks[section].todos[indexPath.row].title
         cell.textField.tag = tagNum
         cell.textField.addTarget(self, action: #selector(todoTitleChanged(_:)), for: .editingChanged)
         let img = tasks[section].todos[indexPath.row].isDone ? UIImage(systemName: "checkmark.square") : UIImage(systemName: "square")
         cell.checkButton.setImage(img, for: .normal)
+        cell.checkButton.tintColor = .textColor.withAlphaComponent(0.9)
         cell.checkButton.tag = tagNum
         cell.checkButton.addTarget(self, action: #selector(checkButtonClicked(_:)), for: .touchUpInside)
         

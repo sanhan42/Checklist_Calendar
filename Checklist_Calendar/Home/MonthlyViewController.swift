@@ -51,6 +51,10 @@ class MonthlyViewController: BaseViewController {
         return formatter.string(from: date)
     }
     
+    override func loadView() {
+        self.view = mainView
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configure()
@@ -62,7 +66,6 @@ class MonthlyViewController: BaseViewController {
         self.navigationController?.isNavigationBarHidden = true
         setToolbar()
         
-        self.view = mainView
         mainView.calendar.dataSource = self
         mainView.calendar.delegate = self
         

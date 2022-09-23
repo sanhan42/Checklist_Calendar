@@ -12,7 +12,7 @@ extension String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = format
         dateFormatter.locale = Locale(identifier:"ko_KR")
-        dateFormatter.timeZone = TimeZone(identifier: "KST")
+//        dateFormatter.timeZone = TimeZone(identifier: "KST")
         return dateFormatter.date(from: self)
     }
 }
@@ -22,7 +22,7 @@ extension Date {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = format
         dateFormatter.locale = Locale(identifier:"ko_KR")
-        dateFormatter.timeZone = TimeZone(identifier: "KST")
+//        dateFormatter.timeZone = TimeZone(identifier: "KST")
         return dateFormatter.string(from: self)
     }
     
