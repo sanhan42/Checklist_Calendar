@@ -19,10 +19,14 @@ class WriteViewController: BaseViewController {
             self.navigationController?.isModalInPresentation = self.hasChanges // 모달 방식으로 dissmiss 못하게 막아줌.
         }
     }
-    var event: Event = {
-        let writeDate = Date()
-        return Event(title: "", color: UIColor.cherryColor.toHexString(), start: writeDate.calMidnight(), end: writeDate.calNextMidnight(), startTime: writeDate, endTime: Calendar.current.date(byAdding: .hour, value: 1, to: writeDate) ?? writeDate)
-    }()
+    
+    lazy var writeDate: Date = Date()
+    
+    lazy var event: Event = Event(title: "", color: UIColor.cherryColor.toHexString(), start: writeDate.calMidnight(), end: writeDate.calNextMidnight(), startTime: writeDate, endTime: Calendar.current.date(byAdding: .hour, value: 1, to: writeDate) ?? writeDate) {
+        didSet {
+            hasChanges = true
+        }
+    }
     
     var todoTableViewCell: TodoTableViewCell?
     var checkListTableViewCell : CheckListTableViewCell?
@@ -42,6 +46,7 @@ class WriteViewController: BaseViewController {
                 let new = Todo(title: todo.title, isDone: todo.isDone)
                 event.todos.append(new)
             }
+            hasChanges = false
         }
         configure()
         setNavigationBar()
@@ -154,8 +159,10 @@ extension WriteViewController: UITableViewDelegate, UITableViewDataSource {
                 cell.endDateBtn.addTarget(self, action: #selector(setEndDate), for: .touchUpInside)
                 cell.startTimeBtn.addTarget(self, action: #selector(setStartTime), for: .touchUpInside)
                 cell.endTimeBtn.addTarget(self, action: #selector(setEndTime), for: .touchUpInside)
-                cell.startDateBtn.setTitle(event.startDate.toString(format: "yy/MM/dd (E)"), for: .normal)
-                cell.endDateBtn.setTitle(event.endDate.toString(format: "yy/MM/dd (E)"), for: .normal)
+                cell.startDateBtn.setTitle(event.startTime.toString(format: "yy/MM/dd (E)"), for: .normal)
+                print(event.startTime)
+                let endDate = event.isAllDay ? Calendar.current.date(byAdding: .second , value: -1, to: event.endTime)! : event.endTime
+                cell.endDateBtn.setTitle(endDate.toString(format: "yy/MM/dd (E)"), for: .normal)
                 cell.startTimeBtn.setTitle(event.startTime.toString(format: "a hh:mm"), for: .normal)
                 cell.endTimeBtn.setTitle(event.endTime.toString(format: "a hh:mm"), for: .normal)
                 return cell
@@ -240,6 +247,8 @@ extension WriteViewController {
     }
     
     @objc func cancleItemClicked() {
+        guard let titleCell = mainView.tableView.cellForRow(at: [0,0]) as? TitleTableViewCell else { return }
+        titleCell.titleTextField.endEditing(true)
         let controller = navigationController?.presentationController ?? UIPresentationController(presentedViewController: self, presenting: nil)
         presentationControllerDidAttemptToDismiss(controller)
     }
@@ -346,18 +355,22 @@ extension WriteViewController {
 }
 
 extension WriteViewController: UITextFieldDelegate {
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        if textField.tag >= 0 || (textField.tag == -2 && textField.text != "") {
-            self.hasChanges = true
-        }
-    }
+//    func textFieldDidBeginEditing(_ textField: UITextField) {
+//        if textField.tag >= 0 || (textField.tag == -2 && textField.text != "") {
+//            self.hasChanges = true
+//        }
+//    }
     
-    func textFieldDidChangeSelection(_ textField: UITextField) {
-        let content = textField.text == nil ? "" : textField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
-        if textField.tag == -2 { // 이벤트 제목 입력란
-            event.title = content
-        }
-    }
+//    func textFieldDidChangeSelection(_ textField: UITextField) {
+//        let content = textField.text == nil ? "" : textField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
+//        if textField.tag == -2 { // 이벤트 제목 입력란
+//            event.title = content
+//        }
+//
+//        if 0..<event.todos.count ~= textField.tag {
+//            event.todos[textField.tag].title = content
+//        }
+//    }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
         let content = textField.text == nil ? "" : textField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -408,7 +421,7 @@ extension WriteViewController: UITextFieldDelegate {
             let changeText = currentText.replacingCharacters(in: stringRange, with: string)
             guard let cell = mainView.tableView.cellForRow(at: [0, 0]) as? TitleTableViewCell else { return false }
             cell.textNumLabel.text = "\(changeText.count)/20"
-            return changeText.count <= 24
+            return changeText.count <= 19
         }
         return true
     }
