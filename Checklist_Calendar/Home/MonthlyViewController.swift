@@ -61,12 +61,12 @@ class MonthlyViewController: BaseViewController {
         super.viewDidLoad()
         configure()
         fetchRealm(date: mainView.calendar.selectedDate ?? Date())
+        setToolbar()
     }
     
     override func configure() {
         super.configure()
         self.navigationController?.isNavigationBarHidden = true
-        setToolbar()
         
         mainView.calendar.dataSource = self
         mainView.calendar.delegate = self
@@ -168,7 +168,8 @@ class MonthlyViewController: BaseViewController {
         var menuElement = [edit]
         if templateTasks != nil {
             for task in templateTasks {
-                let template = UIAction(title: task.title) { _ in
+                let img = UIImage(systemName: "circle.fill")
+                let template = UIAction(title: task.title, image: img?.imageWithColor(color: UIColor(hexAlpha: task.color))) { _ in
                     // TODO: 템플릿 내용 반영해서, 이벤트 추가 & 홈 화면 갱신
                 }
                 menuElement.append(template)
