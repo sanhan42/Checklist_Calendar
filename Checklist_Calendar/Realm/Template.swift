@@ -1,14 +1,14 @@
 //
-//  Event.swift
+//  Template.swift
 //  Checklist_Calendar
 //
-//  Created by 한상민 on 2022/09/15.
+//  Created by 한상민 on 2022/09/24.
 //
 
 import Foundation
 import RealmSwift
 
-class Event: Object {
+class Template: Object {
     @Persisted(primaryKey: true) var id: ObjectId
     @Persisted var title: String
     @Persisted var color: String
@@ -22,14 +22,14 @@ class Event: Object {
     @Persisted var isAllDay: Bool
     @Persisted var todos: List<Todo>
     
-    convenience init(title: String, color: String, startDate: Date, endDate: Date, startTime: Date, endTime: Date, isAllDay: Bool = false) {
+    convenience init(title: String, color: String, startTime: Date, endTime: Date, isAllDay: Bool = false) {
         self.init()
         self.title = title
         self.color = color
+        self.startDate = Date()
+        self.endDate = Date()
         self.startTime = startTime
         self.endTime = endTime
-        self.startDate = startDate
-        self.endDate = endDate
         self.startHour = Calendar.current.dateComponents([.hour], from: startTime).hour!
         self.isAllDay = isAllDay
     }

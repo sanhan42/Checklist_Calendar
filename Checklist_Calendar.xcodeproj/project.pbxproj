@@ -10,6 +10,10 @@
 		BF0B57DC28D05BE9005A090B /* BaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0B57DB28D05BE9005A090B /* BaseView.swift */; };
 		BF0B57DE28D05C38005A090B /* BaseTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0B57DD28D05C38005A090B /* BaseTableViewCell.swift */; };
 		BF0B57E128D05F9C005A090B /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = BF0B57E028D05F9C005A090B /* SnapKit */; };
+		BF1A6AE628DE7BEE0094EA6D /* Template.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A6AE528DE7BEE0094EA6D /* Template.swift */; };
+		BF1A6AEA28DE93E20094EA6D /* EmptyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A6AE928DE93E20094EA6D /* EmptyCell.swift */; };
+		BF1A6AEC28DE96720094EA6D /* TemplateListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A6AEB28DE96720094EA6D /* TemplateListViewController.swift */; };
+		BF1A6AEE28DE985A0094EA6D /* TemplateListTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A6AED28DE985A0094EA6D /* TemplateListTableCell.swift */; };
 		BF27397C28D3476500441B7F /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF27397B28D3476500441B7F /* UIColor+Extension.swift */; };
 		BF497FA028D9E194007D1527 /* Toast in Frameworks */ = {isa = PBXBuildFile; productRef = BF497F9F28D9E194007D1527 /* Toast */; };
 		BF55056728DC80F200DF978E /* CheckListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF55056628DC80F200DF978E /* CheckListViewController.swift */; };
@@ -47,6 +51,10 @@
 /* Begin PBXFileReference section */
 		BF0B57DB28D05BE9005A090B /* BaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseView.swift; sourceTree = "<group>"; };
 		BF0B57DD28D05C38005A090B /* BaseTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTableViewCell.swift; sourceTree = "<group>"; };
+		BF1A6AE528DE7BEE0094EA6D /* Template.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Template.swift; sourceTree = "<group>"; };
+		BF1A6AE928DE93E20094EA6D /* EmptyCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyCell.swift; sourceTree = "<group>"; };
+		BF1A6AEB28DE96720094EA6D /* TemplateListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateListViewController.swift; sourceTree = "<group>"; };
+		BF1A6AED28DE985A0094EA6D /* TemplateListTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateListTableCell.swift; sourceTree = "<group>"; };
 		BF27397B28D3476500441B7F /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		BF55056628DC80F200DF978E /* CheckListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckListViewController.swift; sourceTree = "<group>"; };
 		BF55056828DC854F00DF978E /* CkeckListHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CkeckListHeaderView.swift; sourceTree = "<group>"; };
@@ -97,6 +105,24 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		BF1A6AE728DE7DC90094EA6D /* TemplateList */ = {
+			isa = PBXGroup;
+			children = (
+				BF1A6AEB28DE96720094EA6D /* TemplateListViewController.swift */,
+				BF1A6AED28DE985A0094EA6D /* TemplateListTableCell.swift */,
+			);
+			path = TemplateList;
+			sourceTree = "<group>";
+		};
+		BF1A6AE828DE938E0094EA6D /* CommonUseCell */ = {
+			isa = PBXGroup;
+			children = (
+				BFEA3A3228D7DC1200003E81 /* CheckListTableViewCell.swift */,
+				BF1A6AE928DE93E20094EA6D /* EmptyCell.swift */,
+			);
+			path = CommonUseCell;
+			sourceTree = "<group>";
+		};
 		BF55056528DC80B100DF978E /* CheckList */ = {
 			isa = PBXGroup;
 			children = (
@@ -120,6 +146,7 @@
 			children = (
 				BFB1052628D3153200D24376 /* Event.swift */,
 				BFB1052828D31B8F00D24376 /* Todo.swift */,
+				BF1A6AE528DE7BEE0094EA6D /* Template.swift */,
 				BFEA3A3428D852F500003E81 /* EventRepository.swift */,
 			);
 			path = Realm;
@@ -153,8 +180,10 @@
 				BFDDC9B328D059860047F22E /* Home */,
 				BFF02C5928D44CE200F0D6AA /* Write */,
 				BF55056528DC80B100DF978E /* CheckList */,
-				BFDDC99728D0572D0047F22E /* AppDelegate.swift */,
+				BF1A6AE728DE7DC90094EA6D /* TemplateList */,
+				BF1A6AE828DE938E0094EA6D /* CommonUseCell */,
 				BFDDC99928D0572D0047F22E /* SceneDelegate.swift */,
+				BFDDC99728D0572D0047F22E /* AppDelegate.swift */,
 				BFDDC99B28D0572D0047F22E /* ViewController.swift */,
 				BFDDC99D28D0572D0047F22E /* Main.storyboard */,
 				BFDDC9A028D057300047F22E /* Assets.xcassets */,
@@ -204,7 +233,6 @@
 				BFF02C5E28D462B900F0D6AA /* TitleTableViewCell.swift */,
 				BFF02C6028D4633C00F0D6AA /* DateTableViewCell.swift */,
 				BFF02C6228D4635800F0D6AA /* TodoTableViewCell.swift */,
-				BFEA3A3228D7DC1200003E81 /* CheckListTableViewCell.swift */,
 			);
 			path = Write;
 			sourceTree = "<group>";
@@ -298,9 +326,12 @@
 				BFB1052728D3153200D24376 /* Event.swift in Sources */,
 				BFDDC9B528D059BC0047F22E /* MonthlyViewController.swift in Sources */,
 				BFF02C6328D4635800F0D6AA /* TodoTableViewCell.swift in Sources */,
+				BF1A6AE628DE7BEE0094EA6D /* Template.swift in Sources */,
 				BFDDC99C28D0572D0047F22E /* ViewController.swift in Sources */,
+				BF1A6AEA28DE93E20094EA6D /* EmptyCell.swift in Sources */,
 				BF55056728DC80F200DF978E /* CheckListViewController.swift in Sources */,
 				BFDDC99828D0572D0047F22E /* AppDelegate.swift in Sources */,
+				BF1A6AEE28DE985A0094EA6D /* TemplateListTableCell.swift in Sources */,
 				BFFDE20728D3658C00090E8A /* BaseCollectionViewCell.swift in Sources */,
 				BFDDC99A28D0572D0047F22E /* SceneDelegate.swift in Sources */,
 				BFC8110728D55D7100BB0011 /* ReusableProtocol.swift in Sources */,
@@ -311,6 +342,7 @@
 				BFDDC9B728D05A3C0047F22E /* MonthlyView.swift in Sources */,
 				BFDDC9BB28D05B380047F22E /* BaseViewController.swift in Sources */,
 				BF27397C28D3476500441B7F /* UIColor+Extension.swift in Sources */,
+				BF1A6AEC28DE96720094EA6D /* TemplateListViewController.swift in Sources */,
 				BFEA3A3828D8579B00003E81 /* DateFormEnum.swift in Sources */,
 				BF7C140D28D1B60B00DF1EEE /* Date+Extension.swift in Sources */,
 				BF70765828D6F2DA003506C0 /* MonthlyTableViewHeaderView.swift in Sources */,

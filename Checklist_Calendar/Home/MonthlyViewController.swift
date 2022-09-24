@@ -8,6 +8,7 @@
 import UIKit
 import FSCalendar
 import RealmSwift
+import SnapKit
 
 class MonthlyViewController: BaseViewController {
     
@@ -16,6 +17,7 @@ class MonthlyViewController: BaseViewController {
     
     var allDayTasks: Results<Event>!
     var notAllDayTasks: Results<Event>!
+    var templateTasks: Results<Template>!
     var notAllDayArr: [[Event]] = [] // [테이블셀 row][컬렉션뷰셀의 item]
     
     var dayEventCount: Int {
@@ -78,12 +80,14 @@ class MonthlyViewController: BaseViewController {
         mainView.tableView.delegate = self
         mainView.tableView.dataSource = self
         mainView.tableView.register(MonthlyTableViewCell.self, forCellReuseIdentifier: MonthlyTableViewCell.reuseIdentifier)
+        mainView.tableView.register(EmptyCell.self, forCellReuseIdentifier: EmptyCell.reuseIdentifier)
     }
     
     func fetchRealm(date: Date) {
         allDayTasks = repository.allDayTasksFetch(date: date, isHiding:  isHiding)
         notAllDayTasks = repository.notAllDayTasksFetch(date: date, isHiding: isHiding)
         setNotAllDayArr()
+        templateTasks = repository.templateTasksFetch()
     }
     
     func setNotAllDayArr() {
@@ -102,8 +106,6 @@ class MonthlyViewController: BaseViewController {
         }
         notAllDayArr = rtnArry
     }
-    
-    // TODO: 작은 아이폰에서 레이아웃 확인 후 수정 필요
     
     @objc func setTitleDate() {
         datePicker.date = mainView.calendar.selectedDate ?? Date()
@@ -126,13 +128,55 @@ class MonthlyViewController: BaseViewController {
         
         let btn = UIButton()
         btn.setTitle("새로운 이벤트 추가", for: .normal)
-        btn.setTitleColor(.black.withAlphaComponent(0.75), for: .normal)
+        btn.setTitleColor(.black.withAlphaComponent(0.65), for: .normal)
         btn.titleLabel?.font = .systemFont(ofSize: 18, weight: .bold)
         btn.layer.cornerRadius = 4
-        btn.backgroundColor = .clear
+        btn.backgroundColor = .bgColor.withAlphaComponent(0.5)
+        btn.layer.borderColor = UIColor.textColor.withAlphaComponent(0.65).cgColor
+        btn.layer.borderWidth = 1.8
+        btn.snp.makeConstraints { make in
+            make.width.equalTo(self.navigationController!.toolbar.frame.width - 100)
+        }
         btn.addTarget(self, action: #selector(addNewEventBtnClicked), for: .touchUpInside)
         let addNewEventBtn = UIBarButtonItem(customView: btn)
-        toolbarItems = [addNewEventBtn]
+        let templateBtn = setTemplateBtn()
+        let space = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        toolbarItems = [space, addNewEventBtn, space, templateBtn]
+    }
+    
+    func setTemplateBtn() -> UIBarButtonItem {
+        let rtn = UIButton()
+        rtn.showsMenuAsPrimaryAction = true
+        if #available(iOS 15.0, *) {
+            rtn.changesSelectionAsPrimaryAction = false
+        }
+        rtn.setImage(UIImage(systemName: "text.badge.plus"), for: .normal)
+        rtn.tintColor = .textColor.withAlphaComponent(0.65)
+        rtn.backgroundColor = .bgColor.withAlphaComponent(0.5)
+        rtn.layer.borderColor = UIColor.textColor.withAlphaComponent(0.65).cgColor
+        rtn.layer.borderWidth = 1.8
+        rtn.layer.cornerRadius = 4
+        rtn.snp.makeConstraints { make in
+            make.width.height.equalTo(34)
+        }
+        let edit = UIAction(title: "템플릿 편집") { _ in
+            let vc = TemplateListViewController()
+            let navi = UINavigationController(rootViewController: vc)
+            vc.templateTasks = self.templateTasks
+            self.present(navi, animated: true)
+        }
+        var menuElement = [edit]
+        if templateTasks != nil {
+            for task in templateTasks {
+                let template = UIAction(title: task.title) { _ in
+                    // TODO: 템플릿 내용 반영해서, 이벤트 추가 & 홈 화면 갱신
+                }
+                menuElement.append(template)
+            }
+        }
+        let buttonMenu = UIMenu(children: menuElement)
+        rtn.menu = buttonMenu
+        return UIBarButtonItem(customView: rtn)
     }
     
     @objc func addNewEventBtnClicked() {
@@ -229,10 +273,16 @@ extension MonthlyViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if dayEventCount == 0 { return 1 }
         return allDayTasks.isEmpty ? notAllDayArr.count : notAllDayArr.count + 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if dayEventCount == 0 {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: EmptyCell.reuseIdentifier, for: indexPath) as? EmptyCell else { return UITableViewCell() }
+            cell.label.text = "등록된 이벤트가 없습니다."
+            return cell
+        }
         guard let cell = tableView.dequeueReusableCell(withIdentifier: MonthlyTableViewCell.reuseIdentifier, for: indexPath) as? MonthlyTableViewCell else { return UITableViewCell() }
         cell.selectionStyle = .none
         cell.collectionView.delegate = self

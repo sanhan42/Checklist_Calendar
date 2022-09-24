@@ -12,15 +12,17 @@ import Toast
 
 class WriteViewController: BaseViewController {
     let mainView = WriteView()
-    let repository = EventRepository()
+    private let repository = EventRepository()
     var realmEvent: Event?
-    var hasChanges = false { // View의 변화를 감지하기 위한 변수
+    var template: Template?
+    var isTemplatePage = false
+    private var hasChanges = false { // View의 변화를 감지하기 위한 변수
         didSet {
             self.navigationController?.isModalInPresentation = self.hasChanges // 모달 방식으로 dissmiss 못하게 막아줌.
         }
     }
     
-    lazy var writeDate: Date = Date()
+    private lazy var writeDate: Date = Date()
     
     lazy var event: Event = Event(title: "", color: UIColor.cherryColor.toHexString(), startDate: writeDate.calMidnight(), endDate: writeDate.calMidnight(), startTime: writeDate, endTime: Calendar.current.date(byAdding: .hour, value: 1, to: writeDate) ?? writeDate) {
         didSet {
@@ -64,13 +66,15 @@ class WriteViewController: BaseViewController {
     }
     
     private func setNavigationBar() {
-        title = realmEvent == nil ? "새로운 이벤트" : "이벤트 세부사항"
+        let name = isTemplatePage ? "템플릿" : "이벤트"
+        let tasks = isTemplatePage ? template : realmEvent
+        title = tasks == nil ? "새로운 " + name : name + " 세부사항"
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.textColor]
         let cancleItem = UIBarButtonItem(title: "취소", style: .plain, target: self, action: #selector(cancleItemClicked))
-        cancleItem.tintColor = .red.withAlphaComponent(0.9)
+        cancleItem.tintColor = .textColor
         let saveBtnTitle = realmEvent == nil ? "추가" : "편집"
         let saveItem = UIBarButtonItem(title: saveBtnTitle, style: .done, target: self, action: #selector(okButtonClicked))
-        saveItem.tintColor = .red.withAlphaComponent(0.88)
+        saveItem.tintColor = .textColor
         
         navigationController?.navigationBar.topItem?.leftBarButtonItem = cancleItem
         navigationController?.navigationBar.topItem?.rightBarButtonItem = saveItem
@@ -79,7 +83,8 @@ class WriteViewController: BaseViewController {
     private func setToolbar() {
         navigationController?.isToolbarHidden = realmEvent == nil
         let btn = UIButton()
-        btn.setTitle("이벤트 삭제", for: .normal)
+        let name = isTemplatePage ? "템플릿" : "이벤트"
+        btn.setTitle(name + " 삭제", for: .normal)
         btn.setTitleColor(.red, for: .normal)
         btn.titleLabel?.font = .systemFont(ofSize: 16.5, weight: .bold)
         btn.layer.cornerRadius = 4
@@ -111,11 +116,12 @@ extension WriteViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if tableView.tag == 0 {
+            let num: CGFloat = isTemplatePage ? 40 : 0
             switch indexPath.row {
             case 0: return 50
             case 1:
-                return event.isAllDay ? 90 : 130 // TODO: 수정 필요!
-            default: return tableView.frame.height - (navigationController?.navigationBar.frame.height ?? 0) - (event.isAllDay ? 90 : 130) - 70
+                return event.isAllDay ? 90 - num : 130 - num // TODO: 수정 필요!
+            default: return tableView.frame.height - (navigationController?.navigationBar.frame.height ?? 0) - (event.isAllDay ? 90 - num : 130 - num) - 70
             }
         } else {
             return 38
@@ -152,6 +158,14 @@ extension WriteViewController: UITableViewDelegate, UITableViewDataSource {
             case 1:
                 guard let cell = tableView.dequeueReusableCell(withIdentifier: DateTableViewCell.reuseIdentifier, for: indexPath) as? DateTableViewCell else { return UITableViewCell()}
                 cell.selectionStyle = .none
+                cell.dateView.isHidden = isTemplatePage
+                if isTemplatePage {
+                    cell.dateView.snp.remakeConstraints { make in
+                        make.horizontalEdges.equalToSuperview().inset(10)
+                        make.top.equalTo(cell.titleView.snp.bottom).inset(-10)
+                        make.height.equalTo(CGFloat.leastNonzeroMagnitude)
+                    }
+                }
                 cell.timeView.isHidden = event.isAllDay
                 cell.allDaySwitch.setOn(event.isAllDay, animated: false)
                 cell.allDaySwitch.addTarget(self, action: #selector(onClickSwitch(_:)), for: .valueChanged)
@@ -160,7 +174,6 @@ extension WriteViewController: UITableViewDelegate, UITableViewDataSource {
                 cell.startTimeBtn.addTarget(self, action: #selector(setStartTime), for: .touchUpInside)
                 cell.endTimeBtn.addTarget(self, action: #selector(setEndTime), for: .touchUpInside)
                 cell.startDateBtn.setTitle(event.startTime.toString(format: "yy/MM/dd (E)"), for: .normal)
-                print(event.startTime)
                 let endDate = event.isAllDay ? Calendar.current.date(byAdding: .second , value: -1, to: event.endTime)! : event.endTime
                 cell.endDateBtn.setTitle(endDate.toString(format: "yy/MM/dd (E)"), for: .normal)
                 cell.startTimeBtn.setTitle(event.startTime.toString(format: "a hh:mm"), for: .normal)
@@ -259,8 +272,9 @@ extension WriteViewController {
         titleCell.titleTextField.endEditing(true)
         
         if event.isAllDay {
-            event.startTime = event.startTime.calMidnight()
+            event.startTime = event.startDate.calMidnight()
             event.endTime = event.endDate.calNextMidnight()
+            event.startHour = 0
         }
         
         if event.title == "" {
@@ -296,9 +310,8 @@ extension WriteViewController {
             guard let dateCell = mainView.tableView.cellForRow(at: [0, 1]) as? DateTableViewCell else { return }
             guard let start = dateCell.startDateBtn.titleLabel?.text?.toDate(format: SHDate.date.str()) else { return }
             guard let end = dateCell.endDateBtn.titleLabel?.text?.toDate(format: SHDate.date.str()) else { return }
-            event.startTime = start
-            event.startHour = 0
-            event.endTime = end.calNextMidnight()
+            event.startDate = start
+            event.endDate = end
             mainView.tableView.reloadRows(at: [[0, 1]], with: .automatic)
         }
     }

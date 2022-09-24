@@ -10,15 +10,19 @@ import RealmSwift
 
 protocol EventRepositoryType {
     func addEvent(event: Event)
+    
     func dayTasksFetch(date: Date) -> Results<Event>
     func allDayTasksFetch(date: Date, isHiding: Bool) -> Results<Event>
     func notAllDayTasksFetch(date: Date, isHiding: Bool) -> Results<Event>
+    
     func updateEvent(old: Event, new: Event)
     func deleteEvent(event: Event)
     
     func deleteTodo(todo: Todo)
     func updateTodoTitle(todo: Todo, title: String)
     func updateTodoStatus(todo: Todo)
+    
+    func templateTasksFetch() -> Results<Template>
 }
 
 class EventRepository: EventRepositoryType {
@@ -127,5 +131,9 @@ class EventRepository: EventRepositoryType {
         } catch let error {
             print(error)
         }
+    }
+    
+    func templateTasksFetch() -> Results<Template> {
+        return localRealm.objects(Template.self).sorted(byKeyPath: "startDate", ascending: false)
     }
 }

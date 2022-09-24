@@ -63,14 +63,14 @@ class MonthlyTableViewHeaderView: BaseView {
         }
         
         checkListBtn.snp.makeConstraints { make in
-            make.trailing.equalToSuperview().inset(12)
+            make.trailing.equalToSuperview().inset(18)
             make.width.equalTo(28)
             make.height.equalTo(24)
             make.centerY.equalToSuperview()
         }
         
         hideBtn.snp.makeConstraints { make in
-            make.trailing.equalTo(checkListBtn.snp.leading).inset(-20)
+            make.trailing.equalTo(checkListBtn.snp.leading).inset(-12)
             make.width.equalTo(100)
             make.height.equalTo(24)
             make.centerY.equalToSuperview()
