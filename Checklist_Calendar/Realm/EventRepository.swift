@@ -23,6 +23,9 @@ protocol EventRepositoryType {
     func updateTodoStatus(todo: Todo)
     
     func templateTasksFetch() -> Results<Template>
+    func addTemplate(template: Template)
+    func updateTemplate(old: Template, new: Template)
+    func deleteTemplate(template: Template)
 }
 
 class EventRepository: EventRepositoryType {
@@ -135,5 +138,31 @@ class EventRepository: EventRepositoryType {
     
     func templateTasksFetch() -> Results<Template> {
         return localRealm.objects(Template.self).sorted(byKeyPath: "startDate", ascending: false)
+    }
+    
+    func addTemplate(template: Template) {
+        do {
+            try localRealm.write({
+                localRealm.add(template)
+            })
+        } catch let error {
+            print(error)
+        }
+    }
+    
+    func updateTemplate(old: Template, new: Template) {
+        deleteTemplate(template: old)
+        addTemplate(template: new)
+    }
+    
+    func deleteTemplate(template: Template) {
+        deleteTodos(todos: template.todos)
+        do {
+            try localRealm.write({
+                localRealm.delete(template)
+            })
+        } catch let error {
+            print(error)
+        }
     }
 }

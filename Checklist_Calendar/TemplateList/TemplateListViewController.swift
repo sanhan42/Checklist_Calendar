@@ -16,8 +16,8 @@ class TemplateListViewController: BaseViewController {
         view.separatorStyle = .none
         view.register(EmptyCell.self, forCellReuseIdentifier: EmptyCell.reuseIdentifier)
         view.register(TemplateListTableCell.self, forCellReuseIdentifier: TemplateListTableCell.reuseIdentifier)
-        view.rowHeight = 38
-        view.sectionHeaderHeight = 38
+        view.rowHeight = 48
+        view.sectionHeaderHeight = CGFloat.leastNonzeroMagnitude
         return view
     }()
     
@@ -61,6 +61,9 @@ class TemplateListViewController: BaseViewController {
     @objc private func addBtnClicked() {
         let vc = WriteViewController()
         vc.isTemplatePage = true
+        vc.afterDissmiss = {
+            self.tableView.reloadData()
+        }
         let navi = UINavigationController(rootViewController: vc)
         present(navi, animated: true)
     }

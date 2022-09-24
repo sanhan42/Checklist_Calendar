@@ -14,8 +14,9 @@ class WriteViewController: BaseViewController {
     let mainView = WriteView()
     private let repository = EventRepository()
     var realmEvent: Event?
-    var template: Template?
+    var realmTemplate: Template?
     var isTemplatePage = false
+    var selecedDate: Date?
     private var hasChanges = false { // View의 변화를 감지하기 위한 변수
         didSet {
             self.navigationController?.isModalInPresentation = self.hasChanges // 모달 방식으로 dissmiss 못하게 막아줌.
@@ -38,22 +39,14 @@ class WriteViewController: BaseViewController {
     override func loadView() {
         view = mainView
     }
-    
+   
     override func viewDidLoad() {
         super.viewDidLoad()
-        if realmEvent != nil {
-            let tempEvent = realmEvent!
-            self.event = Event(title: tempEvent.title, color: tempEvent.color, startDate: tempEvent.startDate, endDate: tempEvent.endDate, startTime: tempEvent.startTime, endTime: tempEvent.endTime, isAllDay: tempEvent.isAllDay)
-            for todo in realmEvent!.todos {
-                let new = Todo(title: todo.title, isDone: todo.isDone)
-                event.todos.append(new)
-            }
-            hasChanges = false
-        }
+        
         configure()
         setNavigationBar()
         setToolbar()
-       
+        setEvent()
         print(repository.fileUrl)
     }
     
@@ -67,7 +60,7 @@ class WriteViewController: BaseViewController {
     
     private func setNavigationBar() {
         let name = isTemplatePage ? "템플릿" : "이벤트"
-        let tasks = isTemplatePage ? template : realmEvent
+        let tasks = isTemplatePage ? realmTemplate : realmEvent
         title = tasks == nil ? "새로운 " + name : name + " 세부사항"
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.textColor]
         let cancleItem = UIBarButtonItem(title: "취소", style: .plain, target: self, action: #selector(cancleItemClicked))
@@ -94,6 +87,30 @@ class WriteViewController: BaseViewController {
         toolbarItems = [deleteEventBtn]
     }
     
+    func setEvent() {
+        if realmEvent != nil {
+            let temp = realmEvent!
+            self.event = Event(title: temp.title, color: temp.color, startDate: temp.startDate, endDate: temp.endDate, startTime: temp.startTime, endTime: temp.endTime, isAllDay: temp.isAllDay)
+            for todo in realmEvent!.todos {
+                let new = Todo(title: todo.title, isDone: todo.isDone)
+                event.todos.append(new)
+            }
+            hasChanges = false
+        } else if realmTemplate != nil {
+            let temp = realmTemplate!
+            var components = Calendar.current.dateComponents([.hour, .minute], from: temp.startTime)
+            guard let startTime = Calendar.current.date(bySettingHour: components.hour!, minute: components.minute!, second: 0, of: selecedDate!) else { return }
+            components = Calendar.current.dateComponents([.hour, .minute], from: temp.endTime)
+            guard let endTime = Calendar.current.date(bySettingHour: components.hour!, minute: components.minute!, second: 0, of: selecedDate!) else { return }
+            self.event = Event(title: temp.title, color: temp.color, startDate: selecedDate!, endDate: selecedDate!, startTime: startTime, endTime: endTime, isAllDay: temp.isAllDay)
+            for todo in temp.todos {
+                let new = Todo(title: todo.title, isDone: todo.isDone)
+                event.todos.append(new)
+            }
+            hasChanges = false
+            
+        }
+    }
 }
 
 extension WriteViewController: UITableViewDelegate, UITableViewDataSource {
@@ -116,12 +133,12 @@ extension WriteViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if tableView.tag == 0 {
-            let num: CGFloat = isTemplatePage ? 40 : 0
+            let num: CGFloat = isTemplatePage ? 30 : 0
             switch indexPath.row {
             case 0: return 50
             case 1:
-                return event.isAllDay ? 90 - num : 130 - num // TODO: 수정 필요!
-            default: return tableView.frame.height - (navigationController?.navigationBar.frame.height ?? 0) - (event.isAllDay ? 90 - num : 130 - num) - 70
+                return event.isAllDay ? 80 - num : 110 - num // TODO: 수정 필요!
+            default: return tableView.frame.height - (navigationController?.navigationBar.frame.height ?? 0) - (event.isAllDay ? 80 - num : 110 - num) - 70
             }
         } else {
             return 38
@@ -285,7 +302,13 @@ extension WriteViewController {
             return
         }
         
-        realmEvent == nil ? repository.addEvent(event: event) : repository.updateEvent(old: realmEvent!, new: event)
+        if isTemplatePage {
+            let newTemplate = Template(title: event.title, color: event.color, startTime: event.startTime, endTime: event.endTime, isAllDay: event.isAllDay)
+            realmTemplate == nil ? repository.addTemplate(template: newTemplate) : repository.updateTemplate(old: realmTemplate!, new: newTemplate)
+            
+        } else {
+            realmEvent == nil ? repository.addEvent(event: event) : repository.updateEvent(old: realmEvent!, new: event)
+        }
         afterDissmiss?()
         dismiss(animated: true)
     }

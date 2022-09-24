@@ -14,6 +14,7 @@
 		BF1A6AEA28DE93E20094EA6D /* EmptyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A6AE928DE93E20094EA6D /* EmptyCell.swift */; };
 		BF1A6AEC28DE96720094EA6D /* TemplateListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A6AEB28DE96720094EA6D /* TemplateListViewController.swift */; };
 		BF1A6AEE28DE985A0094EA6D /* TemplateListTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A6AED28DE985A0094EA6D /* TemplateListTableCell.swift */; };
+		BF1A6AF128DEBF480094EA6D /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = BF1A6AF028DEBF480094EA6D /* IQKeyboardManagerSwift */; };
 		BF27397C28D3476500441B7F /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF27397B28D3476500441B7F /* UIColor+Extension.swift */; };
 		BF497FA028D9E194007D1527 /* Toast in Frameworks */ = {isa = PBXBuildFile; productRef = BF497F9F28D9E194007D1527 /* Toast */; };
 		BF55056728DC80F200DF978E /* CheckListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF55056628DC80F200DF978E /* CheckListViewController.swift */; };
@@ -99,6 +100,7 @@
 				BFDDC9B028D059350047F22E /* Realm in Frameworks */,
 				BF497FA028D9E194007D1527 /* Toast in Frameworks */,
 				BFDDC9AD28D058950047F22E /* FSCalendar in Frameworks */,
+				BF1A6AF128DEBF480094EA6D /* IQKeyboardManagerSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -259,6 +261,7 @@
 				BFDDC9B128D059350047F22E /* RealmSwift */,
 				BF0B57E028D05F9C005A090B /* SnapKit */,
 				BF497F9F28D9E194007D1527 /* Toast */,
+				BF1A6AF028DEBF480094EA6D /* IQKeyboardManagerSwift */,
 			);
 			productName = Checklist_Calendar;
 			productReference = BFDDC99428D0572D0047F22E /* Checklist_Calendar.app */;
@@ -293,6 +296,7 @@
 				BFDDC9AE28D059350047F22E /* XCRemoteSwiftPackageReference "realm-swift" */,
 				BF0B57DF28D05F9C005A090B /* XCRemoteSwiftPackageReference "SnapKit" */,
 				BF497F9E28D9E194007D1527 /* XCRemoteSwiftPackageReference "Toast-Swift" */,
+				BF1A6AEF28DEBF480094EA6D /* XCRemoteSwiftPackageReference "IQKeyboardManager" */,
 			);
 			productRefGroup = BFDDC99528D0572D0047F22E /* Products */;
 			projectDirPath = "";
@@ -583,6 +587,14 @@
 				minimumVersion = 5.0.0;
 			};
 		};
+		BF1A6AEF28DEBF480094EA6D /* XCRemoteSwiftPackageReference "IQKeyboardManager" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/hackiftekhar/IQKeyboardManager";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.5.0;
+			};
+		};
 		BF497F9E28D9E194007D1527 /* XCRemoteSwiftPackageReference "Toast-Swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/scalessec/Toast-Swift.git";
@@ -614,6 +626,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = BF0B57DF28D05F9C005A090B /* XCRemoteSwiftPackageReference "SnapKit" */;
 			productName = SnapKit;
+		};
+		BF1A6AF028DEBF480094EA6D /* IQKeyboardManagerSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BF1A6AEF28DEBF480094EA6D /* XCRemoteSwiftPackageReference "IQKeyboardManager" */;
+			productName = IQKeyboardManagerSwift;
 		};
 		BF497F9F28D9E194007D1527 /* Toast */ = {
 			isa = XCSwiftPackageProductDependency;
