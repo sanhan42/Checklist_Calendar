@@ -41,7 +41,6 @@ class WriteViewController: BaseViewController {
    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         configure()
         setNavigationBar()
         setToolbar()
@@ -222,7 +221,7 @@ extension WriteViewController: UITableViewDelegate, UITableViewDataSource {
                 let img = event.todos[indexPath.row].isDone ? UIImage(systemName: "checkmark.square") : UIImage(systemName: "square")
                 cell.checkButton.setImage(img, for: .normal)
             } else {
-                if !event.todos.isEmpty {
+                if !event.todos.isEmpty && realmEvent == nil && realmTemplate == nil {
                     cell.textField.becomeFirstResponder()
                 }
                 cell.checkButton.setImage(UIImage(systemName: "square.dashed"), for: .normal)
