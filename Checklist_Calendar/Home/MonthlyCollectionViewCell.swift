@@ -11,7 +11,6 @@ class MonthlyCollectionViewCell: BaseCollectionViewCell {
     
     let dateLabel: UILabel = {
         let view = UILabel()
-        view.text = "하루 종일"
         view.textColor = .textColor
         view.textAlignment = .center
         view.adjustsFontSizeToFitWidth = true
@@ -22,13 +21,11 @@ class MonthlyCollectionViewCell: BaseCollectionViewCell {
     
     let lineView: UIView = {
         let view = UIView()
-        view.backgroundColor = .systemRed // TODO: 기본색 설정
         return view
     }()
     
     let titleLabel: UILabel = {
         let view = UILabel()
-        view.text = "TEST!!!!!!!!"
         view.textColor = .black
         view.font = .systemFont(ofSize: 15)
         return view
@@ -71,7 +68,6 @@ class MonthlyCollectionViewCell: BaseCollectionViewCell {
         layer.shadowOpacity = 0.5
         layer.shadowOffset = CGSize(width: 0, height: 0)
         layer.shadowRadius = 2
-//        [dateLabel, lineView, titleLabel].forEach { contentView.addSubview($0) }
         contentView.addSubview(backView)
     }
     

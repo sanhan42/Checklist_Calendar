@@ -11,24 +11,21 @@ class TemplateListTableCell: BaseTableViewCell {
     
     let dateLabel: UILabel = {
         let view = UILabel()
-        view.text = "하루 종일"
         view.textColor = .textColor
         view.textAlignment = .center
         view.adjustsFontSizeToFitWidth = true
-        view.numberOfLines = 3
+        view.numberOfLines = 2
         view.font = .systemFont(ofSize: 13.5, weight: .semibold)
         return view
     }()
     
     let lineView: UIView = {
         let view = UIView()
-        view.backgroundColor = .systemRed // TODO: 기본색 설정
         return view
     }()
     
     let titleLabel: UILabel = {
         let view = UILabel()
-        view.text = "TEST!!!!!!!!"
         view.textColor = .black
         view.font = .systemFont(ofSize: 15)
         return view
@@ -44,13 +41,16 @@ class TemplateListTableCell: BaseTableViewCell {
         return view
     }()
     
+    private let separatorView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .tableBgColor
+        view.layer.borderColor = UIColor.tableBgColor.cgColor
+        return view
+    }()
+    
     lazy var backView: UIView = {
         let view = UIView()
-        [dateLabel, lineView, titleLabel, fullDateLabel].forEach { view.addSubview($0) }
-        view.layer.masksToBounds = true
-        view.layer.cornerRadius = 10
-        view.layer.borderWidth = 1
-        view.layer.borderColor = UIColor.clear.cgColor
+        [dateLabel, lineView, titleLabel, fullDateLabel, separatorView].forEach { view.addSubview($0) }
         view.backgroundColor = .bgColor // TODO: 실질적인 셀 배경색
         return view
     }()
@@ -66,34 +66,27 @@ class TemplateListTableCell: BaseTableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 0, left: 0, bottom: 6, right: 0))
-    }
-    
     override func configure() {
-        layer.masksToBounds = false
-        layer.shadowOpacity = 0.5
-        layer.shadowOffset = CGSize(width: 0, height: 0)
-        layer.shadowRadius = 2
         contentView.addSubview(backView)
     }
     
     override func setConstraints() {
         backView.snp.makeConstraints { make in
-            make.edges.equalToSuperview().inset(2)
+            make.edges.equalToSuperview()
         }
         
         dateLabel.snp.makeConstraints { make in
             make.leading.equalToSuperview().inset(4)
-            make.verticalEdges.equalToSuperview().inset(4)
+            make.top.equalToSuperview().inset(4)
+            make.bottom.equalTo(separatorView.snp.top).inset(-6)
             make.width.equalTo(50)
         }
         
         lineView.snp.makeConstraints { make in
             make.width.equalTo(4)
             make.leading.equalTo(dateLabel.snp.trailing).offset(4)
-            make.verticalEdges.equalToSuperview().inset(4)
+            make.top.equalToSuperview().inset(4)
+            make.bottom.equalTo(separatorView.snp.top).inset(-6)
         }
         
         titleLabel.snp.makeConstraints { make in
@@ -106,7 +99,12 @@ class TemplateListTableCell: BaseTableViewCell {
             make.leading.equalTo(lineView.snp.trailing).offset(12)
             make.trailing.equalToSuperview().inset(8)
             make.top.equalTo(titleLabel.snp.bottom).offset(4)
-            make.bottom.equalToSuperview().inset(6)
+            make.bottom.equalTo(separatorView.snp.top).inset(-6)
+        }
+        
+        separatorView.snp.makeConstraints { make in
+            make.height.equalTo(1)
+            make.horizontalEdges.bottom.equalToSuperview()
         }
     }
 }

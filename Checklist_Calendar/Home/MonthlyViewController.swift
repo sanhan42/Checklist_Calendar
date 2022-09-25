@@ -132,7 +132,7 @@ class MonthlyViewController: BaseViewController {
         btn.titleLabel?.font = .systemFont(ofSize: 18, weight: .bold)
         btn.layer.cornerRadius = 4
         btn.backgroundColor = .bgColor.withAlphaComponent(0.5)
-        btn.layer.borderColor = UIColor.textColor.withAlphaComponent(0.65).cgColor
+        btn.layer.borderColor = UIColor.clear.cgColor// UIColor.textColor.withAlphaComponent(0.65).cgColor
         btn.layer.borderWidth = 1.8
         btn.snp.makeConstraints { make in
             make.width.equalTo(self.navigationController!.toolbar.frame.width - 100)
@@ -295,7 +295,7 @@ extension MonthlyViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if dayEventCount == 0 {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: EmptyCell.reuseIdentifier, for: indexPath) as? EmptyCell else { return UITableViewCell() }
-            cell.label.text = "등록된 이벤트가 없습니다."
+            cell.label.text = "이벤트를 추가해보세요 :)"
             return cell
         }
         guard let cell = tableView.dequeueReusableCell(withIdentifier: MonthlyTableViewCell.reuseIdentifier, for: indexPath) as? MonthlyTableViewCell else { return UITableViewCell() }

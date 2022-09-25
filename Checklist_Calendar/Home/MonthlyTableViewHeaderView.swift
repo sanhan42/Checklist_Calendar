@@ -18,7 +18,6 @@ class MonthlyTableViewHeaderView: BaseView {
     let hideBtn: UIButton = {
         let btn = UIButton()
         btn.setTitleColor(UIColor.textColor.withAlphaComponent(0.8), for: .normal)
-        btn.setTitle("지난 일정 숨기기", for: .normal)
         btn.backgroundColor = .bgColor.withAlphaComponent(0.5)
         btn.titleLabel?.font = .systemFont(ofSize: 12, weight: .bold)
         btn.layer.borderColor = UIColor.textColor.withAlphaComponent(0.65).cgColor

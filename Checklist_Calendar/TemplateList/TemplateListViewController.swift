@@ -12,11 +12,11 @@ import SwiftUI
 class TemplateListViewController: BaseViewController {
     let tableView: UITableView = {
         let view = UITableView(frame: .null, style: .insetGrouped)
-        view.backgroundColor = .bgColor
+        view.backgroundColor = .tableBgColor
         view.separatorStyle = .none
         view.register(EmptyCell.self, forCellReuseIdentifier: EmptyCell.reuseIdentifier)
         view.register(TemplateListTableCell.self, forCellReuseIdentifier: TemplateListTableCell.reuseIdentifier)
-        view.rowHeight = 54
+        view.rowHeight = 48
         view.tableHeaderView = nil
         view.sectionHeaderHeight = CGFloat.leastNonzeroMagnitude
         return view
@@ -49,9 +49,9 @@ class TemplateListViewController: BaseViewController {
     private func setNavigationBar() {
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.textColor]
         title = "템플릿"
-        let cancleItem = UIBarButtonItem(image: UIImage(systemName: "xmark.app"), style: .plain, target: self, action: #selector(cancleBtnClicked))
+        let cancleItem = UIBarButtonItem(image: UIImage(systemName: "xmark.square"), style: .plain, target: self, action: #selector(cancleBtnClicked))
         cancleItem.tintColor = .textColor
-        let saveItem = UIBarButtonItem(image: UIImage(systemName: "plus.app"), style: .done, target: self, action: #selector(addBtnClicked))
+        let saveItem = UIBarButtonItem(image: UIImage(systemName: "plus.square"), style: .done, target: self, action: #selector(addBtnClicked))
         saveItem.tintColor = .textColor
         
         navigationController?.navigationBar.topItem?.leftBarButtonItem = cancleItem
@@ -105,6 +105,26 @@ extension TemplateListViewController: UITableViewDelegate, UITableViewDataSource
         }
         let navi = UINavigationController(rootViewController: vc)
         self.present(navi, animated: true)
+    }
+    
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let delete = UIContextualAction(style: .normal, title: nil) { action, view, completionHandler in
+            let alert = UIAlertController(title: nil, message: "정말 삭제하시겠습니까?", preferredStyle: .alert)
+            let cancel = UIAlertAction(title: "취소", style: .cancel)
+            cancel.setValue(UIColor.red, forKey: "titleTextColor")
+            let ok = UIAlertAction(title: "확인", style: .destructive) { _ in
+                
+                self.repository.deleteTemplate(template: self.templateTasks[indexPath.row])
+                self.tableView.reloadData()
+            }
+            alert.addAction(cancel)
+            alert.addAction(ok)
+            self.present(alert, animated: true)
+        }
+        
+        delete.image = .init(systemName: "trash.fill")
+        delete.backgroundColor = .systemRed
+        return UISwipeActionsConfiguration(actions: [delete])
     }
 }
 
