@@ -14,8 +14,7 @@ class CheckListViewController: BaseViewController {
         let view = UITableView(frame: .null, style: .insetGrouped)
         view.backgroundColor = .bgColor
         view.separatorStyle = .none
-        view.register(CheckListTableViewCell.self, forCellReuseIdentifier: CheckListTableViewCell.reuseIdentifier)
-        view.rowHeight = 38
+        view.register(CheckListTableCell.self, forCellReuseIdentifier: CheckListTableCell.reuseIdentifier)
         view.sectionHeaderHeight = 38
         return view
     }()
@@ -44,6 +43,12 @@ class CheckListViewController: BaseViewController {
 }
 
 extension CheckListViewController: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        let section = 0..<allDayTasks.count ~= indexPath.section ? indexPath.section : indexPath.section - allDayTasks.count
+        let tasks: Results<Event> = 0..<allDayTasks.count ~= indexPath.section ? allDayTasks : notAllDayTasks
+        return tasks[section].todos[indexPath.row].title.heightWithConstrainedWidth(width: tableView.frame.width, font: UIFont.systemFont(ofSize: 15)) + 20
+    }
+    
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header = CheckListHeaderView()
         let tasks: Results<Event> = allDayTasks.isEmpty || section >= allDayTasks.count  ? notAllDayTasks : allDayTasks
@@ -71,7 +76,7 @@ extension CheckListViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: CheckListTableViewCell.reuseIdentifier, for: indexPath) as? CheckListTableViewCell else { return UITableViewCell() }
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: CheckListTableCell.reuseIdentifier, for: indexPath) as? CheckListTableCell else { return UITableViewCell() }
         cell.selectionStyle = .none
         cell.checkButton.snp.remakeConstraints { make in
             make.width.height.equalTo(15)
@@ -82,12 +87,10 @@ extension CheckListViewController: UITableViewDelegate, UITableViewDataSource {
         let tagNum = setTagNum(section: indexPath.section, row: indexPath.row)
         let section = 0..<allDayTasks.count ~= indexPath.section ? indexPath.section : indexPath.section - allDayTasks.count
         let tasks: Results<Event> = 0..<allDayTasks.count ~= indexPath.section ? allDayTasks : notAllDayTasks
-        cell.textField.font = .systemFont(ofSize: 15)
-        cell.textField.adjustsFontSizeToFitWidth = true
-        cell.textField.textColor = .textColor.withAlphaComponent(0.9)
-        cell.textField.text = tasks[section].todos[indexPath.row].title
-        cell.textField.tag = tagNum
-        cell.textField.addTarget(self, action: #selector(todoTitleChanged(_:)), for: .editingChanged)
+        cell.textView.font = .systemFont(ofSize: 15)
+        cell.textView.text = tasks[section].todos[indexPath.row].title
+        cell.textView.tag = tagNum
+        cell.textView.delegate = self
         let img = tasks[section].todos[indexPath.row].isDone ? UIImage(systemName: "checkmark.square") : UIImage(systemName: "square")
         cell.checkButton.setImage(img, for: .normal)
         cell.checkButton.tintColor = .textColor.withAlphaComponent(0.9)
@@ -130,16 +133,6 @@ extension CheckListViewController {
     func calIndexPath(tagNum: Int) -> IndexPath {
          return IndexPath(row: tagNum%100, section: tagNum/100)
     }
-   
-    @objc func todoTitleChanged(_ sender: UITextField) {
-        let indexPath = calIndexPath(tagNum: sender.tag)
-        let tasks: Results<Event> = allDayTasks.isEmpty || indexPath.section >= allDayTasks.count  ? notAllDayTasks : allDayTasks
-        let section = allDayTasks.isEmpty || indexPath.section < allDayTasks.count ? indexPath.section : indexPath.section - allDayTasks.count
-        let row = indexPath.row
-        repository.updateTodoTitle(todo: tasks[section].todos[row], title: sender.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? "")
-        tableView.reloadRows(at: [indexPath], with: .none)
-        sender.becomeFirstResponder()
-    }
     
     @objc func checkButtonClicked(_ sender: UIButton) {
         let indexPath = calIndexPath(tagNum: sender.tag)
@@ -148,5 +141,16 @@ extension CheckListViewController {
         let row = indexPath.row
         repository.updateTodoStatus(todo: tasks[section].todos[row])
         tableView.reloadRows(at: [indexPath], with: .none)
+    }
+}
+
+extension CheckListViewController: UITextViewDelegate {
+    func textViewDidChange(_ textView: UITextView) {
+        let indexPath = calIndexPath(tagNum: textView.tag)
+        let section = 0..<allDayTasks.count ~= indexPath.section ? indexPath.section : indexPath.section - allDayTasks.count
+        let tasks: Results<Event> = 0..<allDayTasks.count ~= indexPath.section ? allDayTasks : notAllDayTasks
+        repository.updateTodoTitle(todo: tasks[section].todos[indexPath.row], title: textView.text)
+        tableView.beginUpdates()
+        tableView.endUpdates()
     }
 }

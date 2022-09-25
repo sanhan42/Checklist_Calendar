@@ -15,6 +15,8 @@
 		BF1A6AEC28DE96720094EA6D /* TemplateListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A6AEB28DE96720094EA6D /* TemplateListViewController.swift */; };
 		BF1A6AEE28DE985A0094EA6D /* TemplateListTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A6AED28DE985A0094EA6D /* TemplateListTableCell.swift */; };
 		BF1A6AF128DEBF480094EA6D /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = BF1A6AF028DEBF480094EA6D /* IQKeyboardManagerSwift */; };
+		BF1E010528E008E1006D27E5 /* CheckListTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1E010428E008E1006D27E5 /* CheckListTableCell.swift */; };
+		BF1E010728E00F98006D27E5 /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1E010628E00F98006D27E5 /* String+Extension.swift */; };
 		BF27397C28D3476500441B7F /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF27397B28D3476500441B7F /* UIColor+Extension.swift */; };
 		BF497FA028D9E194007D1527 /* Toast in Frameworks */ = {isa = PBXBuildFile; productRef = BF497F9F28D9E194007D1527 /* Toast */; };
 		BF55056728DC80F200DF978E /* CheckListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF55056628DC80F200DF978E /* CheckListViewController.swift */; };
@@ -57,6 +59,8 @@
 		BF1A6AE928DE93E20094EA6D /* EmptyCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyCell.swift; sourceTree = "<group>"; };
 		BF1A6AEB28DE96720094EA6D /* TemplateListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateListViewController.swift; sourceTree = "<group>"; };
 		BF1A6AED28DE985A0094EA6D /* TemplateListTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateListTableCell.swift; sourceTree = "<group>"; };
+		BF1E010428E008E1006D27E5 /* CheckListTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckListTableCell.swift; sourceTree = "<group>"; };
+		BF1E010628E00F98006D27E5 /* String+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
 		BF27397B28D3476500441B7F /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		BF55056628DC80F200DF978E /* CheckListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckListViewController.swift; sourceTree = "<group>"; };
 		BF55056828DC854F00DF978E /* CkeckListHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CkeckListHeaderView.swift; sourceTree = "<group>"; };
@@ -121,7 +125,6 @@
 		BF1A6AE828DE938E0094EA6D /* CommonUseCell */ = {
 			isa = PBXGroup;
 			children = (
-				BFEA3A3228D7DC1200003E81 /* CheckListTableViewCell.swift */,
 				BF1A6AE928DE93E20094EA6D /* EmptyCell.swift */,
 			);
 			path = CommonUseCell;
@@ -131,6 +134,7 @@
 			isa = PBXGroup;
 			children = (
 				BF55056628DC80F200DF978E /* CheckListViewController.swift */,
+				BF1E010428E008E1006D27E5 /* CheckListTableCell.swift */,
 				BF55056828DC854F00DF978E /* CkeckListHeaderView.swift */,
 			);
 			path = CheckList;
@@ -142,6 +146,7 @@
 				BF7C140C28D1B60B00DF1EEE /* Date+Extension.swift */,
 				BF27397B28D3476500441B7F /* UIColor+Extension.swift */,
 				BFF236A828DED4BB0057FCF7 /* UIImage+Extension.swift */,
+				BF1E010628E00F98006D27E5 /* String+Extension.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -238,6 +243,7 @@
 				BFF02C5E28D462B900F0D6AA /* TitleTableViewCell.swift */,
 				BFF02C6028D4633C00F0D6AA /* DateTableViewCell.swift */,
 				BFF02C6228D4635800F0D6AA /* TodoTableViewCell.swift */,
+				BFEA3A3228D7DC1200003E81 /* CheckListTableViewCell.swift */,
 			);
 			path = Write;
 			sourceTree = "<group>";
@@ -331,10 +337,12 @@
 				BF0B57DE28D05C38005A090B /* BaseTableViewCell.swift in Sources */,
 				BF55056928DC854F00DF978E /* CkeckListHeaderView.swift in Sources */,
 				BFB1052728D3153200D24376 /* Event.swift in Sources */,
+				BF1E010528E008E1006D27E5 /* CheckListTableCell.swift in Sources */,
 				BFDDC9B528D059BC0047F22E /* MonthlyViewController.swift in Sources */,
 				BFF02C6328D4635800F0D6AA /* TodoTableViewCell.swift in Sources */,
 				BF1A6AE628DE7BEE0094EA6D /* Template.swift in Sources */,
 				BFDDC99C28D0572D0047F22E /* ViewController.swift in Sources */,
+				BF1E010728E00F98006D27E5 /* String+Extension.swift in Sources */,
 				BF1A6AEA28DE93E20094EA6D /* EmptyCell.swift in Sources */,
 				BF55056728DC80F200DF978E /* CheckListViewController.swift in Sources */,
 				BFDDC99828D0572D0047F22E /* AppDelegate.swift in Sources */,

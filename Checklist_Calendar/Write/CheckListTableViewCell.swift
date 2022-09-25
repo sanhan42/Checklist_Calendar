@@ -42,9 +42,6 @@ class CheckListTableViewCell: BaseTableViewCell {
     
     override func configure() {
         contentView.addSubview(bgView)
-//        [checkButton, textField].forEach { v in
-//            contentView.addSubview(v)
-//        }
     }
     
     override func setConstraints() {
