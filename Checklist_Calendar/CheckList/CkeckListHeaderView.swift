@@ -10,14 +10,12 @@ import UIKit
 class CheckListHeaderView: BaseView {
     let lineView: UIView = {
         let view = UIView()
-        view.backgroundColor = .systemRed // TODO: 기본색 설정
         return view
     }()
     
     let titleLabel: UILabel = {
         let view = UILabel()
-        view.text = "TEST!!!!!!!!"
-        view.textColor = .black
+        view.textColor = .textColor
         view.font = .systemFont(ofSize: 13, weight: .semibold)
         return view
     }()
@@ -32,9 +30,16 @@ class CheckListHeaderView: BaseView {
         return view
     }()
     
+    let addButton: UIButton = {
+        let btn = UIButton()
+        btn.setImage(UIImage(systemName: "plus.square.fill"), for: .normal)
+        btn.tintColor = .textColor.withAlphaComponent(0.8)
+        return btn
+    }()
+    
     lazy var backView: UIView = {
         let view = UIView()
-        [lineView, titleLabel, fullDateLabel].forEach { view.addSubview($0) }
+        [lineView, titleLabel, fullDateLabel, addButton].forEach { view.addSubview($0) }
         view.layer.masksToBounds = true
         view.layer.cornerRadius = 10
         view.layer.borderWidth = 1
@@ -76,7 +81,7 @@ class CheckListHeaderView: BaseView {
         
         titleLabel.snp.makeConstraints { make in
             make.leading.equalTo(lineView.snp.trailing).offset(12)
-            make.trailing.equalToSuperview().inset(8)
+            make.trailing.equalTo(addButton.snp.leading)
             make.top.equalToSuperview().inset(2)
         }
         
@@ -85,6 +90,12 @@ class CheckListHeaderView: BaseView {
             make.trailing.equalToSuperview().inset(8)
             make.top.equalTo(titleLabel.snp.bottom).offset(4)
             make.bottom.equalToSuperview().inset(2)
+        }
+        
+        addButton.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.trailing.equalToSuperview().inset(8)
+            make.width.height.equalTo(28)
         }
     }
 }

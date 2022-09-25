@@ -132,7 +132,7 @@ class MonthlyViewController: BaseViewController {
         btn.titleLabel?.font = .systemFont(ofSize: 18, weight: .bold)
         btn.layer.cornerRadius = 4
         btn.backgroundColor = .bgColor.withAlphaComponent(0.5)
-        btn.layer.borderColor = UIColor.clear.cgColor// UIColor.textColor.withAlphaComponent(0.65).cgColor
+        btn.layer.borderColor = UIColor.clear.cgColor
         btn.layer.borderWidth = 1.8
         btn.snp.makeConstraints { make in
             make.width.equalTo(self.navigationController!.toolbar.frame.width - 100)
@@ -211,9 +211,14 @@ class MonthlyViewController: BaseViewController {
     @objc func checkListBtnClicked() {
         let vc = CheckListViewController()
         let date = mainView.calendar.selectedDate ?? Date()
-        vc.allDayTasks = isHiding ? repository.allDayTasksFetch(date: date, isHiding: false): allDayTasks
-        vc.notAllDayTasks = isHiding ? repository.notAllDayTasksFetch(date: date, isHiding: false) : notAllDayTasks
+        vc.allDayTasks = allDayTasks
+        vc.notAllDayTasks = notAllDayTasks
         vc.selectedDate = date
+        vc.isHiding = isHiding
+        vc.afterDissmiss = { [self] in
+            mainView.calendar.select(vc.selectedDate)
+            dismissHandler()
+        }
         let navigationVC = UINavigationController(rootViewController: vc)
         self.present(navigationVC, animated: true)
     }
@@ -243,7 +248,6 @@ extension MonthlyViewController: FSCalendarDataSource, FSCalendarDelegate {
     }
     
     func calendar(_ calendar: FSCalendar, boundingRectWillChange bounds: CGRect, animated: Bool) {
-        //        mainView.calendar.removeConstraint(mainView.calendar.constraints.last!)
         mainView.calendar.snp.remakeConstraints { make in
             make.top.equalTo(mainView.calHeaderView.snp.bottom)
             make.width.equalTo(UIScreen.main.bounds.width)

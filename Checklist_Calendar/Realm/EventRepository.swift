@@ -18,6 +18,7 @@ protocol EventRepositoryType {
     func updateEvent(old: Event, new: Event)
     func deleteEvent(event: Event)
     
+    func addTodoInEvent(event: Event)
     func deleteTodo(todo: Todo)
     func updateTodoTitle(todo: Todo, title: String)
     func updateTodoStatus(todo: Todo)
@@ -100,6 +101,16 @@ class EventRepository: EventRepositoryType {
         do {
             try localRealm.write({
                 localRealm.delete(todos)
+            })
+        } catch let error {
+            print(error)
+        }
+    }
+    
+    func addTodoInEvent(event: Event) {
+        do {
+            try localRealm.write({
+                event.todos.append(Todo())
             })
         } catch let error {
             print(error)
