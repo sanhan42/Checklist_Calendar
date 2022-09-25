@@ -66,6 +66,11 @@ class TemplateListTableCell: BaseTableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 0, left: 0, bottom: 6, right: 0))
+    }
+    
     override func configure() {
         layer.masksToBounds = false
         layer.shadowOpacity = 0.5

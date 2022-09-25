@@ -159,18 +159,32 @@ class MonthlyViewController: BaseViewController {
         rtn.snp.makeConstraints { make in
             make.width.height.equalTo(34)
         }
-        let edit = UIAction(title: "템플릿 편집") { _ in
+        let edit = UIAction(title: "템플릿 편집", image: UIImage(systemName: "wrench.and.screwdriver")) { _ in
             let vc = TemplateListViewController()
             let navi = UINavigationController(rootViewController: vc)
             vc.templateTasks = self.templateTasks
+            vc.afterDissmiss = self.setToolbar
             self.present(navi, animated: true)
         }
         var menuElement = [edit]
         if templateTasks != nil {
             for task in templateTasks {
-                let img = UIImage(systemName: "circle.fill")
+                let img = UIImage(systemName: "plus.circle")
                 let template = UIAction(title: task.title, image: img?.imageWithColor(color: UIColor(hexAlpha: task.color))) { _ in
-                    // TODO: 템플릿 내용 반영해서, 이벤트 추가 & 홈 화면 갱신
+                    var components = Calendar.current.dateComponents([.hour, .minute], from: task.startTime)
+                    let date = self.mainView.calendar.selectedDate ?? Date()
+                    guard let startTime = Calendar.current.date(bySettingHour: components.hour!, minute: components.minute!, second: 0, of: date) else { return }
+                    components = Calendar.current.dateComponents([.hour, .minute], from: task.endTime)
+                    guard let endTime = Calendar.current.date(bySettingHour: components.hour!, minute: components.minute!, second: 0, of: date) else { return }
+                    let endDate = task.isAllDay ? date.calNextMidnight() : date
+                    let event = Event(title: task.title, color: task.color, startDate: date, endDate: endDate, startTime: startTime, endTime: endTime, isAllDay: task.isAllDay)
+                    for todo in task.todos {
+                        let newTodo = Todo(title: todo.title, isDone: todo.isDone)
+                        event.todos.append(newTodo)
+                    }
+                    self.repository.addEvent(event: event)
+                    self.fetchRealm(date: date)
+                    self.mainView.tableView.reloadData()
                 }
                 menuElement.append(template)
             }

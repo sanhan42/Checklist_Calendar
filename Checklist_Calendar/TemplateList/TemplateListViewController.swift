@@ -16,7 +16,8 @@ class TemplateListViewController: BaseViewController {
         view.separatorStyle = .none
         view.register(EmptyCell.self, forCellReuseIdentifier: EmptyCell.reuseIdentifier)
         view.register(TemplateListTableCell.self, forCellReuseIdentifier: TemplateListTableCell.reuseIdentifier)
-        view.rowHeight = 48
+        view.rowHeight = 54
+        view.tableHeaderView = nil
         view.sectionHeaderHeight = CGFloat.leastNonzeroMagnitude
         return view
     }()
@@ -24,6 +25,8 @@ class TemplateListViewController: BaseViewController {
     let repository = EventRepository()
     
     var templateTasks: Results<Template>!
+    
+    var afterDissmiss: (() -> ())?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,7 +42,8 @@ class TemplateListViewController: BaseViewController {
         }
         tableView.delegate = self
         tableView.dataSource = self
-        
+            
+        navigationController?.presentationController?.delegate = self
     }
     
     private func setNavigationBar() {
@@ -55,6 +59,7 @@ class TemplateListViewController: BaseViewController {
     }
     
     @objc private func cancleBtnClicked() {
+        afterDissmiss?()
         dismiss(animated: true)
     }
     
@@ -78,14 +83,34 @@ extension TemplateListViewController: UITableViewDelegate, UITableViewDataSource
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if templateTasks.isEmpty {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: EmptyCell.reuseIdentifier, for: indexPath) as? EmptyCell else { return UITableViewCell() }
+            cell.selectionStyle = .none
             cell.label.text = "등록된 템플릿이 없습니다."
             return cell
         }
         guard let cell = tableView.dequeueReusableCell(withIdentifier: TemplateListTableCell.reuseIdentifier, for: indexPath) as? TemplateListTableCell else { return UITableViewCell() }
+        cell.selectionStyle = .none
         cell.dateLabel.text = templateTasks[indexPath.row].startTime.toString(format: SHDate.time.str())
         cell.lineView.backgroundColor = UIColor(hexAlpha: templateTasks[indexPath.row].color)
         cell.titleLabel.text = templateTasks[indexPath.row].title
         cell.fullDateLabel.text = templateTasks[indexPath.row].startTime.toString(format: SHDate.time.str()) + "->" + templateTasks[indexPath.row].endTime.toString(format: SHDate.time.str())
         return cell
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let vc = WriteViewController()
+        vc.realmTemplate = templateTasks[indexPath.row]
+        vc.isTemplatePage = true
+        vc.afterDissmiss = {
+            self.tableView.reloadRows(at: [[0, indexPath.row]], with: .automatic)
+        }
+        let navi = UINavigationController(rootViewController: vc)
+        self.present(navi, animated: true)
+    }
 }
+
+extension TemplateListViewController: UIAdaptivePresentationControllerDelegate {
+    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+        afterDissmiss?()
+    }
+}
+

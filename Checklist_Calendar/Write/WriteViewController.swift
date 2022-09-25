@@ -16,7 +16,6 @@ class WriteViewController: BaseViewController {
     var realmEvent: Event?
     var realmTemplate: Template?
     var isTemplatePage = false
-    var selecedDate: Date?
     private var hasChanges = false { // View의 변화를 감지하기 위한 변수
         didSet {
             self.navigationController?.isModalInPresentation = self.hasChanges // 모달 방식으로 dissmiss 못하게 막아줌.
@@ -65,7 +64,7 @@ class WriteViewController: BaseViewController {
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.textColor]
         let cancleItem = UIBarButtonItem(title: "취소", style: .plain, target: self, action: #selector(cancleItemClicked))
         cancleItem.tintColor = .textColor
-        let saveBtnTitle = realmEvent == nil ? "추가" : "편집"
+        let saveBtnTitle = (realmEvent == nil && realmTemplate == nil) ? "추가" : "편집"
         let saveItem = UIBarButtonItem(title: saveBtnTitle, style: .done, target: self, action: #selector(okButtonClicked))
         saveItem.tintColor = .textColor
         
@@ -98,14 +97,14 @@ class WriteViewController: BaseViewController {
             hasChanges = false
         } else if realmTemplate != nil {
             let temp = realmTemplate!
-            var components = Calendar.current.dateComponents([.hour, .minute], from: temp.startTime)
-            guard let startTime = Calendar.current.date(bySettingHour: components.hour!, minute: components.minute!, second: 0, of: selecedDate!) else { return }
-            components = Calendar.current.dateComponents([.hour, .minute], from: temp.endTime)
-            guard let endTime = Calendar.current.date(bySettingHour: components.hour!, minute: components.minute!, second: 0, of: selecedDate!) else { return }
-            self.event = Event(title: temp.title, color: temp.color, startDate: selecedDate!, endDate: selecedDate!, startTime: startTime, endTime: endTime, isAllDay: temp.isAllDay)
+//            var components = Calendar.current.dateComponents([.hour, .minute], from: temp.startTime)
+//            guard let startTime = Calendar.current.date(bySettingHour: components.hour!, minute: components.minute!, second: 0, of: writeDate) else { return }
+//            components = Calendar.current.dateComponents([.hour, .minute], from: temp.endTime)
+//            guard let endTime = Calendar.current.date(bySettingHour: components.hour!, minute: components.minute!, second: 0, of: writeDate) else { return }
+            self.event = Event(title: temp.title, color: temp.color, startDate: writeDate, endDate: writeDate, startTime: temp.startTime, endTime: temp.endTime, isAllDay: temp.isAllDay)
             for todo in temp.todos {
                 let new = Todo(title: todo.title, isDone: todo.isDone)
-                event.todos.append(new)
+                self.event.todos.append(new)
             }
             hasChanges = false
             
@@ -304,6 +303,9 @@ extension WriteViewController {
         
         if isTemplatePage {
             let newTemplate = Template(title: event.title, color: event.color, startTime: event.startTime, endTime: event.endTime, isAllDay: event.isAllDay)
+            for todo in event.todos {
+                newTemplate.todos.append(todo)
+            }
             realmTemplate == nil ? repository.addTemplate(template: newTemplate) : repository.updateTemplate(old: realmTemplate!, new: newTemplate)
             
         } else {
@@ -391,22 +393,6 @@ extension WriteViewController {
 }
 
 extension WriteViewController: UITextFieldDelegate {
-//    func textFieldDidBeginEditing(_ textField: UITextField) {
-//        if textField.tag >= 0 || (textField.tag == -2 && textField.text != "") {
-//            self.hasChanges = true
-//        }
-//    }
-    
-//    func textFieldDidChangeSelection(_ textField: UITextField) {
-//        let content = textField.text == nil ? "" : textField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
-//        if textField.tag == -2 { // 이벤트 제목 입력란
-//            event.title = content
-//        }
-//
-//        if 0..<event.todos.count ~= textField.tag {
-//            event.todos[textField.tag].title = content
-//        }
-//    }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
         let content = textField.text == nil ? "" : textField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
