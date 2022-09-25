@@ -96,7 +96,29 @@ extension CheckListViewController: UITableViewDelegate, UITableViewDataSource {
         
         return cell
     }
-    
+   
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        
+        let delete = UIContextualAction(style: .normal, title: nil) { action, view, completionHandler in
+            let alert = UIAlertController(title: nil, message: "정말 삭제하시겠습니까?", preferredStyle: .alert)
+            let cancel = UIAlertAction(title: "취소", style: .cancel)
+            cancel.setValue(UIColor.red, forKey: "titleTextColor")
+            let ok = UIAlertAction(title: "확인", style: .destructive) { [self] _ in
+                let section = 0..<allDayTasks.count ~= indexPath.section ? indexPath.section : indexPath.section - allDayTasks.count
+                let tasks: Results<Event> = 0..<allDayTasks.count ~= indexPath.section ? allDayTasks : notAllDayTasks
+                let todos = tasks[section].todos
+                repository.deleteTodo(todo: todos[indexPath.row])
+                tableView.reloadSections([indexPath.section], with: .none)
+            }
+            alert.addAction(cancel)
+            alert.addAction(ok)
+            self.present(alert, animated: true)
+        }
+        
+        delete.image = .init(systemName: "trash.fill")
+        delete.backgroundColor = .systemRed
+        return UISwipeActionsConfiguration(actions: [delete])
+    }
     
 }
 
