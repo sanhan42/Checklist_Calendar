@@ -43,9 +43,14 @@ class MonthlyTableViewCell: BaseTableViewCell {
     }
     
     static func MonthlyCollectionViewLayout() -> UICollectionViewFlowLayout {
+        let scenes = UIApplication.shared.connectedScenes
+        let windowScene = scenes.first as? UIWindowScene
+        let window = windowScene?.windows.first
+        
+        let width = window?.safeAreaLayoutGuide.layoutFrame.width ?? UIScreen.main.bounds.width
+        let height = window?.safeAreaLayoutGuide.layoutFrame.height ?? UIScreen.main.bounds.height
+        let itemWidth: CGFloat = width > height ? (width/2 - 26) : (width - 44) // TODO: 아이패드나 다른 기기에서 가로 모드로 테스트 해봐야함.
         let layout = UICollectionViewFlowLayout()
-        let deviceWidth: CGFloat = UIScreen.main.bounds.width
-        let itemWidth: CGFloat = deviceWidth - 44
         layout.scrollDirection = .horizontal
         layout.minimumInteritemSpacing = 8.0
         layout.itemSize = CGSize(width: itemWidth, height: 46)

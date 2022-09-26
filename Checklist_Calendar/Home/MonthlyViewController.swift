@@ -9,6 +9,7 @@ import UIKit
 import FSCalendar
 import RealmSwift
 import SnapKit
+import SwiftUI
 
 class MonthlyViewController: BaseViewController {
     
@@ -32,6 +33,7 @@ class MonthlyViewController: BaseViewController {
     
     lazy var dismissHandler = {
         self.fetchRealm(date: self.mainView.calendar.selectedDate ?? Date())
+        self.mainView.calendar.reloadData()
         self.mainView.tableView.reloadData()
     }
     
@@ -64,6 +66,11 @@ class MonthlyViewController: BaseViewController {
         setToolbar()
     }
     
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        mainView.calendar.reloadData()
+        mainView.tableView.reloadData()
+    }
+    
     override func configure() {
         super.configure()
         self.navigationController?.isNavigationBarHidden = true
@@ -79,8 +86,21 @@ class MonthlyViewController: BaseViewController {
         
         mainView.tableView.delegate = self
         mainView.tableView.dataSource = self
+        mainView.tableView.tag = 0
         mainView.tableView.register(MonthlyTableViewCell.self, forCellReuseIdentifier: MonthlyTableViewCell.reuseIdentifier)
         mainView.tableView.register(EmptyCell.self, forCellReuseIdentifier: EmptyCell.reuseIdentifier)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(willResign), name: UIScene.didActivateNotification, object: nil) // UIApplication.willResignActiveNotification
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        print(#function)
+    }
+    
+    @objc func willResign() {
+        print(#function)
+        mainView.calendar.reloadData()
+        mainView.tableView.reloadData()
     }
     
     func fetchRealm(date: Date) {
@@ -184,6 +204,7 @@ class MonthlyViewController: BaseViewController {
                     }
                     self.repository.addEvent(event: event)
                     self.fetchRealm(date: date)
+                    self.mainView.calendar.reloadData()
                     self.mainView.tableView.reloadData()
                 }
                 menuElement.append(template)
@@ -250,7 +271,7 @@ extension MonthlyViewController: FSCalendarDataSource, FSCalendarDelegate {
     func calendar(_ calendar: FSCalendar, boundingRectWillChange bounds: CGRect, animated: Bool) {
         mainView.calendar.snp.remakeConstraints { make in
             make.top.equalTo(mainView.calHeaderView.snp.bottom)
-            make.width.equalTo(UIScreen.main.bounds.width)
+            make.horizontalEdges.equalToSuperview()
             make.height.equalTo(bounds.height)
         }
         
@@ -265,10 +286,12 @@ extension MonthlyViewController: FSCalendarDataSource, FSCalendarDelegate {
         fetchRealm(date: date)
         mainView.tableView.reloadData()
     }
-    //
-    //        func calendar(_ calendar: FSCalendar, numberOfEventsFor date: Date) -> Int {
-    //
-    //        }
+    
+    
+    func calendar(_ calendar: FSCalendar, subtitleFor date: Date) -> String? {
+        let count = repository.dayTasksFetch(date: date).count
+        return count == 0 ? nil : "\(count)"
+    }
 }
 
 extension MonthlyViewController: UITableViewDelegate, UITableViewDataSource {
@@ -299,6 +322,7 @@ extension MonthlyViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if dayEventCount == 0 {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: EmptyCell.reuseIdentifier, for: indexPath) as? EmptyCell else { return UITableViewCell() }
+            cell.selectionStyle = .none
             cell.label.text = "이벤트를 추가해보세요 :)"
             return cell
         }
@@ -306,10 +330,11 @@ extension MonthlyViewController: UITableViewDelegate, UITableViewDataSource {
         cell.selectionStyle = .none
         cell.collectionView.delegate = self
         cell.collectionView.dataSource = self
-        cell.collectionView.reloadData()
         cell.collectionView.tag = indexPath.row
-        cell.collectionView.scrollToItem(at: [0, 0], at: .left, animated: false)
+        cell.collectionView.collectionViewLayout = MonthlyTableViewCell.MonthlyCollectionViewLayout()
         collectionViewLayout = cell.collectionView.collectionViewLayout as? UICollectionViewFlowLayout
+        cell.collectionView.reloadData()
+        cell.collectionView.scrollToItem(at: [0, 0], at: .left, animated: false)
         return cell
     }
 }
@@ -329,6 +354,7 @@ extension MonthlyViewController: UICollectionViewDelegate, UICollectionViewDataS
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MonthlyCollectionViewCell.reuseIdentifier, for: indexPath) as? MonthlyCollectionViewCell else { return UICollectionViewCell() }
+        if cell.cellWidth > self.view.bounds.width { cell.cellWidth = self.view.bounds.width}
         let allDayRowNum = allDayTasks.isEmpty ? 0 : 1
         switch collectionView.tag {
         case 0:
@@ -377,6 +403,7 @@ extension MonthlyViewController: UICollectionViewDelegate, UICollectionViewDataS
     }
     
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        if scrollView.tag == 0 { return }
         guard let layout = collectionViewLayout else { return }
         // collectionView의 item에 마진이 있기 때문에, item의 width와 item 사이의 간격을 포함한 offset에서 left Inset을 뺸 만큼 스크롤
         let cellWidthIncludingSpacing = layout.itemSize.width + layout.minimumLineSpacing

@@ -22,7 +22,7 @@ class MonthlyTableViewHeaderView: BaseView {
         btn.titleLabel?.font = .systemFont(ofSize: 12, weight: .bold)
         btn.layer.borderColor = UIColor.textColor.withAlphaComponent(0.65).cgColor
         btn.layer.borderWidth = 2
-        btn.layer.cornerRadius = 12
+        btn.layer.cornerRadius = 8
         return btn
     }()
     
@@ -33,7 +33,7 @@ class MonthlyTableViewHeaderView: BaseView {
         btn.tintColor = UIColor.textColor.withAlphaComponent(0.65)
         btn.layer.borderColor = UIColor.textColor.withAlphaComponent(0.65).cgColor
         btn.layer.borderWidth = 1.8
-        btn.layer.cornerRadius = 2
+        btn.layer.cornerRadius = 5
         return btn
     }()
     
@@ -56,8 +56,9 @@ class MonthlyTableViewHeaderView: BaseView {
     
     override func setConstraints() {
         titleLabel.snp.makeConstraints { make in
-            make.width.equalTo(100)
+//            make.width.equalTo(100)
             make.leading.equalToSuperview().inset(18)
+            make.trailing.equalTo(hideBtn.snp.leading).inset(-12)
             make.centerY.equalToSuperview()
         }
         

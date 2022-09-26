@@ -78,10 +78,16 @@ class MonthlyView: BaseView {
     
     override func configureUI() {
         [calHeaderView, todayBtn, calendar, tableView].forEach { v in addSubview(v) }
-        self.backgroundColor = .bgColor // TODO: 달력 배경색 수정 필요
+        self.backgroundColor = .tableBgColor // TODO: 배경색 수정 필요
     }
     
     override func setConstraints() {
+//        let scenes = UIApplication.shared.connectedScenes
+//        let windowScene = scenes.first as? UIWindowScene
+//        let window = windowScene?.windows.first
+//        
+//        let width = window?.safeAreaLayoutGuide.layoutFrame.width ?? UIScreen.main.bounds.width
+        
         prevButton.snp.makeConstraints { make in
             make.width.equalTo(24)
         }
@@ -98,21 +104,22 @@ class MonthlyView: BaseView {
             make.topMargin.equalTo(12)
             make.width.equalTo(180)
             make.height.equalTo(48)
-            make.leading.equalToSuperview().inset(8)
+            make.leading.equalTo(self.safeAreaLayoutGuide)
         }
         
         todayBtn.snp.makeConstraints { make in
             make.width.equalTo(60)
             make.height.equalTo(48)
-            make.trailing.equalToSuperview().inset(8)
+            make.trailing.equalTo(self.safeAreaLayoutGuide)
             make.centerY.equalTo(calHeaderView)
         }
         
         calendar.snp.makeConstraints { make in
             make.top.equalTo(calHeaderView.snp.bottom)
-            make.width.equalTo(UIScreen.main.bounds.size.width)
+            make.centerX.equalToSuperview()
+            make.horizontalEdges.equalTo(self.safeAreaLayoutGuide)
             if UIDevice.current.model.hasPrefix("iPad") {
-                make.height.equalTo(400)
+                make.height.equalTo(340)
             } else {
                 make.height.equalTo(250)
             }
@@ -120,8 +127,7 @@ class MonthlyView: BaseView {
         
         tableView.snp.makeConstraints { make in
             make.top.equalTo(calendar.snp.bottom)
-            make.horizontalEdges.equalToSuperview()
-//            make.bottomMargin.equalTo(self.safeAreaLayoutGuide)
+            make.horizontalEdges.equalTo(self.safeAreaLayoutGuide)
             make.bottom.equalTo(self.safeAreaLayoutGuide)
         }
     }
@@ -191,17 +197,10 @@ class MonthlyView: BaseView {
        
         calendar.appearance.selectionColor = UIColor(named: "SkyColor")
         
-        // 캘린더 숫자와 subtitle간의 간격 조정
-        calendar.appearance.subtitleOffset = CGPoint(x: 0, y: 4)
+        calendar.appearance.subtitleOffset = CGPoint(x: 0, y: 2.4) // 캘린더 숫자와 subtitle간의 간격 조정
+        calendar.appearance.subtitleDefaultColor = UIColor.textColor.withAlphaComponent(0.6) // subtitle 색 설정
         
-//        // 날짜 다중 선택
-//        calendar.allowsMultipleSelection = true
-//        // 스와이프 선택 제스처
-//        calendar.swipeToChooseGesture.isEnabled = true
-        
-//        // 이벤트 컬러 마크
-//        calendar.appearance.eventDefaultColor = .black
-//        calendar.appearance.eventSelectionColor = .black
+        calendar.translatesAutoresizingMaskIntoConstraints = false
     }
     
 }

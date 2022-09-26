@@ -76,7 +76,7 @@ class CheckListTableCell: BaseTableViewCell {
         }
         
         checkButton.snp.makeConstraints { make in
-            make.width.height.equalTo(30)
+            make.width.height.equalTo(24)
             make.leading.equalToSuperview()
             make.topMargin.equalToSuperview().inset(4)
         }

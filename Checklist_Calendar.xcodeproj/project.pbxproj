@@ -209,8 +209,8 @@
 				BFDDC9B428D059BC0047F22E /* MonthlyViewController.swift */,
 				BFDDC9B628D05A3C0047F22E /* MonthlyView.swift */,
 				BF7C141028D1F8A100DF1EEE /* MonthlyTableViewCell.swift */,
-				BFFDE20128D34BC000090E8A /* MonthlyCollectionViewCell.swift */,
 				BF70765728D6F2DA003506C0 /* MonthlyTableViewHeaderView.swift */,
+				BFFDE20128D34BC000090E8A /* MonthlyCollectionViewCell.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -517,6 +517,7 @@
 				DEVELOPMENT_TEAM = 5534Y3FYT7;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Checklist_Calendar/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "체리캘린더";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -533,7 +534,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -547,6 +548,7 @@
 				DEVELOPMENT_TEAM = 5534Y3FYT7;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Checklist_Calendar/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "체리캘린더";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -563,7 +565,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};

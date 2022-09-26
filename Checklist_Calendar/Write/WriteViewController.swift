@@ -217,8 +217,8 @@ extension WriteViewController: UITableViewDelegate, UITableViewDataSource {
                 cell.checkButton.tag = indexPath.row
                 cell.checkButton.addTarget(self, action: #selector(checkButtonClicked(sender:)), for: .touchUpInside)
                 cell.textField.placeholder = "내용을 입력해주세요"
-                cell.textField.text = event.todos[indexPath.row].title
-                let img = event.todos[indexPath.row].isDone ? UIImage(systemName: "checkmark.square") : UIImage(systemName: "square")
+                cell.textField.attributedText = event.todos[indexPath.row].isDone ? event.todos[indexPath.row].title.strikeThrough() : event.todos[indexPath.row].title.regular()
+                let img = event.todos[indexPath.row].isDone ? UIImage(systemName: "checkmark.square")?.imageWithColor(color: .textColor.withAlphaComponent(0.5)) : UIImage(systemName: "square")?.imageWithColor(color: .textColor)
                 cell.checkButton.setImage(img, for: .normal)
             } else {
                 if !event.todos.isEmpty && realmEvent == nil && realmTemplate == nil {

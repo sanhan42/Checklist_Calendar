@@ -8,6 +8,7 @@
 import UIKit
 
 class MonthlyCollectionViewCell: BaseCollectionViewCell {
+    var cellWidth: CGFloat = UIScreen.main.bounds.width
     
     let dateLabel: UILabel = {
         let view = UILabel()
@@ -72,6 +73,7 @@ class MonthlyCollectionViewCell: BaseCollectionViewCell {
     }
     
     override func setConstraints() {
+        
         backView.snp.makeConstraints { make in
             make.edges.equalToSuperview().inset(2)
         }

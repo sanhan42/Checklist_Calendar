@@ -14,7 +14,7 @@ class BaseViewController: UIViewController {
         dp.datePickerMode = .date
         dp.preferredDatePickerStyle = .wheels
         
-        dp.locale = NSLocale(localeIdentifier: "ko_KR") as Locale // datePicker의 default 값이 영어이기 때문에 한글로 바꿔줌.
+        dp.locale = NSLocale(localeIdentifier: "ko_KR") as Locale // 영어에서 한글로 바꿔줌.
 //        dp.locale = NSLocale.current
         dp.timeZone = .autoupdatingCurrent
         // TODO: 글로벌 대응

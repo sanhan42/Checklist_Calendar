@@ -127,7 +127,7 @@ extension CheckListViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         let section = 0..<allDayTasks.count ~= indexPath.section ? indexPath.section : indexPath.section - allDayTasks.count
         let tasks: Results<Event> = 0..<allDayTasks.count ~= indexPath.section ? allDayTasks : notAllDayTasks
-        return tasks[section].todos[indexPath.row].title.heightWithConstrainedWidth(width: tableView.frame.width, font: UIFont.systemFont(ofSize: 15)) + 20
+        return tasks[section].todos[indexPath.row].title.heightWithConstrainedWidth(width: tableView.frame.width, font: UIFont.systemFont(ofSize: 13)) + 20
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -175,11 +175,10 @@ extension CheckListViewController: UITableViewDelegate, UITableViewDataSource {
         let tagNum = setTagNum(section: indexPath.section, row: indexPath.row)
         let section = 0..<allDayTasks.count ~= indexPath.section ? indexPath.section : indexPath.section - allDayTasks.count
         let tasks: Results<Event> = 0..<allDayTasks.count ~= indexPath.section ? allDayTasks : notAllDayTasks
-        cell.textView.font = .systemFont(ofSize: 15)
-        cell.textView.text = tasks[section].todos[indexPath.row].title
+        cell.textView.attributedText = tasks[section].todos[indexPath.row].isDone ? tasks[section].todos[indexPath.row].title.strikeThrough() : tasks[section].todos[indexPath.row].title.regular()
         cell.textView.tag = tagNum
         cell.textView.delegate = self
-        let img = tasks[section].todos[indexPath.row].isDone ? UIImage(systemName: "checkmark.square") : UIImage(systemName: "square")
+        let img = tasks[section].todos[indexPath.row].isDone ? UIImage(systemName: "checkmark.square")?.imageWithColor(color: .textColor.withAlphaComponent(0.5)) : UIImage(systemName: "square")?.imageWithColor(color: .textColor)
         cell.checkButton.setImage(img, for: .normal)
         cell.checkButton.tintColor = .textColor.withAlphaComponent(0.9)
         cell.checkButton.tag = tagNum
