@@ -93,12 +93,8 @@ class MonthlyViewController: BaseViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(willResign), name: UIScene.didActivateNotification, object: nil) // UIApplication.willResignActiveNotification
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        print(#function)
-    }
     
     @objc func willResign() {
-        print(#function)
         mainView.calendar.reloadData()
         mainView.tableView.reloadData()
     }
