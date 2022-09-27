@@ -8,6 +8,16 @@
 import UIKit
 import RealmSwift
 
+
+extension String {
+    func toDate(format: String) -> Date? {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = format
+        dateFormatter.locale = Locale(identifier:"ko_KR")
+        return dateFormatter.date(from: self)
+    }
+}
+
 extension String {
     func heightWithConstrainedWidth(width: CGFloat, font: UIFont) -> CGFloat {
         let constraintRect = CGSize(width: width, height: .greatestFiniteMagnitude)

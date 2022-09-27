@@ -27,7 +27,7 @@ class MonthlyCollectionViewCell: BaseCollectionViewCell {
     
     let titleLabel: UILabel = {
         let view = UILabel()
-        view.textColor = .black
+        view.textColor = .textColor
         view.font = .systemFont(ofSize: 15)
         return view
     }()
@@ -48,7 +48,7 @@ class MonthlyCollectionViewCell: BaseCollectionViewCell {
         view.layer.masksToBounds = true
         view.layer.cornerRadius = 10
         view.layer.borderWidth = 1
-        view.layer.borderColor = UIColor.clear.cgColor
+        view.layer.borderColor = UIColor.lineColor.cgColor
         view.backgroundColor = .bgColor // TODO: 실질적인 셀 아이템 배경색
         return view
     }()
@@ -65,10 +65,6 @@ class MonthlyCollectionViewCell: BaseCollectionViewCell {
     }
     
     override func configure() {
-        layer.masksToBounds = false
-        layer.shadowOpacity = 0.5
-        layer.shadowOffset = CGSize(width: 0, height: 0)
-        layer.shadowRadius = 2
         contentView.addSubview(backView)
     }
     

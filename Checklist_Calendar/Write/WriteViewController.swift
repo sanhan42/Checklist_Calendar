@@ -60,6 +60,7 @@ class WriteViewController: BaseViewController {
         let name = isTemplatePage ? "템플릿" : "이벤트"
         let tasks = isTemplatePage ? realmTemplate : realmEvent
         title = tasks == nil ? "새로운 " + name : name + " 세부사항"
+        navigationController?.navigationBar.backgroundColor = .tableBgColor
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.textColor]
         let cancleItem = UIBarButtonItem(title: "취소", style: .plain, target: self, action: #selector(cancleItemClicked))
         cancleItem.tintColor = .textColor
@@ -457,7 +458,7 @@ extension WriteViewController: UIAdaptivePresentationControllerDelegate {
                 self.dismiss(animated: true, completion: nil)
             }
             let cancel = UIAlertAction(title: "계속 편집하기", style: .cancel, handler: nil)
-            cancel.setValue(UIColor.red, forKey: "titleTextColor")
+            cancel.setValue(UIColor.redColor, forKey: "titleTextColor")
             alert.addAction(dismiss)
             alert.addAction(cancel)
             present(alert, animated: true, completion: nil)

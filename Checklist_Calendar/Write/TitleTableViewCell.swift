@@ -29,13 +29,13 @@ class TitleTableViewCell: BaseTableViewCell {
     
     let colorButton: UIColorWell = {
         let btn = UIColorWell(frame: CGRect(x: 100, y: 100, width: 100, height: 100))
-        btn.selectedColor = .cherryColor
+        btn.selectedColor = .redColor
         return btn
     }()
     
     let separatorView: UIView = {
         let view = UIView()
-        view.backgroundColor = .GrayColor.withAlphaComponent(0.8)
+        view.backgroundColor = .grayColor.withAlphaComponent(0.8)
         return view
     }()
     

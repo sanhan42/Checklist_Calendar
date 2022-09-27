@@ -49,16 +49,16 @@ class TemplateListViewController: BaseViewController {
     private func setNavigationBar() {
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.textColor]
         title = "템플릿"
-        let cancleItem = UIBarButtonItem(image: UIImage(systemName: "xmark.square"), style: .plain, target: self, action: #selector(cancleBtnClicked))
-        cancleItem.tintColor = .textColor
+        let cancelItem = UIBarButtonItem(image: UIImage(systemName: "xmark.square"), style: .plain, target: self, action: #selector(cancelBtnClicked))
+        cancelItem.tintColor = .textColor
         let saveItem = UIBarButtonItem(image: UIImage(systemName: "plus.square"), style: .done, target: self, action: #selector(addBtnClicked))
         saveItem.tintColor = .textColor
         
-        navigationController?.navigationBar.topItem?.leftBarButtonItem = cancleItem
+        navigationController?.navigationBar.topItem?.leftBarButtonItem = cancelItem
         navigationController?.navigationBar.topItem?.rightBarButtonItem = saveItem
     }
     
-    @objc private func cancleBtnClicked() {
+    @objc private func cancelBtnClicked() {
         afterDissmiss?()
         dismiss(animated: true)
     }

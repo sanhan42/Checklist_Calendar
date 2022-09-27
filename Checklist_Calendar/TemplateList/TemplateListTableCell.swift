@@ -26,7 +26,7 @@ class TemplateListTableCell: BaseTableViewCell {
     
     let titleLabel: UILabel = {
         let view = UILabel()
-        view.textColor = .black
+        view.textColor = .textColor
         view.font = .systemFont(ofSize: 15)
         return view
     }()

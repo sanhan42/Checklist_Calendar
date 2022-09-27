@@ -85,9 +85,13 @@ class MonthlyView: BaseView {
 //        let scenes = UIApplication.shared.connectedScenes
 //        let windowScene = scenes.first as? UIWindowScene
 //        let window = windowScene?.windows.first
-//        
-//        let width = window?.safeAreaLayoutGuide.layoutFrame.width ?? UIScreen.main.bounds.width
-        
+//
+//        var width = window?.safeAreaLayoutGuide.layoutFrame.width ?? UIScreen.main.bounds.width
+////        let height = window?.safeAreaLayoutGuide.layoutFrame.height ?? UIScreen.main.bounds.height
+////        let longer = width > height ? width : height
+//        if UIDevice.current.orientation.isLandscape {
+//            width = window?.safeAreaLayoutGuide.layoutFrame.height ?? UIScreen.main.bounds.height
+//        }
         prevButton.snp.makeConstraints { make in
             make.width.equalTo(24)
         }
@@ -117,11 +121,11 @@ class MonthlyView: BaseView {
         calendar.snp.makeConstraints { make in
             make.top.equalTo(calHeaderView.snp.bottom)
             make.centerX.equalToSuperview()
-            make.horizontalEdges.equalTo(self.safeAreaLayoutGuide)
+            make.horizontalEdges.equalToSuperview()//equalTo(self.safeAreaLayoutGuide)
             if UIDevice.current.model.hasPrefix("iPad") {
                 make.height.equalTo(340)
             } else {
-                make.height.equalTo(250)
+                make.height.equalTo(240)
             }
         }
         
@@ -162,15 +166,17 @@ class MonthlyView: BaseView {
         calendar.calendarWeekdayView.weekdayLabels[6].text = "토"
        
         // 월 ~ 일 요일 글자색 변경
-        calendar.appearance.weekdayTextColor = .black.withAlphaComponent(0.66)
+        calendar.appearance.weekdayTextColor = .textColor //.black.withAlphaComponent(0.66)
         
         // 토,일 날짜 색상
-        calendar.appearance.titleWeekendColor = .systemRed.withAlphaComponent(0.95)
+        calendar.appearance.titleWeekendColor = .systemRed.withAlphaComponent(0.7)
+           
         // 기본 날짜 색상
-        calendar.appearance.titleDefaultColor = .black.withAlphaComponent(0.9)
+        calendar.appearance.titleDefaultColor = .textColor
+        calendar.appearance.titleSelectionColor = .selectTextColor
         
         // 숫자들 글자 폰트 사이즈 지정
-        self.calendar.appearance.titleFont = .systemFont(ofSize: 16)
+        calendar.appearance.titleFont = .systemFont(ofSize: 16)
         
         // 캘린더 스크롤 가능하게 지정
         calendar.scrollEnabled = true
@@ -181,7 +187,7 @@ class MonthlyView: BaseView {
         calendar.calendarHeaderView.isHidden = true // 헤더 숨기기
         
         // 캘린더의 cornerRadius 지정
-        calendar.layer.cornerRadius = 10
+        calendar.layer.cornerRadius = 16
         
         // 양옆 년도, 월 지우기
         calendar.appearance.headerMinimumDissolvedAlpha = 0.0
@@ -193,12 +199,15 @@ class MonthlyView: BaseView {
         
         // Today
 //        calendar.appearance.titleTodayColor //Today에 표시되는 특정 글자색
-        calendar.appearance.todayColor = UIColor(named: "PinkColor") // Today에 표시되는 동그라미 색
+        calendar.appearance.todayColor = .bgColor // Today에 표시되는 동그라미색
+        calendar.appearance.todaySelectionColor = .systemRed.withAlphaComponent(0.9)
+        calendar.appearance.titleTodayColor = .systemRed
        
-        calendar.appearance.selectionColor = UIColor(named: "SkyColor")
+        calendar.appearance.selectionColor = .selectColor
+       
+        calendar.appearance.eventDefaultColor = .pinkColor
+        calendar.appearance.eventSelectionColor = .bgColor
         
-        calendar.appearance.subtitleOffset = CGPoint(x: 0, y: 2.4) // 캘린더 숫자와 subtitle간의 간격 조정
-        calendar.appearance.subtitleDefaultColor = UIColor.textColor.withAlphaComponent(0.6) // subtitle 색 설정
         
         calendar.translatesAutoresizingMaskIntoConstraints = false
     }

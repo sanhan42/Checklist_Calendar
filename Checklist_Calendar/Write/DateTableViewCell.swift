@@ -25,7 +25,7 @@ class DateTableViewCell: BaseTableViewCell {
     let allDaySwitch: UISwitch = {
         let btn = UISwitch(frame: CGRect(x: 0, y: 0, width: 250, height: 28))
         btn.transform = CGAffineTransform(scaleX: 0.75, y: 0.8)
-        btn.onTintColor = .cherryColor.withAlphaComponent(0.8)
+        btn.onTintColor = .redColor.withAlphaComponent(0.9)
         return btn
     }()
     
@@ -87,7 +87,7 @@ class DateTableViewCell: BaseTableViewCell {
     
     let separatorView: UIView = {
         let view = UIView()
-        view.backgroundColor = .GrayColor.withAlphaComponent(0.8)
+        view.backgroundColor = .grayColor.withAlphaComponent(0.8)
         return view
     }()
     

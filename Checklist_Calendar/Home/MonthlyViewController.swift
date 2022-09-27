@@ -28,6 +28,7 @@ class MonthlyViewController: BaseViewController {
     var isHiding = false
     
     lazy var lunarDate = calLunarDate()
+    lazy var selectedDate = mainView.calendar.selectedDate ?? Date()
     
     private var collectionViewLayout: UICollectionViewFlowLayout?
     
@@ -64,11 +65,6 @@ class MonthlyViewController: BaseViewController {
         configure()
         fetchRealm(date: mainView.calendar.selectedDate ?? Date())
         setToolbar()
-    }
-    
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        mainView.calendar.reloadData()
-        mainView.tableView.reloadData()
     }
     
     override func configure() {
@@ -144,12 +140,12 @@ class MonthlyViewController: BaseViewController {
         
         let btn = UIButton()
         btn.setTitle("새로운 이벤트 추가", for: .normal)
-        btn.setTitleColor(.black.withAlphaComponent(0.65), for: .normal)
+        btn.setTitleColor(.textColor.withAlphaComponent(0.65), for: .normal)
         btn.titleLabel?.font = .systemFont(ofSize: 18, weight: .bold)
         btn.layer.cornerRadius = 4
         btn.backgroundColor = .bgColor.withAlphaComponent(0.5)
         btn.layer.borderColor = UIColor.clear.cgColor
-        btn.layer.borderWidth = 1.8
+        btn.layer.borderWidth = 2
         btn.snp.makeConstraints { make in
             make.width.equalTo(self.navigationController!.toolbar.frame.width - 100)
         }
@@ -234,6 +230,7 @@ class MonthlyViewController: BaseViewController {
         vc.isHiding = isHiding
         vc.afterDissmiss = { [self] in
             mainView.calendar.select(vc.selectedDate)
+            isHiding = vc.isHiding
             dismissHandler()
         }
         let navigationVC = UINavigationController(rootViewController: vc)
@@ -267,7 +264,7 @@ extension MonthlyViewController: FSCalendarDataSource, FSCalendarDelegate {
     func calendar(_ calendar: FSCalendar, boundingRectWillChange bounds: CGRect, animated: Bool) {
         mainView.calendar.snp.remakeConstraints { make in
             make.top.equalTo(mainView.calHeaderView.snp.bottom)
-            make.horizontalEdges.equalToSuperview()
+            make.horizontalEdges.equalTo(view.safeAreaLayoutGuide)
             make.height.equalTo(bounds.height)
         }
         
@@ -279,14 +276,18 @@ extension MonthlyViewController: FSCalendarDataSource, FSCalendarDelegate {
     
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
         lunarDate = calLunarDate()
+        selectedDate = date
         fetchRealm(date: date)
         mainView.tableView.reloadData()
     }
+   
+    func calendar(_ calendar: FSCalendar, numberOfEventsFor date: Date) -> Int {
+        return repository.dayTasksFetch(date: date).isEmpty ? 0 : 1
+    }
     
-    
-    func calendar(_ calendar: FSCalendar, subtitleFor date: Date) -> String? {
-        let count = repository.dayTasksFetch(date: date).count
-        return count == 0 ? nil : "\(count)"
+    func calendar(_ calendar: FSCalendar, titleFor date: Date) -> String? {
+        
+        return Calendar.current.isDateInToday(date) ? "오늘" : nil
     }
 }
 
@@ -295,6 +296,7 @@ extension MonthlyViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header = MonthlyTableViewHeaderView()
         header.titleLabel.text = lunarDate
+        header.subtitleLabel.text = "(총 이벤트 수 : \(repository.dayTasksFetch(date: selectedDate).count))"
         header.hideBtn.addTarget(self, action: #selector(hideBtnClicked(_:)), for: .touchUpInside)
         let title = isHiding ? "모든 일정 보기" : "지난 일정 숨기기"
         header.hideBtn.setTitle(title, for: .normal)
@@ -303,7 +305,7 @@ extension MonthlyViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 34
+        return 36
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -362,15 +364,15 @@ extension MonthlyViewController: UICollectionViewDelegate, UICollectionViewDataS
             } else {
                 let event = notAllDayArr[collectionView.tag][indexPath.row]
                 cell.titleLabel.text = event.title
-                cell.dateLabel.text = event.startTime.getDateStr()
-                cell.fullDateLabel.text = event.startTime.getDateStr(needOneLine: true) + " -> " + event.endTime.getDateStr(needOneLine: true)
+                cell.dateLabel.text = event.startTime.getDateStr(day: selectedDate)
+                cell.fullDateLabel.text = event.startTime.getDateStr(day: selectedDate, needOneLine: true) + " -> " + event.endTime.getDateStr(day: selectedDate, needOneLine: true)
                 cell.lineView.backgroundColor = UIColor(hexAlpha: event.color)
             }
         case 1...(notAllDayArr.count - 1 + allDayRowNum):
             let event = notAllDayArr[collectionView.tag - allDayRowNum][indexPath.row]
             cell.titleLabel.text = event.title
-            cell.dateLabel.text = event.startTime.getDateStr()
-            cell.fullDateLabel.text = event.startTime.getDateStr(needOneLine: true) + " -> " + event.endTime.getDateStr(needOneLine: true)
+            cell.dateLabel.text = event.startTime.getDateStr(day: selectedDate)
+            cell.fullDateLabel.text = event.startTime.getDateStr(day: selectedDate, needOneLine: true) + " -> " + event.endTime.getDateStr(day: selectedDate, needOneLine: true)
             cell.lineView.backgroundColor = UIColor(hexAlpha: event.color)
         default : return MonthlyCollectionViewCell()
         }

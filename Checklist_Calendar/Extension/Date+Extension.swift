@@ -7,16 +7,6 @@
 
 import Foundation
 
-extension String {
-    func toDate(format: String) -> Date? {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = format
-        dateFormatter.locale = Locale(identifier:"ko_KR")
-//        dateFormatter.timeZone = TimeZone(identifier: "KST")
-        return dateFormatter.date(from: self)
-    }
-}
-
 extension Date {
     func toString(format: String) -> String {
         let dateFormatter = DateFormatter()
@@ -37,10 +27,11 @@ extension Date {
         return Calendar.current.date(byAdding: .day, value: 1, to: self.calMidnight())!
     }
     
-    func getDateStr(needOneLine: Bool = false) -> String {
+    
+    func getDateStr(day: Date, needOneLine: Bool = false) -> String {
         let dateFormatter = DateFormatter()
         let current = Calendar.current
-        if current.isDateInToday(self) {
+        if current.isDate(self, inSameDayAs: day) {
             dateFormatter.dateFormat = "a hh:mm"
         } else if current.dateComponents([.year], from: self, to: Date()).year! == 0 {
             dateFormatter.dateFormat  = needOneLine ? "(MM월 dd일 a hh:mm)" : "MM월 dd일\n a hh:mm"

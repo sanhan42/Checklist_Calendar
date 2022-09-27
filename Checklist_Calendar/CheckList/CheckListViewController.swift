@@ -42,11 +42,11 @@ class CheckListViewController: BaseViewController {
         tableView.dataSource = self
         
         navigationController?.presentationController?.delegate = self
-        setTitleBtn()
         setNavigationLeftItems()
+        setNavigationRightItems()
     }
     
-    func setTitleBtn() {
+    func setNavigationLeftItems() {
         let titleBtn: UIView = {
             let bgView = UIView()
             let btn = UIButton()
@@ -56,14 +56,14 @@ class CheckListViewController: BaseViewController {
             btn.translatesAutoresizingMaskIntoConstraints = false
             btn.setTitleColor(.textColor, for: .normal)
             btn.imageView?.contentMode = .scaleAspectFit
-            btn.titleLabel?.font = .systemFont(ofSize: 18, weight: .bold)
+            btn.titleLabel?.font = .systemFont(ofSize: 16, weight: .bold)
             btn.contentHorizontalAlignment = .center
             btn.semanticContentAttribute = .forceLeftToRight
-            btn.imageEdgeInsets = .init(top: 0, left: 18, bottom: 0, right: 18)
+            btn.imageEdgeInsets = .init(top: 0, left: 4, bottom: 0, right: 40)
             btn.addTarget(self, action: #selector(calendarBtnClicked), for: .touchUpInside)
             bgView.addSubview(btn)
             bgView.snp.makeConstraints { make in
-                make.width.equalTo(220)
+                make.width.equalTo(168)//(197)
                 make.height.equalTo(28)
             }
             btn.snp.makeConstraints { make in
@@ -71,17 +71,29 @@ class CheckListViewController: BaseViewController {
             }
             return bgView
         }()
-        navigationController?.navigationBar.topItem?.leftBarButtonItem = UIBarButtonItem(customView: titleBtn)
+        
+        let cancelBtn: UIButton = {
+            let btn = UIButton()
+            btn.setImage(UIImage(systemName: "xmark"), for: .normal)
+            btn.addTarget(self, action: #selector(cancelBtnClicked), for: .touchUpInside)
+            btn.tintColor = .textColor.withAlphaComponent(0.8)
+            btn.snp.makeConstraints { make in
+                make.width.height.equalTo(21.5)
+            }
+            return btn
+        }()
+        
+        navigationController?.navigationBar.topItem?.leftBarButtonItems = [UIBarButtonItem(customView: cancelBtn), UIBarButtonItem(customView: titleBtn)]
     }
     
-    func setNavigationLeftItems() {
+    func setNavigationRightItems() {
        
         let todayBtn: UIView = {
             let bgView = UIView()
             let btn = UIButton()
             btn.setTitle("오늘 ", for: .normal)
             btn.setImage(UIImage(named: "cherry"), for: .normal)
-            btn.translatesAutoresizingMaskIntoConstraints = false
+//            btn.translatesAutoresizingMaskIntoConstraints = false
             btn.setTitleColor(.textColor, for: .normal)
             btn.imageView?.contentMode = .scaleAspectFit
             btn.titleLabel?.font = .systemFont(ofSize: 12, weight: .bold)
@@ -90,11 +102,11 @@ class CheckListViewController: BaseViewController {
             btn.imageEdgeInsets = .init(top: 6, left: 18, bottom: 8, right: 18)
             btn.addTarget(self, action: #selector(moveToToday), for: .touchUpInside)
             bgView.layer.borderColor = UIColor.textColor.withAlphaComponent(0.65).cgColor
-            bgView.layer.borderWidth = 2
+            bgView.layer.borderWidth = 1.8
             bgView.layer.cornerRadius = 12
             bgView.addSubview(btn)
             bgView.snp.makeConstraints { make in
-                make.width.equalTo(42)
+                make.width.equalTo(40)
                 make.height.equalTo(27)
             }
             btn.snp.makeConstraints { make in
@@ -109,11 +121,11 @@ class CheckListViewController: BaseViewController {
             btn.backgroundColor = .bgColor.withAlphaComponent(0.5)
             btn.titleLabel?.font = .systemFont(ofSize: 12, weight: .bold)
             btn.layer.borderColor = UIColor.textColor.withAlphaComponent(0.65).cgColor
-            btn.layer.borderWidth = 2
+            btn.layer.borderWidth = 1.8
             btn.layer.cornerRadius = 12
             btn.addTarget(self, action: #selector(hideBtnClicked), for: .touchUpInside)
             btn.snp.makeConstraints { make in
-                make.width.equalTo(94)
+                make.width.equalTo(98)
             }
             let title = isHiding ? "모든 일정 보기" : "지난 일정 숨기기"
             btn.setTitle(title, for: .normal)
@@ -136,7 +148,7 @@ extension CheckListViewController: UITableViewDelegate, UITableViewDataSource {
         let index = allDayTasks.isEmpty || section < allDayTasks.count ? section : section - allDayTasks.count
         header.lineView.backgroundColor = UIColor(hexAlpha: tasks[index].color)
         header.titleLabel.text = tasks[index].title
-        header.fullDateLabel.text = tasks[index].startTime.getDateStr(needOneLine: true) + " -> " + tasks[index].endTime.getDateStr(needOneLine: true)
+        header.fullDateLabel.text = tasks[index].startTime.getDateStr(day: selectedDate, needOneLine: true) + " -> " + tasks[index].endTime.getDateStr(day: selectedDate, needOneLine: true)
         header.tag = section
         header.addButton.addTarget(self, action: #selector(addBtnClicked(_:)), for: .touchUpInside)
         return header
@@ -213,17 +225,22 @@ extension CheckListViewController: UITableViewDelegate, UITableViewDataSource {
 }
 
 extension CheckListViewController {
+    @objc func cancelBtnClicked() {
+        afterDissmiss?()
+        dismiss(animated: true)
+    }
+    
     @objc func hideBtnClicked() {
         isHiding.toggle()
         fetchRealm(isHiding: isHiding)
-        setNavigationLeftItems()
+        setNavigationRightItems()
         tableView.reloadData()
     }
 
     @objc func calendarBtnClicked() {
         showDatePickerPopup(mode: .date) { [self] _ in
             selectedDate = datePicker.date
-            setTitleBtn()
+            setNavigationLeftItems()
             fetchRealm(isHiding: isHiding)
             tableView.reloadData()
         }
@@ -232,7 +249,7 @@ extension CheckListViewController {
     @objc func moveToToday() {
         selectedDate = Date()
         datePicker.date = selectedDate
-        setTitleBtn()
+        setNavigationLeftItems()
         fetchRealm(isHiding: isHiding)
         tableView.reloadData()
     }
