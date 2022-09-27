@@ -26,6 +26,7 @@ class MonthlyViewController: BaseViewController {
     }
     
     var isHiding = false
+    var isFiest = true
     
     lazy var lunarDate = calLunarDate()
     lazy var selectedDate = mainView.calendar.selectedDate ?? Date()
@@ -67,6 +68,15 @@ class MonthlyViewController: BaseViewController {
         setToolbar()
     }
     
+    override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
+        let scenes = UIApplication.shared.connectedScenes
+        let windowScene = scenes.first as? UIWindowScene
+        let window = windowScene?.windows.first
+
+        lazy var calWidth =  (window?.safeAreaLayoutGuide.layoutFrame.height ?? UIScreen.main.bounds.height)
+        mainView.calendar.fs_width = calWidth
+    }
+    
     override func configure() {
         super.configure()
         self.navigationController?.isNavigationBarHidden = true
@@ -88,7 +98,6 @@ class MonthlyViewController: BaseViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(willResign), name: UIScene.didActivateNotification, object: nil) // UIApplication.willResignActiveNotification
     }
-    
     
     @objc func willResign() {
         mainView.calendar.reloadData()
@@ -169,7 +178,7 @@ class MonthlyViewController: BaseViewController {
         rtn.layer.borderWidth = 1.8
         rtn.layer.cornerRadius = 4
         rtn.snp.makeConstraints { make in
-            make.width.height.equalTo(34)
+            make.width.height.equalTo(32)
         }
         let edit = UIAction(title: "템플릿 편집", image: UIImage(systemName: "wrench.and.screwdriver")) { _ in
             let vc = TemplateListViewController()

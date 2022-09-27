@@ -82,16 +82,7 @@ class MonthlyView: BaseView {
     }
     
     override func setConstraints() {
-//        let scenes = UIApplication.shared.connectedScenes
-//        let windowScene = scenes.first as? UIWindowScene
-//        let window = windowScene?.windows.first
-//
-//        var width = window?.safeAreaLayoutGuide.layoutFrame.width ?? UIScreen.main.bounds.width
-////        let height = window?.safeAreaLayoutGuide.layoutFrame.height ?? UIScreen.main.bounds.height
-////        let longer = width > height ? width : height
-//        if UIDevice.current.orientation.isLandscape {
-//            width = window?.safeAreaLayoutGuide.layoutFrame.height ?? UIScreen.main.bounds.height
-//        }
+        
         prevButton.snp.makeConstraints { make in
             make.width.equalTo(24)
         }
@@ -120,8 +111,10 @@ class MonthlyView: BaseView {
         
         calendar.snp.makeConstraints { make in
             make.top.equalTo(calHeaderView.snp.bottom)
-            make.centerX.equalToSuperview()
-            make.horizontalEdges.equalToSuperview()//equalTo(self.safeAreaLayoutGuide)
+//            make.centerX.equalToSuperview()
+            make.horizontalEdges.equalToSuperview()//(self.safeAreaLayoutGuide)
+//            make.width.equalToSuperview()
+            
             if UIDevice.current.model.hasPrefix("iPad") {
                 make.height.equalTo(340)
             } else {
