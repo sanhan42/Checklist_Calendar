@@ -112,11 +112,11 @@ class DateTableViewCell: BaseTableViewCell {
         titleView.snp.makeConstraints { make in
             make.top.equalToSuperview().inset(16)
             make.horizontalEdges.equalToSuperview()
-            make.height.equalTo(height - 16)
+            make.height.equalTo(height - 20)
         }
         
         clockImageView.snp.makeConstraints { make in
-            make.width.height.equalTo(28)
+            make.width.height.equalTo(26)
             make.bottom.equalToSuperview().inset(-4)
             make.leading.equalToSuperview().inset(20)
         }

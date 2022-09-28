@@ -12,7 +12,9 @@ class EmptyCell: BaseTableViewCell {
         let label = UILabel()
         label.textColor = .textColor.withAlphaComponent(0.5)
         label.font = .systemFont(ofSize: 15)
+        label.numberOfLines = 0
         label.textAlignment = .center
+        label.adjustsFontSizeToFitWidth = true
         return label
     }()
     

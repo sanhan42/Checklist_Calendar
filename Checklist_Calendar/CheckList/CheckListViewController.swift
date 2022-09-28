@@ -15,6 +15,7 @@ class CheckListViewController: BaseViewController {
         view.backgroundColor = .bgColor
         view.separatorStyle = .none
         view.register(CheckListTableCell.self, forCellReuseIdentifier: CheckListTableCell.reuseIdentifier)
+        view.register(EmptyCell.self, forCellReuseIdentifier: EmptyCell.reuseIdentifier)
         view.sectionHeaderHeight = 38
         return view
     }()
@@ -52,14 +53,14 @@ class CheckListViewController: BaseViewController {
             let btn = UIButton()
             btn.setTitle(selectedDate.toString(format: selectedDate.toString(format: " yy년 MM월 dd일 (E)")), for: .normal)
             btn.setImage(UIImage(systemName: "calendar"), for: .normal)
-            btn.tintColor = .textColor
+            btn.tintColor = .textColor.withAlphaComponent(0.9)
             btn.translatesAutoresizingMaskIntoConstraints = false
             btn.setTitleColor(.textColor, for: .normal)
             btn.imageView?.contentMode = .scaleAspectFit
             btn.titleLabel?.font = .systemFont(ofSize: 16, weight: .bold)
             btn.contentHorizontalAlignment = .center
             btn.semanticContentAttribute = .forceLeftToRight
-            btn.imageEdgeInsets = .init(top: 0, left: 4, bottom: 0, right: 40)
+            btn.imageEdgeInsets = .init(top: 1, left: 4, bottom: 0, right: 40)
             btn.addTarget(self, action: #selector(calendarBtnClicked), for: .touchUpInside)
             bgView.addSubview(btn)
             bgView.snp.makeConstraints { make in
@@ -93,20 +94,19 @@ class CheckListViewController: BaseViewController {
             let btn = UIButton()
             btn.setTitle("오늘 ", for: .normal)
             btn.setImage(UIImage(named: "cherry"), for: .normal)
-//            btn.translatesAutoresizingMaskIntoConstraints = false
             btn.setTitleColor(.textColor, for: .normal)
             btn.imageView?.contentMode = .scaleAspectFit
             btn.titleLabel?.font = .systemFont(ofSize: 12, weight: .bold)
             btn.contentHorizontalAlignment = .center
             btn.semanticContentAttribute = .forceRightToLeft
-            btn.imageEdgeInsets = .init(top: 6, left: 18, bottom: 8, right: 18)
+            btn.imageEdgeInsets = .init(top: 1.5, left: 15.5, bottom: 1.8, right: 15)
             btn.addTarget(self, action: #selector(moveToToday), for: .touchUpInside)
             bgView.layer.borderColor = UIColor.textColor.withAlphaComponent(0.65).cgColor
             bgView.layer.borderWidth = 1.8
             bgView.layer.cornerRadius = 12
             bgView.addSubview(btn)
             bgView.snp.makeConstraints { make in
-                make.width.equalTo(40)
+                make.width.equalTo(42)
                 make.height.equalTo(27)
             }
             btn.snp.makeConstraints { make in
@@ -125,7 +125,7 @@ class CheckListViewController: BaseViewController {
             btn.layer.cornerRadius = 12
             btn.addTarget(self, action: #selector(hideBtnClicked), for: .touchUpInside)
             btn.snp.makeConstraints { make in
-                make.width.equalTo(98)
+                make.width.equalTo(96)
             }
             let title = isHiding ? "모든 일정 보기" : "지난 일정 숨기기"
             btn.setTitle(title, for: .normal)
@@ -137,12 +137,14 @@ class CheckListViewController: BaseViewController {
 
 extension CheckListViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if allDayTasks.isEmpty && notAllDayTasks.isEmpty { return 100 }
         let section = 0..<allDayTasks.count ~= indexPath.section ? indexPath.section : indexPath.section - allDayTasks.count
         let tasks: Results<Event> = 0..<allDayTasks.count ~= indexPath.section ? allDayTasks : notAllDayTasks
         return tasks[section].todos[indexPath.row].title.heightWithConstrainedWidth(width: tableView.frame.width, font: UIFont.systemFont(ofSize: 13)) + 20
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        if allDayTasks.isEmpty && notAllDayTasks.isEmpty { return nil }
         let header = CheckListHeaderView()
         let tasks: Results<Event> = allDayTasks.isEmpty || section >= allDayTasks.count  ? notAllDayTasks : allDayTasks
         let index = allDayTasks.isEmpty || section < allDayTasks.count ? section : section - allDayTasks.count
@@ -155,9 +157,12 @@ extension CheckListViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
+        if allDayTasks.isEmpty && notAllDayTasks.isEmpty { return 1 }
         return allDayTasks.count + notAllDayTasks.count
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if allDayTasks.isEmpty && notAllDayTasks.isEmpty { return 1 }
+
         if allDayTasks.isEmpty {
             return notAllDayTasks[section].todos.count
         }
@@ -173,7 +178,8 @@ extension CheckListViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if allDayTasks.isEmpty && notAllDayTasks.isEmpty {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: EmptyCell.reuseIdentifier, for: indexPath) as? EmptyCell else { return UITableViewCell() }
-            cell.label.text = "먼저 이벤트를 등록해주세요 :)"
+            cell.label.text = "등록된 이벤트들의 체크리스트를\n한 눈에 볼 수 있는 페이지입니다.\n\n먼저 이벤트를 등록해주세요 :)"
+            cell.selectionStyle = .none
             return cell
         }
         guard let cell = tableView.dequeueReusableCell(withIdentifier: CheckListTableCell.reuseIdentifier, for: indexPath) as? CheckListTableCell else { return UITableViewCell() }
