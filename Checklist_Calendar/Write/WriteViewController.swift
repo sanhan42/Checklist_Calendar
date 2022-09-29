@@ -417,7 +417,11 @@ extension WriteViewController {
             let date = self.datePicker.date.calMidnight()
             self.event.startDate = date
             if !self.event.isAllDay {
-                self.setStartTime() // TODO: 이 방식이 불편하면, 대신 여기에 stardTime을 설정해주는 코드가 들어가야 함.
+                let components = Calendar.current.dateComponents([.hour, .minute], from: self.event.startTime)
+                guard let timeDate = Calendar.current.date(bySettingHour: components.hour!, minute: components.minute!, second: 0, of: date) else { return }
+                self.event.startTime = timeDate
+                self.event.startHour = components.hour!
+                self.mainView.tableView.reloadRows(at:[[0,1]], with: .automatic)
             } else {
                 self.event.startTime = date.calMidnight()
                 self.event.startHour = 0
@@ -432,7 +436,10 @@ extension WriteViewController {
             let date = self.datePicker.date.calMidnight()
             self.event.endDate = date
             if !self.event.isAllDay {
-                self.setEndTime()
+                let components = Calendar.current.dateComponents([.hour, .minute], from: self.event.endTime)
+                guard let timeDate = Calendar.current.date(bySettingHour: components.hour!, minute: components.minute!, second: 0, of: date) else { return }
+                self.event.endTime = timeDate
+                self.mainView.tableView.reloadRows(at:[[0,1]], with: .automatic)
             } else {
                 self.event.endTime = date.calNextMidnight()
                 self.mainView.tableView.reloadRows(at:[[0,1]], with: .automatic)
