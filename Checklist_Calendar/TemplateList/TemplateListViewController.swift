@@ -92,7 +92,7 @@ extension TemplateListViewController: UITableViewDelegate, UITableViewDataSource
         cell.dateLabel.text = templateTasks[indexPath.row].startTime.toString(format: SHDate.time.str())
         cell.lineView.backgroundColor = UIColor(hexAlpha: templateTasks[indexPath.row].color)
         cell.titleLabel.text = templateTasks[indexPath.row].title
-        cell.fullDateLabel.text = templateTasks[indexPath.row].startTime.toString(format: SHDate.time.str()) + "->" + templateTasks[indexPath.row].endTime.toString(format: SHDate.time.str())
+        cell.fullDateLabel.text = templateTasks[indexPath.row].startTime.toString(format: SHDate.time.str()) + " → " + templateTasks[indexPath.row].endTime.toString(format: SHDate.time.str())
         return cell
     }
     

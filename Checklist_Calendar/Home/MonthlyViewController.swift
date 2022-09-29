@@ -423,14 +423,14 @@ extension MonthlyViewController: UICollectionViewDelegate, UICollectionViewDataS
                 let event = notAllDayArr[collectionView.tag][indexPath.row]
                 cell.titleLabel.text = event.title
                 cell.dateLabel.text = event.startTime.getDateStr(day: selectedDate)
-                cell.fullDateLabel.text = event.startTime.getDateStr(day: selectedDate, needOneLine: true) + " -> " + event.endTime.getDateStr(day: selectedDate, needOneLine: true)
+                cell.fullDateLabel.text = event.startTime.getDateStr(day: selectedDate, needOneLine: true) + " → " + event.endTime.getDateStr(day: selectedDate, needOneLine: true)
                 cell.lineView.backgroundColor = UIColor(hexAlpha: event.color)
             }
         case 1...(notAllDayArr.count - 1 + allDayRowNum):
             let event = notAllDayArr[collectionView.tag - allDayRowNum][indexPath.row]
             cell.titleLabel.text = event.title
             cell.dateLabel.text = event.startTime.getDateStr(day: selectedDate)
-            cell.fullDateLabel.text = event.startTime.getDateStr(day: selectedDate, needOneLine: true) + " -> " + event.endTime.getDateStr(day: selectedDate, needOneLine: true)
+            cell.fullDateLabel.text = event.startTime.getDateStr(day: selectedDate, needOneLine: true) + " → " + event.endTime.getDateStr(day: selectedDate, needOneLine: true)
             cell.lineView.backgroundColor = UIColor(hexAlpha: event.color)
         default : return MonthlyCollectionViewCell()
         }
