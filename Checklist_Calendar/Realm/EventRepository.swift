@@ -48,7 +48,7 @@ class EventRepository: EventRepositoryType {
         let todayStart = date.calMidnight()
         let todayEnd = date.calNextMidnight()
         return localRealm.objects(Event.self).where {
-            ($0.startTime <= todayEnd && $0.endTime > todayStart)
+            ($0.startTime < todayEnd && $0.endTime > todayStart)
         }
     }
     

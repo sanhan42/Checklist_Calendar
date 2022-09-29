@@ -332,8 +332,8 @@ extension WriteViewController {
         if event.title == "" {
             view.makeToast("제목을 입력해주세요", duration: 0.8, position: .center)
             return
-        } else if (event.startTime > event.endTime) || (event.isAllDay && (event.startDate > event.endDate)) {
-            view.makeToast("이벤트의 시작이 종료보다 늦을 수 없습니다", duration: 1, position: .center)
+        } else if (event.startTime >= event.endTime) || (event.isAllDay && (event.startDate > event.endDate)) {
+            view.makeToast("이벤트의 시작이 종료보다 먼저 이뤄져야합니다.", duration: 1, position: .center)
             return
         }
         
