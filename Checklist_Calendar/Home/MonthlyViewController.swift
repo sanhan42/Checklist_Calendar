@@ -105,6 +105,10 @@ class MonthlyViewController: BaseViewController {
         mainView.tableView.reloadData()
     }
     
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        mainView.tableView.reloadData()
+    }
+    
     func fetchRealm(date: Date) {
         allDayTasks = repository.allDayTasksFetch(date: date, isHiding:  isHiding)
         notAllDayTasks = repository.notAllDayTasksFetch(date: date, isHiding: isHiding)
