@@ -50,6 +50,9 @@
 		BFF02C6128D4633C00F0D6AA /* DateTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF02C6028D4633C00F0D6AA /* DateTableViewCell.swift */; };
 		BFF02C6328D4635800F0D6AA /* TodoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF02C6228D4635800F0D6AA /* TodoTableViewCell.swift */; };
 		BFF236A928DED4BB0057FCF7 /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF236A828DED4BB0057FCF7 /* UIImage+Extension.swift */; };
+		BFFA945328E55CA200D73AFD /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFFA945228E55CA200D73AFD /* SettingViewController.swift */; };
+		BFFA945628E571AD00D73AFD /* AcknowList in Frameworks */ = {isa = PBXBuildFile; productRef = BFFA945528E571AD00D73AFD /* AcknowList */; };
+		BFFA945828E5759400D73AFD /* Package.resolved in Resources */ = {isa = PBXBuildFile; fileRef = BFFA945728E5759400D73AFD /* Package.resolved */; };
 		BFFDE20228D34BC000090E8A /* MonthlyCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFFDE20128D34BC000090E8A /* MonthlyCollectionViewCell.swift */; };
 		BFFDE20728D3658C00090E8A /* BaseCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFFDE20628D3658C00090E8A /* BaseCollectionViewCell.swift */; };
 /* End PBXBuildFile section */
@@ -96,6 +99,8 @@
 		BFF02C6028D4633C00F0D6AA /* DateTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateTableViewCell.swift; sourceTree = "<group>"; };
 		BFF02C6228D4635800F0D6AA /* TodoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoTableViewCell.swift; sourceTree = "<group>"; };
 		BFF236A828DED4BB0057FCF7 /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
+		BFFA945228E55CA200D73AFD /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
+		BFFA945728E5759400D73AFD /* Package.resolved */ = {isa = PBXFileReference; lastKnownFileType = file; name = Package.resolved; path = Checklist_Calendar.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved; sourceTree = SOURCE_ROOT; };
 		BFFDE20128D34BC000090E8A /* MonthlyCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthlyCollectionViewCell.swift; sourceTree = "<group>"; };
 		BFFDE20628D3658C00090E8A /* BaseCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCollectionViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -110,6 +115,7 @@
 				BFDDC9B028D059350047F22E /* Realm in Frameworks */,
 				BF497FA028D9E194007D1527 /* Toast in Frameworks */,
 				BFDDC9AD28D058950047F22E /* FSCalendar in Frameworks */,
+				BFFA945628E571AD00D73AFD /* AcknowList in Frameworks */,
 				BF1A6AF128DEBF480094EA6D /* IQKeyboardManagerSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -195,6 +201,7 @@
 		BFDDC99628D0572D0047F22E /* Checklist_Calendar */ = {
 			isa = PBXGroup;
 			children = (
+				BFFA945728E5759400D73AFD /* Package.resolved */,
 				BFEA3A3628D8576D00003E81 /* Enum */,
 				BFB1052528D314C300D24376 /* Realm */,
 				BF7C140B28D1B5D900DF1EEE /* Extension */,
@@ -204,6 +211,7 @@
 				BF5E552328E3B2B30050594D /* Notification */,
 				BF55056528DC80B100DF978E /* CheckList */,
 				BF1A6AE728DE7DC90094EA6D /* TemplateList */,
+				BFFA945128E55C8300D73AFD /* Setting */,
 				BF1A6AE828DE938E0094EA6D /* CommonUseCell */,
 				BFDDC99928D0572D0047F22E /* SceneDelegate.swift */,
 				BFDDC99728D0572D0047F22E /* AppDelegate.swift */,
@@ -262,6 +270,14 @@
 			path = Write;
 			sourceTree = "<group>";
 		};
+		BFFA945128E55C8300D73AFD /* Setting */ = {
+			isa = PBXGroup;
+			children = (
+				BFFA945228E55CA200D73AFD /* SettingViewController.swift */,
+			);
+			path = Setting;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -285,6 +301,7 @@
 				BF0B57E028D05F9C005A090B /* SnapKit */,
 				BF497F9F28D9E194007D1527 /* Toast */,
 				BF1A6AF028DEBF480094EA6D /* IQKeyboardManagerSwift */,
+				BFFA945528E571AD00D73AFD /* AcknowList */,
 			);
 			productName = Checklist_Calendar;
 			productReference = BFDDC99428D0572D0047F22E /* Checklist_Calendar.app */;
@@ -320,6 +337,7 @@
 				BF0B57DF28D05F9C005A090B /* XCRemoteSwiftPackageReference "SnapKit" */,
 				BF497F9E28D9E194007D1527 /* XCRemoteSwiftPackageReference "Toast-Swift" */,
 				BF1A6AEF28DEBF480094EA6D /* XCRemoteSwiftPackageReference "IQKeyboardManager" */,
+				BFFA945428E571AD00D73AFD /* XCRemoteSwiftPackageReference "AcknowList" */,
 			);
 			productRefGroup = BFDDC99528D0572D0047F22E /* Products */;
 			projectDirPath = "";
@@ -336,6 +354,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BFDDC9A428D057300047F22E /* LaunchScreen.storyboard in Resources */,
+				BFFA945828E5759400D73AFD /* Package.resolved in Resources */,
 				BFDDC9A128D057300047F22E /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -382,6 +401,7 @@
 				BF5E552728E4344F0050594D /* NotiTableViewCell.swift in Sources */,
 				BF7C141128D1F8A100DF1EEE /* MonthlyTableViewCell.swift in Sources */,
 				BFF02C5F28D462B900F0D6AA /* TitleTableViewCell.swift in Sources */,
+				BFFA945328E55CA200D73AFD /* SettingViewController.swift in Sources */,
 				BFEA3A3328D7DC1200003E81 /* CheckListTableViewCell.swift in Sources */,
 				BFF02C5D28D45CBC00F0D6AA /* WriteView.swift in Sources */,
 			);
@@ -639,6 +659,14 @@
 				minimumVersion = 10.0.0;
 			};
 		};
+		BFFA945428E571AD00D73AFD /* XCRemoteSwiftPackageReference "AcknowList" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/vtourraine/AcknowList";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -671,6 +699,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = BFDDC9AE28D059350047F22E /* XCRemoteSwiftPackageReference "realm-swift" */;
 			productName = RealmSwift;
+		};
+		BFFA945528E571AD00D73AFD /* AcknowList */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BFFA945428E571AD00D73AFD /* XCRemoteSwiftPackageReference "AcknowList" */;
+			productName = AcknowList;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

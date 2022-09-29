@@ -100,7 +100,3 @@ extension NotificationViewController: UITableViewDelegate, UITableViewDataSource
         vc.mainView.tableView.reloadRows(at: [[0, 2]], with: .none)
     }
 }
-
-extension NotificationViewController {
-    
-}

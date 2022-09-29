@@ -149,8 +149,8 @@ class MonthlyViewController: BaseViewController {
         self.navigationController?.toolbar.backgroundColor = .bgColor
         
         let btn = UIButton()
-        btn.setTitle("새로운 이벤트 추가", for: .normal)
-        btn.setTitleColor(.textColor.withAlphaComponent(0.65), for: .normal)
+        btn.setTitle("＋ 새로운 이벤트 추가 ", for: .normal)
+        btn.setTitleColor(.textColor.withAlphaComponent(0.9), for: .normal)
         btn.titleLabel?.font = .systemFont(ofSize: 18, weight: .bold)
         btn.layer.cornerRadius = 4
         btn.backgroundColor = .bgColor.withAlphaComponent(0.5)
@@ -163,7 +163,23 @@ class MonthlyViewController: BaseViewController {
         let addNewEventBtn = UIBarButtonItem(customView: btn)
         let templateBtn = setTemplateBtn()
         let space = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        toolbarItems = [space, addNewEventBtn, space, templateBtn]
+        let settingBtn = setSettingBtn()
+//        UIBarButtonItem(image: UIImage(systemName: "gearshape"), style: .plain, target: self, action: #selector(settingBtnClicked))
+        settingBtn.tintColor = .textColor.withAlphaComponent(0.8)
+      
+        toolbarItems = [settingBtn, space, addNewEventBtn, space, templateBtn]
+    }
+    
+    func setSettingBtn() -> UIBarButtonItem {
+        let rtn = UIButton()
+        rtn.setImage(UIImage(systemName: "gearshape"), for: .normal)
+        rtn.tintColor = .textColor.withAlphaComponent(0.8)
+        rtn.backgroundColor = .bgColor.withAlphaComponent(0.5)
+        rtn.addTarget(self, action: #selector(settingBtnClicked), for: .touchUpInside)
+        rtn.snp.makeConstraints { make in
+            make.width.height.equalTo(28)
+        }
+        return UIBarButtonItem(customView: rtn)
     }
     
     func setTemplateBtn() -> UIBarButtonItem {
@@ -173,13 +189,13 @@ class MonthlyViewController: BaseViewController {
             rtn.changesSelectionAsPrimaryAction = false
         }
         rtn.setImage(UIImage(systemName: "text.badge.plus"), for: .normal)
-        rtn.tintColor = .textColor.withAlphaComponent(0.65)
+        rtn.tintColor = .textColor.withAlphaComponent(0.8)
         rtn.backgroundColor = .bgColor.withAlphaComponent(0.5)
         rtn.layer.borderColor = UIColor.textColor.withAlphaComponent(0.65).cgColor
         rtn.layer.borderWidth = 1.8
         rtn.layer.cornerRadius = 4
         rtn.snp.makeConstraints { make in
-            make.width.height.equalTo(32)
+            make.width.height.equalTo(28)
         }
         let edit = UIAction(title: "템플릿 편집", image: UIImage(systemName: "wrench.and.screwdriver")) { _ in
             let vc = TemplateListViewController()
@@ -240,6 +256,12 @@ class MonthlyViewController: BaseViewController {
         let buttonMenu = UIMenu(children: menuElement)
         rtn.menu = buttonMenu
         return UIBarButtonItem(customView: rtn)
+    }
+    
+    @objc func settingBtnClicked() {
+       let vc = SettingViewController()
+        let navi = UINavigationController(rootViewController: vc)
+        self.present(navi, animated: true)
     }
     
     @objc func addNewEventBtnClicked() {
