@@ -13,6 +13,8 @@ class BaseViewController: UIViewController {
         let dp = UIDatePicker()
         dp.datePickerMode = .date
         dp.preferredDatePickerStyle = .wheels
+        dp.maximumDate = "2099.12.31 오후 11:59:59".toDate(format: "yyyy.MM.dd a hh:mm:ss")
+        dp.minimumDate = "1970.01.01 오전 00:00:00".toDate(format: "yyyy.MM.dd a hh:mm:ss")
         
         dp.locale = NSLocale(localeIdentifier: "ko_KR") as Locale // 영어에서 한글로 바꿔줌.
 //        dp.locale = NSLocale.current
