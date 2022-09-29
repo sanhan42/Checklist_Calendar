@@ -93,7 +93,7 @@ class MonthlyViewController: BaseViewController {
         
         mainView.tableView.delegate = self
         mainView.tableView.dataSource = self
-        mainView.tableView.tag = 0
+        mainView.tableView.tag = -1
         mainView.tableView.register(MonthlyTableViewCell.self, forCellReuseIdentifier: MonthlyTableViewCell.reuseIdentifier)
         mainView.tableView.register(EmptyCell.self, forCellReuseIdentifier: EmptyCell.reuseIdentifier)
         
@@ -455,7 +455,7 @@ extension MonthlyViewController: UICollectionViewDelegate, UICollectionViewDataS
     }
     
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-        if scrollView.tag == 0 { return }
+        if scrollView.tag == -1 { return }
         guard let layout = collectionViewLayout else { return }
         // collectionView의 item에 마진이 있기 때문에, item의 width와 item 사이의 간격을 포함한 offset에서 left Inset을 뺸 만큼 스크롤
         let cellWidthIncludingSpacing = layout.itemSize.width + layout.minimumLineSpacing
