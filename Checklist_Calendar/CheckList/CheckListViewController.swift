@@ -99,7 +99,7 @@ class CheckListViewController: BaseViewController {
             btn.titleLabel?.font = .systemFont(ofSize: 12, weight: .bold)
             btn.contentHorizontalAlignment = .center
             btn.semanticContentAttribute = .forceRightToLeft
-            btn.imageEdgeInsets = .init(top: 1.5, left: 15.5, bottom: 1.8, right: 15)
+            btn.imageEdgeInsets = .init(top: 2, left: 15.5, bottom: 2.4, right: 15)
             btn.addTarget(self, action: #selector(moveToToday), for: .touchUpInside)
             bgView.layer.borderColor = UIColor.textColor.withAlphaComponent(0.65).cgColor
             bgView.layer.borderWidth = 1.8

@@ -177,7 +177,7 @@ class MonthlyViewController: BaseViewController {
         rtn.backgroundColor = .bgColor.withAlphaComponent(0.5)
         rtn.addTarget(self, action: #selector(settingBtnClicked), for: .touchUpInside)
         rtn.snp.makeConstraints { make in
-            make.width.height.equalTo(28)
+            make.width.height.equalTo(30)
         }
         return UIBarButtonItem(customView: rtn)
     }
