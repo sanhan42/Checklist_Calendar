@@ -36,7 +36,7 @@ class BaseViewController: UIViewController {
         let dateChooserAlert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         dateChooserAlert.view.addSubview(datePicker)
         let ok = UIAlertAction(title: "선택완료", style: .cancel, handler: okBtnHandler)
-        ok.setValue(UIColor.black, forKey: "titleTextColor")
+        ok.setValue(UIColor.textColor, forKey: "titleTextColor")
         dateChooserAlert.addAction(ok)
     
         datePicker.snp.makeConstraints { make in
