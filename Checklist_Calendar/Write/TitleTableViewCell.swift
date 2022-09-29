@@ -13,7 +13,7 @@ class TitleTableViewCell: BaseTableViewCell {
         tf.textColor = .textColor
         tf.placeholder = "제목"
         tf.adjustsFontSizeToFitWidth = true
-        tf.font = .systemFont(ofSize: 18.5, weight: .black)
+        tf.font = .systemFont(ofSize: 18, weight: .black)
         tf.textAlignment = .left
         return tf
     }()
@@ -28,7 +28,7 @@ class TitleTableViewCell: BaseTableViewCell {
     }()
     
     let colorButton: UIColorWell = {
-        let btn = UIColorWell(frame: CGRect(x: 100, y: 100, width: 100, height: 100))
+        let btn = UIColorWell(frame: CGRect(x: 100, y: 100, width: 85, height: 85))
         btn.selectedColor = .redColor
         return btn
     }()

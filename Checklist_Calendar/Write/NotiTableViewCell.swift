@@ -19,7 +19,7 @@ class NotiTableViewCell: BaseTableViewCell {
         let label = UILabel()
         label.text = "알림"
         label.textColor = .textColor
-        label.font = .systemFont(ofSize: 18, weight: .bold)
+        label.font = .systemFont(ofSize: 17.6, weight: .bold)
         label.textAlignment = .left
         return label
     }()

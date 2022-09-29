@@ -18,7 +18,7 @@ class DateTableViewCell: BaseTableViewCell {
         let label = UILabel()
         label.text = "하루 종일"
         label.textColor = .textColor
-        label.font = .systemFont(ofSize: 19, weight: .bold)
+        label.font = .systemFont(ofSize: 17.6, weight: .bold)
         return label
     }()
     
@@ -39,7 +39,7 @@ class DateTableViewCell: BaseTableViewCell {
         let btn = UIButton()
         btn.setTitle("22/09/17 (토)", for: .normal) // TODO: 임시값
         btn.setTitleColor(UIColor.textColor, for: .normal)
-        btn.titleLabel?.font = .systemFont(ofSize: 17, weight: .bold)
+        btn.titleLabel?.font = .systemFont(ofSize: 16, weight: .bold)
         return btn
     }()
     
@@ -47,7 +47,7 @@ class DateTableViewCell: BaseTableViewCell {
         let btn = UIButton()
         btn.setTitle("22/09/17 (토)", for: .normal) // TODO: 임시값
         btn.setTitleColor(UIColor.textColor, for: .normal)
-        btn.titleLabel?.font = .systemFont(ofSize: 17, weight: .bold)
+        btn.titleLabel?.font = .systemFont(ofSize: 16, weight: .bold)
         return btn
     }()
     
@@ -55,7 +55,7 @@ class DateTableViewCell: BaseTableViewCell {
         let btn = UIButton()
         btn.setTitle("오전 09:00", for: .normal) // TODO: 임시값
         btn.setTitleColor(UIColor.textColor, for: .normal)
-        btn.titleLabel?.font = .systemFont(ofSize: 17, weight: .bold)
+        btn.titleLabel?.font = .systemFont(ofSize: 16, weight: .bold)
         return btn
     }()
     
@@ -63,7 +63,7 @@ class DateTableViewCell: BaseTableViewCell {
         let btn = UIButton()
         btn.setTitle("오전 10:00", for: .normal) // TODO: 임시값
         btn.setTitleColor(UIColor.textColor, for: .normal)
-        btn.titleLabel?.font = .systemFont(ofSize: 17, weight: .bold)
+        btn.titleLabel?.font = .systemFont(ofSize: 16, weight: .bold)
         return btn
     }()
     
