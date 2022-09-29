@@ -205,6 +205,7 @@ extension WriteViewController: UITableViewDelegate, UITableViewDataSource {
                 guard let cell = tableView.dequeueReusableCell(withIdentifier: DateTableViewCell.reuseIdentifier, for: indexPath) as? DateTableViewCell else { return UITableViewCell()}
                 cell.selectionStyle = .none
                 cell.dateView.isHidden = isTemplatePage
+                cell.timeArrowImageView.isHidden = !isTemplatePage
                 if isTemplatePage {
                     cell.dateView.snp.remakeConstraints { make in
                         make.horizontalEdges.equalToSuperview().inset(10)

@@ -73,6 +73,12 @@ class DateTableViewCell: BaseTableViewCell {
         return view
     }()
     
+    let timeArrowImageView: UIImageView = {
+        let view = UIImageView(image: UIImage(systemName: "arrow.right"))
+        view.tintColor = .textColor
+        return view
+    }()
+    
     lazy var dateView: UIView = {
         let view = UIView()
         [startDateBtn, arrowImageView, endDateBtn].forEach{ view.addSubview($0) }
@@ -81,7 +87,7 @@ class DateTableViewCell: BaseTableViewCell {
     
     lazy var timeView: UIView = {
         let view = UIView()
-        [startTimeBtn, endTimeBtn].forEach{ view.addSubview($0) }
+        [startTimeBtn, timeArrowImageView, endTimeBtn].forEach{ view.addSubview($0) }
         return view
     }()
     
@@ -177,6 +183,12 @@ class DateTableViewCell: BaseTableViewCell {
         arrowImageView.snp.makeConstraints { make in
             make.width.height.equalTo(18)
             make.center.equalToSuperview()
+        }
+        
+        timeArrowImageView.snp.makeConstraints { make in
+            make.width.height.equalTo(18)
+            make.centerX.equalToSuperview()
+            make.top.equalToSuperview()
         }
         
         separatorView.snp.makeConstraints { make in
