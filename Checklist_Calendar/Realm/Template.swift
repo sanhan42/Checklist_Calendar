@@ -17,16 +17,18 @@ class Template: Object {
     @Persisted var endTime: Date    /// 이벤트 실제 종료 날짜, 시간
 
     @Persisted var startHour: Int   /// 시작 시간이 같은 이벤트들을 묶어줄 떄 사용
+    @Persisted var notiOption: Int
     @Persisted var isAllDay: Bool
     @Persisted var todos: List<Todo>
     
-    convenience init(title: String, color: String, startTime: Date, endTime: Date, isAllDay: Bool = false) {
+    convenience init(title: String, color: String, startTime: Date, endTime: Date, isAllDay: Bool = false, notiOption: Int) {
         self.init()
         self.title = title
         self.color = color
         self.startTime = startTime
         self.endTime = endTime
         self.startHour = Calendar.current.dateComponents([.hour], from: startTime).hour!
+        self.notiOption = notiOption
         self.isAllDay = isAllDay
     }
     

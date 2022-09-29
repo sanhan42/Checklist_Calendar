@@ -34,6 +34,7 @@ class WriteView: BaseView {
         tableView.register(TitleTableViewCell.self, forCellReuseIdentifier: TitleTableViewCell.reuseIdentifier)
         tableView.register(DateTableViewCell.self, forCellReuseIdentifier: DateTableViewCell.reuseIdentifier)
         tableView.register(TodoTableViewCell.self, forCellReuseIdentifier:TodoTableViewCell.reuseIdentifier)
+        tableView.register(NotiTableViewCell.self, forCellReuseIdentifier: NotiTableViewCell.reuseIdentifier)
     }
     
     override func setConstraints() {

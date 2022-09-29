@@ -23,7 +23,7 @@ class CheckListTableCell: BaseTableViewCell {
         view.isEditable = true
         view.textColor = .textColor.withAlphaComponent(0.9)
         view.backgroundColor = .clear
-        view.layer.borderColor = UIColor.tableBgColor.withAlphaComponent(0.3).cgColor
+        view.layer.borderColor = UIColor.grayColor.withAlphaComponent(0.3).cgColor
         view.layer.borderWidth = 0.8
         view.layer.cornerRadius = 4
         return view
@@ -32,7 +32,7 @@ class CheckListTableCell: BaseTableViewCell {
     lazy private var btnBgView: UIView = {
         let view = UIView()
         view.backgroundColor = .clear
-        view.layer.borderColor = UIColor.tableBgColor.withAlphaComponent(0.3).cgColor
+        view.layer.borderColor = UIColor.grayColor.withAlphaComponent(0.3).cgColor
         view.layer.borderWidth = 0.8
         view.layer.cornerRadius = 3
         view.addSubview(checkButton)
@@ -42,7 +42,7 @@ class CheckListTableCell: BaseTableViewCell {
     lazy private var bgView: UIView = {
         let view = UIView()
         view.backgroundColor = .clear
-        view.layer.borderColor = UIColor.tableBgColor.withAlphaComponent(0.4).cgColor
+        view.layer.borderColor = UIColor.grayColor.withAlphaComponent(0.4).cgColor
         view.layer.borderWidth = 1
         view.layer.cornerRadius = 4
         [btnBgView, textView].forEach{ view.addSubview($0) }

@@ -7,6 +7,7 @@
 
 import Foundation
 import RealmSwift
+import UserNotifications
 
 protocol EventRepositoryType {
     func addEvent(event: Event)
@@ -88,6 +89,7 @@ class EventRepository: EventRepositoryType {
     
     func deleteEvent(event: Event) {
         deleteTodos(todos: event.todos)
+        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: ["\(event.id)"])
         do {
             try localRealm.write({
                 localRealm.delete(event)
@@ -171,6 +173,16 @@ class EventRepository: EventRepositoryType {
         do {
             try localRealm.write({
                 localRealm.delete(template)
+            })
+        } catch let error {
+            print(error)
+        }
+    }
+    
+    func updateEventLotiOpt(event: Event, option: Int) {
+        do {
+            try localRealm.write({
+                event.notiOption = option
             })
         } catch let error {
             print(error)

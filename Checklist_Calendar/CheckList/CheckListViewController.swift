@@ -151,7 +151,7 @@ extension CheckListViewController: UITableViewDelegate, UITableViewDataSource {
         header.lineView.backgroundColor = UIColor(hexAlpha: tasks[index].color)
         header.titleLabel.text = tasks[index].title
         header.fullDateLabel.text = tasks[index].startTime.getDateStr(day: selectedDate, needOneLine: true) + " -> " + tasks[index].endTime.getDateStr(day: selectedDate, needOneLine: true)
-        header.tag = section
+        header.addButton.tag = section
         header.addButton.addTarget(self, action: #selector(addBtnClicked(_:)), for: .touchUpInside)
         return header
     }

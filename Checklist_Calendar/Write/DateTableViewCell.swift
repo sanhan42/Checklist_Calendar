@@ -135,7 +135,7 @@ class DateTableViewCell: BaseTableViewCell {
         
         dateView.snp.makeConstraints { make in
             make.horizontalEdges.equalToSuperview().inset(10)
-            make.top.equalTo(titleView.snp.bottom).inset(-10)
+            make.top.equalTo(titleView.snp.bottom).inset(-6)
             make.height.equalTo(height)
         }
         

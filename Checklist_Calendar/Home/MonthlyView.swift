@@ -99,7 +99,7 @@ class MonthlyView: BaseView {
             make.topMargin.equalTo(12)
             make.width.equalTo(180)
             make.height.equalTo(48)
-            make.leading.equalTo(self.safeAreaLayoutGuide)
+            make.leading.equalTo(self.safeAreaLayoutGuide).inset(10)
         }
         
         todayBtn.snp.makeConstraints { make in
@@ -111,9 +111,7 @@ class MonthlyView: BaseView {
         
         calendar.snp.makeConstraints { make in
             make.top.equalTo(calHeaderView.snp.bottom)
-//            make.centerX.equalToSuperview()
             make.horizontalEdges.equalToSuperview()//(self.safeAreaLayoutGuide)
-//            make.width.equalToSuperview()
             
             if UIDevice.current.model.hasPrefix("iPad") {
                 make.height.equalTo(340)
@@ -192,14 +190,14 @@ class MonthlyView: BaseView {
         
         // Today
 //        calendar.appearance.titleTodayColor //Today에 표시되는 특정 글자색
-        calendar.appearance.todayColor = .bgColor // Today에 표시되는 동그라미색
+        calendar.appearance.todayColor = .systemRed.withAlphaComponent(0.9) // Today에 표시되는 동그라미색
         calendar.appearance.todaySelectionColor = .systemRed.withAlphaComponent(0.9)
-        calendar.appearance.titleTodayColor = .systemRed
+        calendar.appearance.titleTodayColor = .bgColor
        
         calendar.appearance.selectionColor = .selectColor
        
-        calendar.appearance.eventDefaultColor = .pinkColor
-        calendar.appearance.eventSelectionColor = .bgColor
+        calendar.appearance.eventDefaultColor = .textColor.withAlphaComponent(0.85)
+        calendar.appearance.eventSelectionColor = .textColor.withAlphaComponent(0.85)
         
         
         calendar.translatesAutoresizingMaskIntoConstraints = false

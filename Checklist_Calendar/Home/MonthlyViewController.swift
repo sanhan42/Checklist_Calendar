@@ -15,6 +15,7 @@ class MonthlyViewController: BaseViewController {
     
     let mainView = MonthlyView()
     let repository = EventRepository()
+    let notificationCenter = UNUserNotificationCenter.current()
     
     var allDayTasks: Results<Event>!
     var notAllDayTasks: Results<Event>!
@@ -198,11 +199,36 @@ class MonthlyViewController: BaseViewController {
                     components = Calendar.current.dateComponents([.hour, .minute], from: task.endTime)
                     guard let endTime = Calendar.current.date(bySettingHour: components.hour!, minute: components.minute!, second: 0, of: date) else { return }
                     let endDate = task.isAllDay ? date.calNextMidnight() : date
-                    let event = Event(title: task.title, color: task.color, startDate: date, endDate: endDate, startTime: startTime, endTime: endTime, isAllDay: task.isAllDay)
+                    let event = Event(title: task.title, color: task.color, startDate: date, endDate: endDate, startTime: startTime, endTime: endTime, isAllDay: task.isAllDay, notiOption: task.notiOption)
                     for todo in task.todos {
                         let newTodo = Todo(title: todo.title, isDone: todo.isDone)
                         event.todos.append(newTodo)
                     }
+                    
+                    if event.notiOption != 0 {
+                        self.notificationCenter.getNotificationSettings { settings in
+                            guard settings.authorizationStatus == .authorized else {
+                                DispatchQueue.main.async {
+                                    self.repository.updateEventLotiOpt(event: event, option: 0)
+                                    let alert = UIAlertController(title: "알림 권한 없음", message: "알림 등록에 실패하였습니다.", preferredStyle: .alert)
+                                    let ok = UIAlertAction(title: "확인", style: .destructive)
+                                    alert.addAction(ok)
+                                    self.present(alert, animated: true, completion: nil)
+                                }
+                                return
+                            }
+                            DispatchQueue.main.async {
+                                let content = UNMutableNotificationContent()
+                                content.title = event.title
+                                content.subtitle = event.notiOption == 1 ? "이벤트 시작 시간입니다!" : "이벤트 시작 " + event.getOptionName() + " 입니다."
+                                let dateComponents = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: event.getNotiDate())
+                                let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
+                                let request = UNNotificationRequest(identifier: "\(event.id)", content: content, trigger: trigger)
+                                self.notificationCenter.add(request)
+                            }
+                        }
+                    }
+                    
                     self.repository.addEvent(event: event)
                     self.fetchRealm(date: date)
                     self.mainView.calendar.reloadData()
@@ -218,7 +244,9 @@ class MonthlyViewController: BaseViewController {
     
     @objc func addNewEventBtnClicked() {
         let vc = WriteViewController()
-        vc.datePicker.date = mainView.calendar.selectedDate ?? Date()
+        let components = Calendar.current.dateComponents([.hour, .minute], from: Date())
+        guard let date = Calendar.current.date(bySettingHour: components.hour!, minute: components.minute!, second: 0, of: selectedDate) else { return }
+        vc.writeDate = date
         let navi = UINavigationController(rootViewController: vc)
         vc.afterDissmiss = dismissHandler
         self.present(navi, animated: true)
@@ -292,11 +320,6 @@ extension MonthlyViewController: FSCalendarDataSource, FSCalendarDelegate {
    
     func calendar(_ calendar: FSCalendar, numberOfEventsFor date: Date) -> Int {
         return repository.dayTasksFetch(date: date).isEmpty ? 0 : 1
-    }
-    
-    func calendar(_ calendar: FSCalendar, titleFor date: Date) -> String? {
-        
-        return Calendar.current.isDateInToday(date) ? "오늘" : nil
     }
 }
 

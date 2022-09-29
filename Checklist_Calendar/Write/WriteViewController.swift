@@ -9,10 +9,14 @@ import UIKit
 import SwiftUI
 import RealmSwift
 import Toast
+import UserNotifications
 
 class WriteViewController: BaseViewController {
     let mainView = WriteView()
     private let repository = EventRepository()
+    let notificationCenter = UNUserNotificationCenter.current()
+    var noPermissions = false
+    
     var realmEvent: Event?
     var realmTemplate: Template?
     var isTemplatePage = false
@@ -22,7 +26,7 @@ class WriteViewController: BaseViewController {
         }
     }
     
-    private lazy var writeDate: Date = Date()
+    var writeDate = Date()
     
     lazy var event: Event = Event(title: "", color: UIColor.cherryColor.toHexString(), startDate: writeDate.calMidnight(), endDate: writeDate.calMidnight(), startTime: writeDate, endTime: Calendar.current.date(byAdding: .hour, value: 1, to: writeDate) ?? writeDate) {
         didSet {
@@ -45,7 +49,6 @@ class WriteViewController: BaseViewController {
         setNavigationBar()
         setToolbar()
         setEvent()
-        print(repository.fileUrl)
     }
     
     override func configure() {
@@ -89,7 +92,7 @@ class WriteViewController: BaseViewController {
     func setEvent() {
         if realmEvent != nil {
             let temp = realmEvent!
-            self.event = Event(title: temp.title, color: temp.color, startDate: temp.startDate, endDate: temp.endDate, startTime: temp.startTime, endTime: temp.endTime, isAllDay: temp.isAllDay)
+            self.event = Event(title: temp.title, color: temp.color, startDate: temp.startDate, endDate: temp.endDate, startTime: temp.startTime, endTime: temp.endTime, isAllDay: temp.isAllDay, notiOption: temp.notiOption)
             for todo in realmEvent!.todos {
                 let new = Todo(title: todo.title, isDone: todo.isDone)
                 event.todos.append(new)
@@ -97,11 +100,7 @@ class WriteViewController: BaseViewController {
             hasChanges = false
         } else if realmTemplate != nil {
             let temp = realmTemplate!
-//            var components = Calendar.current.dateComponents([.hour, .minute], from: temp.startTime)
-//            guard let startTime = Calendar.current.date(bySettingHour: components.hour!, minute: components.minute!, second: 0, of: writeDate) else { return }
-//            components = Calendar.current.dateComponents([.hour, .minute], from: temp.endTime)
-//            guard let endTime = Calendar.current.date(bySettingHour: components.hour!, minute: components.minute!, second: 0, of: writeDate) else { return }
-            self.event = Event(title: temp.title, color: temp.color, startDate: writeDate, endDate: writeDate, startTime: temp.startTime, endTime: temp.endTime, isAllDay: temp.isAllDay)
+            self.event = Event(title: temp.title, color: temp.color, startDate: writeDate, endDate: writeDate, startTime: temp.startTime, endTime: temp.endTime, isAllDay: temp.isAllDay, notiOption: temp.notiOption)
             for todo in temp.todos {
                 let new = Todo(title: todo.title, isDone: todo.isDone)
                 self.event.todos.append(new)
@@ -113,6 +112,36 @@ class WriteViewController: BaseViewController {
 }
 
 extension WriteViewController: UITableViewDelegate, UITableViewDataSource {
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if tableView.tag == 0 && indexPath.row == 2 {
+            notificationCenter.requestAuthorization(options: [.alert, .sound]) { granted, error in
+                if let error = error { print(#function, error) }
+                
+                if !granted {
+                    DispatchQueue.main.async {
+                        let alert = UIAlertController(title: "알림 권한", message: "알림 설정을 위해선 알림 권한을 허용해주셔야 합니다 :)", preferredStyle: .alert)
+                        let ok = UIAlertAction(title: "권한 설정으로 이동", style: .destructive) { _ in
+                            if let appSettingUrl = URL(string: UIApplication.openSettingsURLString) {
+                                UIApplication.shared.open(appSettingUrl, options: [:], completionHandler: nil)
+                            }
+                        }
+                        let cancel = UIAlertAction(title: "취소", style: .default, handler: nil)
+                        alert.addAction(ok)
+                        alert.addAction(cancel)
+                        self.present(alert, animated: true, completion: nil)
+                    }
+                } else {
+                    DispatchQueue.main.async {
+                        self.hasChanges = true
+                        let vc = NotificationViewController()
+                        vc.selectedRow = self.event.notiOption
+                        self.navigationController?.pushViewController(vc, animated: true)
+                    }
+                }
+            }
+        }
+    }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         return nil
@@ -137,7 +166,8 @@ extension WriteViewController: UITableViewDelegate, UITableViewDataSource {
             case 0: return 46
             case 1:
                 return event.isAllDay ? 76 - num : 106 - num // TODO: 수정 필요!
-            default: return tableView.frame.height - (navigationController?.navigationBar.frame.height ?? 0) - (event.isAllDay ? 76 - num : 106 - num) - 70
+            case 2: return 38
+            default: return tableView.frame.height - (navigationController?.navigationBar.frame.height ?? 0) - (event.isAllDay ? 76 - num : 106 - num) - 70 - 38
             }
         } else {
             return 38
@@ -146,7 +176,7 @@ extension WriteViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView.tag == 0 {
-            return 3
+            return 4
         } else{
             switch section {
             case 0: return event.todos.count == 0 ? 1 : event.todos.count
@@ -196,6 +226,11 @@ extension WriteViewController: UITableViewDelegate, UITableViewDataSource {
                 cell.endTimeBtn.setTitle(event.endTime.toString(format: "a hh:mm"), for: .normal)
                 return cell
             case 2:
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: NotiTableViewCell.reuseIdentifier, for: indexPath) as? NotiTableViewCell else { return UITableViewCell()}
+                cell.selectionStyle = .default
+                cell.valueLabel.text = self.event.getOptionName()
+                return cell
+            case 3:
                 guard let cell = tableView.dequeueReusableCell(withIdentifier: TodoTableViewCell.reuseIdentifier, for: indexPath) as? TodoTableViewCell else { return UITableViewCell()}
                 cell.selectionStyle = .none
                 cell.checkListTableView.delegate = self
@@ -302,17 +337,53 @@ extension WriteViewController {
         }
         
         if isTemplatePage {
-            let newTemplate = Template(title: event.title, color: event.color, startTime: event.startTime, endTime: event.endTime, isAllDay: event.isAllDay)
+            let newTemplate = Template(title: event.title, color: event.color, startTime: event.startTime, endTime: event.endTime, isAllDay: event.isAllDay, notiOption: event.notiOption)
             for todo in event.todos {
                 newTemplate.todos.append(todo)
             }
             realmTemplate == nil ? repository.addTemplate(template: newTemplate) : repository.updateTemplate(old: realmTemplate!, new: newTemplate)
-            
         } else {
-            realmEvent == nil ? repository.addEvent(event: event) : repository.updateEvent(old: realmEvent!, new: event)
+            if self.event.notiOption != 0 {
+                self.notificationCenter.getNotificationSettings { settings in
+                    guard settings.authorizationStatus == .authorized else {
+                        self.noPermissions = true
+                        DispatchQueue.main.async {
+                            self.repository.updateEventLotiOpt(event: self.event, option: 0)
+                        }
+                        return
+                    }
+                    
+                    let content = UNMutableNotificationContent()
+                    content.title = self.event.title
+                    content.subtitle = self.event.notiOption == 1 ? "이벤트 시작 시간입니다!" : "이벤트 시작 " + self.event.getOptionName() + " 입니다."
+                    let dateComponents = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: self.event.getNotiDate())
+                    let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
+                    let request = UNNotificationRequest(identifier: "\(self.event.id)", content: content, trigger: trigger)
+                    self.notificationCenter.add(request)
+                    }
+            }
+                self.realmEvent == nil ? self.repository.addEvent(event: self.event) : self.repository.updateEvent(old: self.realmEvent!, new: self.event)
         }
-        afterDissmiss?()
-        dismiss(animated: true)
+        
+        DispatchQueue.main.async {
+            if self.noPermissions {
+                let alert = UIAlertController(title: "알림 권한 없음", message: "알림 등록에 실패하였습니다.", preferredStyle: .alert)
+                let ok = UIAlertAction(title: "확인", style: .destructive) { _ in
+                    self.afterDissmiss?()
+                    self.dismiss(animated: true)
+                }
+                alert.addAction(ok)
+                self.present(alert, animated: true, completion: nil)
+                self.noPermissions = false
+                return
+            }
+            self.afterDissmiss?()
+            self.dismiss(animated: true)
+        }
+    }
+   
+    private func setNotification() {
+        
     }
     
     @objc func colorWellChanged(_ sender: UIColorWell) {
