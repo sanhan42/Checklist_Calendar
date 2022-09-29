@@ -136,6 +136,10 @@ class CheckListViewController: BaseViewController {
 }
 
 extension CheckListViewController: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, shouldSpringLoadRowAt indexPath: IndexPath, with context: UISpringLoadedInteractionContext) -> Bool {
+        return false
+    }
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if allDayTasks.isEmpty && notAllDayTasks.isEmpty { return 100 }
         let section = 0..<allDayTasks.count ~= indexPath.section ? indexPath.section : indexPath.section - allDayTasks.count
@@ -266,7 +270,7 @@ extension CheckListViewController {
         let index = allDayTasks.isEmpty || section < allDayTasks.count ? section : section - allDayTasks.count
         repository.addTodoInEvent(event: tasks[index])
         fetchRealm()
-        tableView.reloadSections([section], with: .none)
+        tableView.reloadSections([section], with: .fade)
         guard let cell = tableView.cellForRow(at: [section, tasks[index].todos.count - 1]) as? CheckListTableCell else { return }
         cell.textView.becomeFirstResponder()
     }
