@@ -10,14 +10,14 @@ import UIKit
 class MonthlyTableViewHeaderView: BaseView {
     let titleLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 14, weight: .semibold)
+        label.font = .systemFont(ofSize: 11, weight: .semibold)
         label.textColor = .textColor.withAlphaComponent(0.65)
         return label
     }()
     
     let subtitleLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 8.5, weight: .semibold)
+        label.font = .systemFont(ofSize: 10, weight: .semibold)
         label.textColor = .textColor.withAlphaComponent(0.65)
         return label
     }()
@@ -27,7 +27,7 @@ class MonthlyTableViewHeaderView: BaseView {
         btn.setTitleColor(UIColor.textColor.withAlphaComponent(0.65), for: .normal)
         btn.backgroundColor = .bgColor.withAlphaComponent(0.5)
         btn.titleLabel?.font = .systemFont(ofSize: 12, weight: .bold)
-        btn.layer.borderColor = UIColor.textColor.withAlphaComponent(0.65).cgColor
+        btn.layer.borderColor = UIColor.textColor.withAlphaComponent(0.5).cgColor
         btn.layer.borderWidth = 2
         btn.layer.cornerRadius = 8
         return btn
@@ -38,7 +38,7 @@ class MonthlyTableViewHeaderView: BaseView {
         btn.backgroundColor = .bgColor.withAlphaComponent(0.5)
         btn.setImage(UIImage(systemName: "checklist"), for: .normal)
         btn.tintColor = UIColor.textColor.withAlphaComponent(0.65)
-        btn.layer.borderColor = UIColor.textColor.withAlphaComponent(0.65).cgColor
+        btn.layer.borderColor = UIColor.textColor.withAlphaComponent(0.5).cgColor
         btn.layer.borderWidth = 1.8
         btn.layer.cornerRadius = 5
         return btn
@@ -63,8 +63,8 @@ class MonthlyTableViewHeaderView: BaseView {
     override func setConstraints() {
         titleLabel.snp.makeConstraints { make in
             make.leading.equalToSuperview().inset(18)
-            make.width.equalTo(100)
-            make.bottom.equalToSuperview().inset(8)
+            make.width.equalTo(85)
+            make.bottom.equalToSuperview().inset(9)
         }
         
         subtitleLabel.snp.makeConstraints { make in

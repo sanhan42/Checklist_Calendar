@@ -91,14 +91,14 @@ class CheckListViewController: BaseViewController {
             let btn = UIButton()
             btn.setTitle("오늘 ", for: .normal)
             btn.setImage(UIImage(named: "cherry"), for: .normal)
-            btn.setTitleColor(.textColor, for: .normal)
+            btn.setTitleColor(.textColor.withAlphaComponent(0.65), for: .normal)
             btn.imageView?.contentMode = .scaleAspectFit
-            btn.titleLabel?.font = .systemFont(ofSize: 12, weight: .bold)
+            btn.titleLabel?.font = .systemFont(ofSize: 11.6, weight: .bold)
             btn.contentHorizontalAlignment = .center
             btn.semanticContentAttribute = .forceRightToLeft
-            btn.imageEdgeInsets = .init(top: 2, left: 15.5, bottom: 2.4, right: 15)
+            btn.imageEdgeInsets = .init(top: 2.2, left: 15.5, bottom: 2.6, right: 15)
             btn.addTarget(self, action: #selector(moveToToday), for: .touchUpInside)
-            bgView.layer.borderColor = UIColor.textColor.withAlphaComponent(0.65).cgColor
+            bgView.layer.borderColor = UIColor.textColor.withAlphaComponent(0.5).cgColor
             bgView.layer.borderWidth = 1.8
             bgView.layer.cornerRadius = 12
             bgView.addSubview(btn)
@@ -114,10 +114,10 @@ class CheckListViewController: BaseViewController {
         
         let hideBtn: UIButton = {
             let btn = UIButton()
-            btn.setTitleColor(UIColor.textColor.withAlphaComponent(0.8), for: .normal)
+            btn.setTitleColor(UIColor.textColor.withAlphaComponent(0.65), for: .normal)
             btn.backgroundColor = .bgColor.withAlphaComponent(0.5)
             btn.titleLabel?.font = .systemFont(ofSize: 12, weight: .bold)
-            btn.layer.borderColor = UIColor.textColor.withAlphaComponent(0.65).cgColor
+            btn.layer.borderColor = UIColor.textColor.withAlphaComponent(0.5).cgColor
             btn.layer.borderWidth = 1.8
             btn.layer.cornerRadius = 12
             btn.addTarget(self, action: #selector(hideBtnClicked), for: .touchUpInside)
