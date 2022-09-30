@@ -14,7 +14,6 @@ class TemplateListViewController: BaseViewController {
         let view = UITableView(frame: .null, style: .insetGrouped)
         view.backgroundColor = .tableBgColor
         view.separatorStyle = .none
-        view.register(EmptyCell.self, forCellReuseIdentifier: EmptyCell.reuseIdentifier)
         view.register(TemplateListTableCell.self, forCellReuseIdentifier: TemplateListTableCell.reuseIdentifier)
         view.rowHeight = 48
         view.tableHeaderView = nil
@@ -93,12 +92,7 @@ extension TemplateListViewController: UITableViewDelegate, UITableViewDataSource
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        if templateTasks.isEmpty {
-//            guard let cell = tableView.dequeueReusableCell(withIdentifier: EmptyCell.reuseIdentifier, for: indexPath) as? EmptyCell else { return UITableViewCell() }
-//            cell.selectionStyle = .none
-//            cell.label.text = "등록된 템플릿이 없습니다."
-//            return cell
-//        }
+        
         guard let cell = tableView.dequeueReusableCell(withIdentifier: TemplateListTableCell.reuseIdentifier, for: indexPath) as? TemplateListTableCell else { return UITableViewCell() }
         cell.selectionStyle = .none
         cell.dateLabel.text = templateTasks[indexPath.row].startTime.toString(format: SHDate.time.str())
