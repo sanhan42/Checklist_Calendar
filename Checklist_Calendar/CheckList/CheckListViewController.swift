@@ -15,7 +15,6 @@ class CheckListViewController: BaseViewController {
         view.backgroundColor = .bgColor
         view.separatorStyle = .none
         view.register(CheckListTableCell.self, forCellReuseIdentifier: CheckListTableCell.reuseIdentifier)
-        view.register(EmptyCell.self, forCellReuseIdentifier: EmptyCell.reuseIdentifier)
         view.sectionHeaderHeight = 38
         return view
     }()
