@@ -55,10 +55,9 @@ class EventRepository: EventRepositoryType {
     func allDayTasksFetch(date: Date, isHiding: Bool) -> Results<Event> {
         let todayStart = date.calMidnight()
         let todayEnd = date.calNextMidnight()
-        let date = Calendar.current.date(byAdding: .minute, value: -1, to: Date()) ?? Date()
         if isHiding {
             return localRealm.objects(Event.self).sorted(byKeyPath: "endTime", ascending: true).where {
-                $0.endTime > date && ($0.startTime <= todayStart && $0.endTime >= todayEnd)
+                $0.endTime > Date() && ($0.startTime <= todayStart && $0.endTime >= todayEnd)
             }
         } else {
             return localRealm.objects(Event.self).sorted(byKeyPath: "endTime", ascending: true).where {
@@ -72,9 +71,10 @@ class EventRepository: EventRepositoryType {
         let todayStart = date.calMidnight()
         let todayEnd = date.calNextMidnight()
         let todayEventTasks = dayTasksFetch(date: date)
+        let date = Calendar.current.date(byAdding: .minute, value: -1, to: Date()) ?? Date()
         if isHiding {
             return todayEventTasks.sorted(byKeyPath: "endTime", ascending: true).sorted(byKeyPath: "startTime", ascending: true).where {
-                $0.endTime > Date() && (($0.startTime <= todayStart && $0.endTime < todayEnd) || ($0.startTime > todayStart && $0.startTime < todayEnd))
+                $0.endTime > date && (($0.startTime <= todayStart && $0.endTime < todayEnd) || ($0.startTime > todayStart && $0.startTime < todayEnd))
             }
         } else {
             return todayEventTasks.sorted(byKeyPath: "endTime", ascending: true).sorted(byKeyPath: "startTime", ascending: true).where {
