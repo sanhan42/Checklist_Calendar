@@ -10,7 +10,7 @@ import RealmSwift
 import SwiftUI
 
 class TemplateListViewController: BaseViewController {
-    let tableView: UITableView = {
+    lazy var tableView: UITableView = {
         let view = UITableView(frame: .null, style: .insetGrouped)
         view.backgroundColor = .tableBgColor
         view.separatorStyle = .none
@@ -18,6 +18,13 @@ class TemplateListViewController: BaseViewController {
         view.rowHeight = 48
         view.tableHeaderView = nil
         view.sectionHeaderHeight = CGFloat.leastNonzeroMagnitude
+        view.addSubview(emptyView)
+        return view
+    }()
+    
+    let emptyView: EmptyView = {
+        let view = EmptyView()
+        view.label.text = "템플릿을 추가해주세요"
         return view
     }()
     
@@ -40,22 +47,20 @@ class TemplateListViewController: BaseViewController {
     }
     
     func addView() {
-         if templateTasks.isEmpty {
-             let emptyView = EmptyView()
-             emptyView.label.text = "등록된 템플릿이 없습니다."
-             view.addSubview(emptyView)
-             emptyView.snp.makeConstraints { make in
-                 make.edges.equalTo(view.safeAreaLayoutGuide)
-             }
-         } else {
-             view.addSubview(tableView)
-             tableView.snp.makeConstraints { make in
-                 make.edges.equalToSuperview()
-             }
-             tableView.delegate = self
-             tableView.dataSource = self
-         }
-     }
+        view.addSubview(tableView)
+        tableView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        tableView.delegate = self
+        tableView.dataSource = self
+        
+        emptyView.snp.makeConstraints { make in
+            make.top.equalToSuperview().inset(20)
+            make.bottom.centerX.equalToSuperview()
+            make.width.equalTo(200)
+        }
+        emptyView.isHidden = !templateTasks.isEmpty
+    }
     
     private func setNavigationBar() {
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.textColor]
@@ -78,6 +83,7 @@ class TemplateListViewController: BaseViewController {
         let vc = WriteViewController()
         vc.isTemplatePage = true
         vc.afterDissmiss = {
+            self.emptyView.isHidden = !self.templateTasks.isEmpty
             self.tableView.reloadData()
         }
         let navi = UINavigationController(rootViewController: vc)
@@ -137,6 +143,7 @@ extension TemplateListViewController: UITableViewDelegate, UITableViewDataSource
 extension TemplateListViewController: UIAdaptivePresentationControllerDelegate {
     func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
         afterDissmiss?()
+        emptyView.isHidden = !templateTasks.isEmpty
     }
 }
 
