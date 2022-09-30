@@ -24,7 +24,7 @@ class MonthlyView: BaseView {
         let view = UIButton()
         view.setTitle(self.calendar.currentPage.toString(format: "yyyy년 MM월"), for: .normal)
         view.setTitleColor(.textColor, for: .normal)
-        view.titleLabel?.font = .systemFont(ofSize: 20)
+        view.titleLabel?.font = .systemFont(ofSize: 18)
         return view
     }()
     
@@ -84,20 +84,20 @@ class MonthlyView: BaseView {
     override func setConstraints() {
         
         prevButton.snp.makeConstraints { make in
-            make.width.equalTo(24)
+            make.width.equalTo(18)
         }
         
         nextButton.snp.makeConstraints { make in
-            make.width.equalTo(24)
+            make.width.equalTo(18)
         }
         
         titleButton.snp.makeConstraints { make in
-            make.width.equalTo(120)
+            make.width.equalTo(100)
         }
         
         calHeaderView.snp.makeConstraints { make in
             make.topMargin.equalTo(12)
-            make.width.equalTo(180)
+            make.width.equalTo(150)
             make.height.equalTo(48)
             make.leading.equalTo(self.safeAreaLayoutGuide).inset(10)
         }

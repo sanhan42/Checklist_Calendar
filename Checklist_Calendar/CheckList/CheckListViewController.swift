@@ -51,20 +51,17 @@ class CheckListViewController: BaseViewController {
         let titleBtn: UIView = {
             let bgView = UIView()
             let btn = UIButton()
-            btn.setTitle(selectedDate.toString(format: selectedDate.toString(format: " yy년 MM월 dd일 (E)")), for: .normal)
-            btn.setImage(UIImage(systemName: "calendar"), for: .normal)
+            btn.setTitle(selectedDate.toString(format: selectedDate.toString(format: "MM월 dd일 EEEE")), for: .normal)
             btn.tintColor = .textColor.withAlphaComponent(0.9)
             btn.translatesAutoresizingMaskIntoConstraints = false
             btn.setTitleColor(.textColor, for: .normal)
             btn.imageView?.contentMode = .scaleAspectFit
-            btn.titleLabel?.font = .systemFont(ofSize: 16, weight: .bold)
+            btn.titleLabel?.font = .systemFont(ofSize: 17, weight: .bold)
             btn.contentHorizontalAlignment = .center
-            btn.semanticContentAttribute = .forceLeftToRight
-            btn.imageEdgeInsets = .init(top: 1, left: 4, bottom: 0, right: 40)
             btn.addTarget(self, action: #selector(calendarBtnClicked), for: .touchUpInside)
             bgView.addSubview(btn)
             bgView.snp.makeConstraints { make in
-                make.width.equalTo(168)//(197)
+                make.width.equalTo(150)
                 make.height.equalTo(28)
             }
             btn.snp.makeConstraints { make in
