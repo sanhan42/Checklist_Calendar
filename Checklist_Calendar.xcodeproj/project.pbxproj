@@ -29,6 +29,7 @@
 		BF7C141128D1F8A100DF1EEE /* MonthlyTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF7C141028D1F8A100DF1EEE /* MonthlyTableViewCell.swift */; };
 		BFB1052728D3153200D24376 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB1052628D3153200D24376 /* Event.swift */; };
 		BFB1052928D31B8F00D24376 /* Todo.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB1052828D31B8F00D24376 /* Todo.swift */; };
+		BFB64C6E28E6D51C00E56CE4 /* EmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB64C6D28E6D51C00E56CE4 /* EmptyView.swift */; };
 		BFC8110728D55D7100BB0011 /* ReusableProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC8110628D55D7100BB0011 /* ReusableProtocol.swift */; };
 		BFDDC99828D0572D0047F22E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFDDC99728D0572D0047F22E /* AppDelegate.swift */; };
 		BFDDC99A28D0572D0047F22E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFDDC99928D0572D0047F22E /* SceneDelegate.swift */; };
@@ -78,6 +79,7 @@
 		BF7C141228D1FA9000DF1EEE /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		BFB1052628D3153200D24376 /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
 		BFB1052828D31B8F00D24376 /* Todo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Todo.swift; sourceTree = "<group>"; };
+		BFB64C6D28E6D51C00E56CE4 /* EmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyView.swift; sourceTree = "<group>"; };
 		BFC8110628D55D7100BB0011 /* ReusableProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReusableProtocol.swift; sourceTree = "<group>"; };
 		BFDDC99428D0572D0047F22E /* Checklist_Calendar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Checklist_Calendar.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BFDDC99728D0572D0047F22E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -132,12 +134,13 @@
 			path = TemplateList;
 			sourceTree = "<group>";
 		};
-		BF1A6AE828DE938E0094EA6D /* CommonUseCell */ = {
+		BF1A6AE828DE938E0094EA6D /* Common */ = {
 			isa = PBXGroup;
 			children = (
 				BF1A6AE928DE93E20094EA6D /* EmptyCell.swift */,
+				BFB64C6D28E6D51C00E56CE4 /* EmptyView.swift */,
 			);
-			path = CommonUseCell;
+			path = Common;
 			sourceTree = "<group>";
 		};
 		BF55056528DC80B100DF978E /* CheckList */ = {
@@ -212,7 +215,7 @@
 				BF55056528DC80B100DF978E /* CheckList */,
 				BF1A6AE728DE7DC90094EA6D /* TemplateList */,
 				BFFA945128E55C8300D73AFD /* Setting */,
-				BF1A6AE828DE938E0094EA6D /* CommonUseCell */,
+				BF1A6AE828DE938E0094EA6D /* Common */,
 				BFDDC99928D0572D0047F22E /* SceneDelegate.swift */,
 				BFDDC99728D0572D0047F22E /* AppDelegate.swift */,
 				BFDDC99B28D0572D0047F22E /* ViewController.swift */,
@@ -367,6 +370,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BF0B57DE28D05C38005A090B /* BaseTableViewCell.swift in Sources */,
+				BFB64C6E28E6D51C00E56CE4 /* EmptyView.swift in Sources */,
 				BF55056928DC854F00DF978E /* CkeckListHeaderView.swift in Sources */,
 				BFB1052728D3153200D24376 /* Event.swift in Sources */,
 				BF1E010528E008E1006D27E5 /* CheckListTableCell.swift in Sources */,
@@ -541,7 +545,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = 5534Y3FYT7;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Checklist_Calendar/Info.plist;
@@ -571,7 +575,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = 5534Y3FYT7;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Checklist_Calendar/Info.plist;

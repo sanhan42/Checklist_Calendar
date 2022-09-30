@@ -27,6 +27,8 @@ class CheckListViewController: BaseViewController {
     var selectedDate: Date!
     var afterDissmiss: (() -> ())?
     var isHiding = false
+   
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,16 +37,28 @@ class CheckListViewController: BaseViewController {
     
     override func configure() {
         super.configure()
-        view.addSubview(tableView)
-        tableView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
-        tableView.delegate = self
-        tableView.dataSource = self
-        
         navigationController?.presentationController?.delegate = self
+        addView()
         setNavigationLeftItems()
         setNavigationRightItems()
+    }
+    
+    func addView() {
+        if notAllDayTasks.isEmpty && allDayTasks.isEmpty {
+            let emptyView = EmptyView()
+            emptyView.label.text = "등록된 이벤트들의 체크리스트를\n한 눈에 볼 수 있는 페이지입니다.\n\n먼저 이벤트를 등록해주세요 :)"
+            view.addSubview(emptyView)
+            emptyView.snp.makeConstraints { make in
+                make.edges.equalTo(view.safeAreaLayoutGuide)
+            }
+        } else {
+            view.addSubview(tableView)
+            tableView.snp.makeConstraints { make in
+                make.edges.equalToSuperview()
+            }
+            tableView.delegate = self
+            tableView.dataSource = self
+        }
     }
     
     func setNavigationLeftItems() {
@@ -138,14 +152,12 @@ extension CheckListViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if allDayTasks.isEmpty && notAllDayTasks.isEmpty { return 100 }
         let section = 0..<allDayTasks.count ~= indexPath.section ? indexPath.section : indexPath.section - allDayTasks.count
         let tasks: Results<Event> = 0..<allDayTasks.count ~= indexPath.section ? allDayTasks : notAllDayTasks
         return tasks[section].todos[indexPath.row].title.heightWithConstrainedWidth(width: tableView.frame.width, font: UIFont.systemFont(ofSize: 13)) + 20
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        if allDayTasks.isEmpty && notAllDayTasks.isEmpty { return nil }
         let header = CheckListHeaderView()
         let tasks: Results<Event> = allDayTasks.isEmpty || section >= allDayTasks.count  ? notAllDayTasks : allDayTasks
         let index = allDayTasks.isEmpty || section < allDayTasks.count ? section : section - allDayTasks.count
@@ -158,11 +170,9 @@ extension CheckListViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        if allDayTasks.isEmpty && notAllDayTasks.isEmpty { return 1 }
         return allDayTasks.count + notAllDayTasks.count
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if allDayTasks.isEmpty && notAllDayTasks.isEmpty { return 1 }
 
         if allDayTasks.isEmpty {
             return notAllDayTasks[section].todos.count
@@ -177,12 +187,6 @@ extension CheckListViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if allDayTasks.isEmpty && notAllDayTasks.isEmpty {
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: EmptyCell.reuseIdentifier, for: indexPath) as? EmptyCell else { return UITableViewCell() }
-            cell.label.text = "등록된 이벤트들의 체크리스트를\n한 눈에 볼 수 있는 페이지입니다.\n\n먼저 이벤트를 등록해주세요 :)"
-            cell.selectionStyle = .none
-            return cell
-        }
         guard let cell = tableView.dequeueReusableCell(withIdentifier: CheckListTableCell.reuseIdentifier, for: indexPath) as? CheckListTableCell else { return UITableViewCell() }
         cell.selectionStyle = .none
         cell.checkButton.snp.remakeConstraints { make in

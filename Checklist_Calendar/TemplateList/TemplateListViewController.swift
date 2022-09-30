@@ -36,15 +36,27 @@ class TemplateListViewController: BaseViewController {
     
     override func configure() {
         super.configure()
-        view.addSubview(tableView)
-        tableView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
-        tableView.delegate = self
-        tableView.dataSource = self
-            
+        addView()
         navigationController?.presentationController?.delegate = self
     }
+    
+    func addView() {
+         if templateTasks.isEmpty {
+             let emptyView = EmptyView()
+             emptyView.label.text = "등록된 템플릿이 없습니다."
+             view.addSubview(emptyView)
+             emptyView.snp.makeConstraints { make in
+                 make.edges.equalTo(view.safeAreaLayoutGuide)
+             }
+         } else {
+             view.addSubview(tableView)
+             tableView.snp.makeConstraints { make in
+                 make.edges.equalToSuperview()
+             }
+             tableView.delegate = self
+             tableView.dataSource = self
+         }
+     }
     
     private func setNavigationBar() {
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.textColor]
@@ -77,16 +89,16 @@ class TemplateListViewController: BaseViewController {
 extension TemplateListViewController: UITableViewDelegate, UITableViewDataSource {
   
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return templateTasks.isEmpty ? 1 : templateTasks.count
+        return templateTasks.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if templateTasks.isEmpty {
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: EmptyCell.reuseIdentifier, for: indexPath) as? EmptyCell else { return UITableViewCell() }
-            cell.selectionStyle = .none
-            cell.label.text = "등록된 템플릿이 없습니다."
-            return cell
-        }
+//        if templateTasks.isEmpty {
+//            guard let cell = tableView.dequeueReusableCell(withIdentifier: EmptyCell.reuseIdentifier, for: indexPath) as? EmptyCell else { return UITableViewCell() }
+//            cell.selectionStyle = .none
+//            cell.label.text = "등록된 템플릿이 없습니다."
+//            return cell
+//        }
         guard let cell = tableView.dequeueReusableCell(withIdentifier: TemplateListTableCell.reuseIdentifier, for: indexPath) as? TemplateListTableCell else { return UITableViewCell() }
         cell.selectionStyle = .none
         cell.dateLabel.text = templateTasks[indexPath.row].startTime.toString(format: SHDate.time.str())
