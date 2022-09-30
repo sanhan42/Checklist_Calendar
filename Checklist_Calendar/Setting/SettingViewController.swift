@@ -136,7 +136,7 @@ extension SettingViewController {
         } else {
             let sendMailErrorAlert = UIAlertController(title: "메일 주소 복사", message: "클립보드에 복사된 메일 주소(42.sanhan@gmail.com)로 소중한 의견을 남겨주시면 감사하겠습니다 :D", preferredStyle: .alert)
             let ok = UIAlertAction(title: "확인", style: .default) { _ in
-                UIPasteboard.general.string = "42.sanhan@gmail.com"
+                UIPasteboard.general.string = "42.sanhan@gmail.com"
             }
             sendMailErrorAlert.addAction(ok)
             self.present(sendMailErrorAlert, animated: true, completion: nil)
