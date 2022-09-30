@@ -67,6 +67,7 @@ class MonthlyViewController: BaseViewController {
         configure()
         fetchRealm(date: mainView.calendar.selectedDate ?? Date())
         setToolbar()
+        print(repository.fileUrl)
     }
     
     override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -214,12 +215,12 @@ class MonthlyViewController: BaseViewController {
                 let img = UIImage(systemName: "plus.circle")
                 let template = UIAction(title: task.title, image: img?.imageWithColor(color: UIColor(hexAlpha: task.color))) { _ in
                     var components = Calendar.current.dateComponents([.hour, .minute], from: task.startTime)
-                    let date = self.mainView.calendar.selectedDate ?? Date()
+                    let date = self.mainView.calendar.selectedDate?.calMidnight() ?? Date().calMidnight()
                     guard let startTime = Calendar.current.date(bySettingHour: components.hour!, minute: components.minute!, second: 0, of: date) else { return }
                     components = Calendar.current.dateComponents([.hour, .minute], from: task.endTime)
-                    guard let endTime = Calendar.current.date(bySettingHour: components.hour!, minute: components.minute!, second: 0, of: date) else { return }
-                    let endDate = task.isAllDay ? date.calNextMidnight() : date
-                    let event = Event(title: task.title, color: task.color, startDate: date, endDate: endDate, startTime: startTime, endTime: endTime, isAllDay: task.isAllDay, notiOption: task.notiOption)
+                    guard let notAllDayEndTime = Calendar.current.date(bySettingHour: components.hour!, minute: components.minute!, second: 0, of: date) else { return }
+                    let endTime = task.isAllDay ? task.endTime : notAllDayEndTime
+                    let event = Event(title: task.title, color: task.color, startDate: date, endDate: date, startTime: startTime, endTime: endTime, isAllDay: task.isAllDay, notiOption: task.notiOption)
                     for todo in task.todos {
                         let newTodo = Todo(title: todo.title, isDone: todo.isDone)
                         event.todos.append(newTodo)
