@@ -254,6 +254,7 @@ extension WriteViewController: UITableViewDelegate, UITableViewDataSource {
                 cell.checkButton.tag = indexPath.row
                 cell.checkButton.addTarget(self, action: #selector(checkButtonClicked(sender:)), for: .touchUpInside)
                 cell.textField.placeholder = "내용을 입력해주세요"
+                cell.textField.font = .systemFont(ofSize: 13)
                 cell.textField.attributedText = event.todos[indexPath.row].isDone ? event.todos[indexPath.row].title.strikeThrough() : event.todos[indexPath.row].title.regular()
                 let img = event.todos[indexPath.row].isDone ? UIImage(systemName: "checkmark.square")?.imageWithColor(color: .textColor.withAlphaComponent(0.5)) : UIImage(systemName: "square")?.imageWithColor(color: .textColor)
                 cell.checkButton.setImage(img, for: .normal)
@@ -363,7 +364,7 @@ extension WriteViewController {
                     self.notificationCenter.add(request)
                     }
             }
-            DispatchQueue.main.async {                
+            DispatchQueue.main.async {
                 self.realmEvent == nil ? self.repository.addEvent(event: self.event) : self.repository.updateEvent(old: self.realmEvent!, new: self.event)
             }
         }
