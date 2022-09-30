@@ -363,7 +363,9 @@ extension WriteViewController {
                     self.notificationCenter.add(request)
                     }
             }
+            DispatchQueue.main.async {                
                 self.realmEvent == nil ? self.repository.addEvent(event: self.event) : self.repository.updateEvent(old: self.realmEvent!, new: self.event)
+            }
         }
         
         DispatchQueue.main.async {
