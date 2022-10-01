@@ -42,6 +42,7 @@
 		BFDDC9B528D059BC0047F22E /* MonthlyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFDDC9B428D059BC0047F22E /* MonthlyViewController.swift */; };
 		BFDDC9B728D05A3C0047F22E /* MonthlyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFDDC9B628D05A3C0047F22E /* MonthlyView.swift */; };
 		BFDDC9BB28D05B380047F22E /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFDDC9BA28D05B380047F22E /* BaseViewController.swift */; };
+		BFE9DF8628E7F242002684D0 /* Zip in Frameworks */ = {isa = PBXBuildFile; productRef = BFE9DF8528E7F242002684D0 /* Zip */; };
 		BFEA3A3328D7DC1200003E81 /* CheckListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFEA3A3228D7DC1200003E81 /* CheckListTableViewCell.swift */; };
 		BFEA3A3528D852F500003E81 /* EventRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFEA3A3428D852F500003E81 /* EventRepository.swift */; };
 		BFEA3A3828D8579B00003E81 /* DateFormEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFEA3A3728D8579B00003E81 /* DateFormEnum.swift */; };
@@ -118,6 +119,7 @@
 				BF497FA028D9E194007D1527 /* Toast in Frameworks */,
 				BFDDC9AD28D058950047F22E /* FSCalendar in Frameworks */,
 				BFFA945628E571AD00D73AFD /* AcknowList in Frameworks */,
+				BFE9DF8628E7F242002684D0 /* Zip in Frameworks */,
 				BF1A6AF128DEBF480094EA6D /* IQKeyboardManagerSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -305,6 +307,7 @@
 				BF497F9F28D9E194007D1527 /* Toast */,
 				BF1A6AF028DEBF480094EA6D /* IQKeyboardManagerSwift */,
 				BFFA945528E571AD00D73AFD /* AcknowList */,
+				BFE9DF8528E7F242002684D0 /* Zip */,
 			);
 			productName = Checklist_Calendar;
 			productReference = BFDDC99428D0572D0047F22E /* Checklist_Calendar.app */;
@@ -341,6 +344,7 @@
 				BF497F9E28D9E194007D1527 /* XCRemoteSwiftPackageReference "Toast-Swift" */,
 				BF1A6AEF28DEBF480094EA6D /* XCRemoteSwiftPackageReference "IQKeyboardManager" */,
 				BFFA945428E571AD00D73AFD /* XCRemoteSwiftPackageReference "AcknowList" */,
+				BFE9DF8428E7F242002684D0 /* XCRemoteSwiftPackageReference "Zip" */,
 			);
 			productRefGroup = BFDDC99528D0572D0047F22E /* Products */;
 			projectDirPath = "";
@@ -663,6 +667,14 @@
 				minimumVersion = 10.0.0;
 			};
 		};
+		BFE9DF8428E7F242002684D0 /* XCRemoteSwiftPackageReference "Zip" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/marmelroy/Zip.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
 		BFFA945428E571AD00D73AFD /* XCRemoteSwiftPackageReference "AcknowList" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/vtourraine/AcknowList";
@@ -703,6 +715,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = BFDDC9AE28D059350047F22E /* XCRemoteSwiftPackageReference "realm-swift" */;
 			productName = RealmSwift;
+		};
+		BFE9DF8528E7F242002684D0 /* Zip */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BFE9DF8428E7F242002684D0 /* XCRemoteSwiftPackageReference "Zip" */;
+			productName = Zip;
 		};
 		BFFA945528E571AD00D73AFD /* AcknowList */ = {
 			isa = XCSwiftPackageProductDependency;
