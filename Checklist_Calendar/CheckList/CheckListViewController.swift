@@ -50,21 +50,13 @@ class CheckListViewController: BaseViewController {
     }
     
     func addView() {
-//        if notAllDayTasks.isEmpty && allDayTasks.isEmpty {
-//            let emptyView = EmptyView()
-//            emptyView.label.text = "등록된 이벤트들의 체크리스트를\n한 눈에 볼 수 있는 페이지입니다.\n\n먼저 이벤트를 등록해주세요 :)"
-//            view.addSubview(emptyView)
-//            emptyView.snp.makeConstraints { make in
-//                make.edges.equalTo(view.safeAreaLayoutGuide)
-//            }
-//        } else {
-            view.addSubview(tableView)
-            tableView.snp.makeConstraints { make in
-                make.edges.equalToSuperview()
-            }
-            tableView.delegate = self
-            tableView.dataSource = self
-//        }
+        view.addSubview(tableView)
+        tableView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        tableView.delegate = self
+        tableView.dataSource = self
+        
         emptyView.snp.makeConstraints { make in
             make.top.equalToSuperview().inset(20)
             make.bottom.centerX.equalToSuperview()
