@@ -68,7 +68,6 @@ class MonthlyViewController: BaseViewController {
         configure()
         fetchRealm(date: mainView.calendar.selectedDate ?? Date())
         setToolbar()
-        print(repository.fileUrl)
     }
     
     override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
