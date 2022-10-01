@@ -158,7 +158,7 @@ extension CheckListViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         let section = 0..<allDayTasks.count ~= indexPath.section ? indexPath.section : indexPath.section - allDayTasks.count
         let tasks: Results<Event> = 0..<allDayTasks.count ~= indexPath.section ? allDayTasks : notAllDayTasks
-        return tasks[section].todos[indexPath.row].title.heightWithConstrainedWidth(width: tableView.frame.width, font: UIFont.systemFont(ofSize: 13)) + 20
+        return tasks[section].todos[indexPath.row].title.heightWithConstrainedWidth(width: tableView.frame.width, font: UIFont.systemFont(ofSize: 13)) + 24
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -193,21 +193,15 @@ extension CheckListViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: CheckListTableCell.reuseIdentifier, for: indexPath) as? CheckListTableCell else { return UITableViewCell() }
         cell.selectionStyle = .none
-        cell.checkButton.snp.remakeConstraints { make in
-            make.width.height.equalTo(15)
-            make.leading.equalToSuperview().inset(8)
-            make.centerY.equalToSuperview()
-        }
-        
         let tagNum = setTagNum(section: indexPath.section, row: indexPath.row)
         let section = 0..<allDayTasks.count ~= indexPath.section ? indexPath.section : indexPath.section - allDayTasks.count
         let tasks: Results<Event> = 0..<allDayTasks.count ~= indexPath.section ? allDayTasks : notAllDayTasks
         cell.textView.attributedText = tasks[section].todos[indexPath.row].isDone ? tasks[section].todos[indexPath.row].title.strikeThrough() : tasks[section].todos[indexPath.row].title.regular()
         cell.textView.tag = tagNum
         cell.textView.delegate = self
-        let img = tasks[section].todos[indexPath.row].isDone ? UIImage(systemName: "checkmark.square")?.imageWithColor(color: .textColor.withAlphaComponent(0.5)) : UIImage(systemName: "square")?.imageWithColor(color: .textColor)
+        let img = tasks[section].todos[indexPath.row].isDone ? UIImage(systemName: "checkmark.square") : UIImage(systemName: "square")
         cell.checkButton.setImage(img, for: .normal)
-        cell.checkButton.tintColor = .textColor.withAlphaComponent(0.9)
+        cell.checkButton.tintColor = tasks[section].todos[indexPath.row].isDone ? .textColor.withAlphaComponent(0.5) : .textColor
         cell.checkButton.tag = tagNum
         cell.checkButton.addTarget(self, action: #selector(checkButtonClicked(_:)), for: .touchUpInside)
         

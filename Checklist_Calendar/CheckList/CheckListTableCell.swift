@@ -11,8 +11,6 @@ class CheckListTableCell: BaseTableViewCell {
    
     let checkButton: UIButton = {
         let btn = UIButton()
-        btn.setImage(UIImage(systemName: "square.dashed"), for: .normal)
-        btn.tintColor = .textColor
         return btn
     }()
     
@@ -21,11 +19,9 @@ class CheckListTableCell: BaseTableViewCell {
         view.isScrollEnabled = false
         view.textAlignment = .left
         view.isEditable = true
+        view.font = .systemFont(ofSize: 13)
         view.textColor = .textColor.withAlphaComponent(0.9)
         view.backgroundColor = .clear
-        view.layer.borderColor = UIColor.grayColor.withAlphaComponent(0.3).cgColor
-        view.layer.borderWidth = 0.8
-        view.layer.cornerRadius = 4
         return view
     }()
     
@@ -45,7 +41,7 @@ class CheckListTableCell: BaseTableViewCell {
         view.layer.borderColor = UIColor.grayColor.withAlphaComponent(0.4).cgColor
         view.layer.borderWidth = 1
         view.layer.cornerRadius = 4
-        [btnBgView, textView].forEach{ view.addSubview($0) }
+        [btnBgView, checkButton, textView].forEach{ view.addSubview($0) }
         return view
     }()
     
@@ -71,18 +67,17 @@ class CheckListTableCell: BaseTableViewCell {
         }
         
         btnBgView.snp.makeConstraints { make in
-            make.verticalEdges.leading.equalToSuperview().inset(1)
-            make.width.equalTo(32)
+            make.verticalEdges.leading.equalToSuperview()
+            make.width.equalTo(40)
         }
         
         checkButton.snp.makeConstraints { make in
-            make.width.height.equalTo(24)
-            make.leading.equalToSuperview()
-            make.topMargin.equalToSuperview().inset(4)
+            make.top.leading.equalToSuperview()
+            make.width.height.equalTo(40)
         }
         
         textView.snp.makeConstraints { make in
-            make.verticalEdges.equalToSuperview().inset(1)
+            make.top.equalToSuperview().inset(3)
             make.leading.equalTo(btnBgView.snp.trailing)
             make.trailing.equalToSuperview().inset(1.2)
         }
