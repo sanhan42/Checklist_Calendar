@@ -424,10 +424,17 @@ extension WriteViewController {
                 let components = Calendar.current.dateComponents([.hour, .minute], from: self.event.startTime)
                 guard let timeDate = Calendar.current.date(bySettingHour: components.hour!, minute: components.minute!, second: 0, of: date) else { return }
                 self.event.startTime = timeDate
+                if self.event.startTime >= self.event.endTime { // TODO: 나중에 시작 시간과 종료 시간이 동일한 이벤트 등록을 가능하게 해준다면 수정해줘야 함.
+                    self.event.endTime = Calendar.current.date(byAdding: .hour, value: 1, to: timeDate) ?? timeDate
+                    self.event.endDate = self.event.endTime.calMidnight()
+                    self.datePicker.date = self.event.endTime
+                }
                 self.event.startHour = components.hour!
                 self.mainView.tableView.reloadRows(at:[[0,1]], with: .automatic)
             } else {
-                self.event.startTime = date.calMidnight()
+                self.event.startTime = date
+                self.event.endTime = date.calNextMidnight()
+                self.event.endDate = date
                 self.event.startHour = 0
                 self.mainView.tableView.reloadRows(at:[[0,1]], with: .automatic)
             }
@@ -458,6 +465,11 @@ extension WriteViewController {
             guard let date = Calendar.current.date(bySettingHour: components.hour!, minute: components.minute!, second: 0, of: self.event.startDate) else { return }
             self.event.startTime = date
             self.event.startHour = components.hour!
+            if self.event.startTime >= self.event.endTime {
+                self.event.endTime = Calendar.current.date(byAdding: .hour, value: 1, to: date) ?? date
+                self.event.endDate = self.event.endTime.calMidnight()
+                self.datePicker.date = self.event.endTime
+            }
             self.mainView.tableView.reloadRows(at:[[0,1]], with: .automatic)
             self.hasChanges = true
         }
