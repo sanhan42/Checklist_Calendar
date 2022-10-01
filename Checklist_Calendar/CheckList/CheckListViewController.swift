@@ -27,6 +27,7 @@ class CheckListViewController: BaseViewController {
     }()
     
     let repository = EventRepository()
+    private let selectionFeedbackGenerator = UISelectionFeedbackGenerator()
     
     var allDayTasks: Results<Event>!
     var notAllDayTasks: Results<Event>!
@@ -245,6 +246,7 @@ extension CheckListViewController {
         setNavigationRightItems()
         emptyView.isHidden = !allDayTasks.isEmpty || !notAllDayTasks.isEmpty
         emptyView.label.text = isHiding ? "등록된 이후 일정이 없네요.\n\n먼저 이벤트를 등록해주세요 :)" : "등록된 이벤트들의 체크리스트를\n한 눈에 볼 수 있는 페이지입니다.\n\n먼저 이벤트를 등록해주세요 :)"
+        selectionFeedbackGenerator.selectionChanged()
         tableView.reloadData()
     }
 
@@ -264,6 +266,7 @@ extension CheckListViewController {
         setNavigationLeftItems()
         fetchRealm(isHiding: isHiding)
         emptyView.isHidden = !allDayTasks.isEmpty || !notAllDayTasks.isEmpty
+        selectionFeedbackGenerator.selectionChanged()
         tableView.reloadData()
     }
     

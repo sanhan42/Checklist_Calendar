@@ -16,6 +16,7 @@ class MonthlyViewController: BaseViewController {
     let mainView = MonthlyView()
     let repository = EventRepository()
     let notificationCenter = UNUserNotificationCenter.current()
+    private let selectionFeedbackGenerator = UISelectionFeedbackGenerator()
     
     var allDayTasks: Results<Event>!
     var notAllDayTasks: Results<Event>!
@@ -146,6 +147,7 @@ class MonthlyViewController: BaseViewController {
     @objc func moveToToday() {
         mainView.calendar.select(Date())
         calendar(mainView.calendar, didSelect: Date(), at: .current)
+        selectionFeedbackGenerator.selectionChanged()
     }
     
     
@@ -253,6 +255,7 @@ class MonthlyViewController: BaseViewController {
                     
                     self.repository.addEvent(event: event)
                     self.fetchRealm(date: date)
+                    self.selectionFeedbackGenerator.selectionChanged()
                     self.mainView.calendar.reloadData()
                     self.mainView.tableView.reloadData()
                 }
@@ -283,6 +286,7 @@ class MonthlyViewController: BaseViewController {
     @objc func hideBtnClicked(_ sender: UIButton) {
         isHiding.toggle()
         fetchRealm(date: mainView.calendar.selectedDate ?? Date())
+        selectionFeedbackGenerator.selectionChanged()
         mainView.tableView.reloadData()
     }
     
