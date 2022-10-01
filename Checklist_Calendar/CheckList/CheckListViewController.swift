@@ -10,12 +10,19 @@ import RealmSwift
 import SwiftUI
 
 class CheckListViewController: BaseViewController {
-    let tableView: UITableView = {
+    lazy var tableView: UITableView = {
         let view = UITableView(frame: .null, style: .insetGrouped)
         view.backgroundColor = .bgColor
         view.separatorStyle = .none
         view.register(CheckListTableCell.self, forCellReuseIdentifier: CheckListTableCell.reuseIdentifier)
         view.sectionHeaderHeight = 38
+        view.addSubview(emptyView)
+        return view
+    }()
+    
+    lazy var emptyView: EmptyView = {
+        let view = EmptyView()
+        view.label.text = isHiding ? "등록된 이후 일정이 없네요.\n\n먼저 이벤트를 등록해주세요 :)" : "등록된 이벤트들의 체크리스트를\n한 눈에 볼 수 있는 페이지입니다.\n\n먼저 이벤트를 등록해주세요 :)"
         return view
     }()
     
@@ -43,21 +50,27 @@ class CheckListViewController: BaseViewController {
     }
     
     func addView() {
-        if notAllDayTasks.isEmpty && allDayTasks.isEmpty {
-            let emptyView = EmptyView()
-            emptyView.label.text = "등록된 이벤트들의 체크리스트를\n한 눈에 볼 수 있는 페이지입니다.\n\n먼저 이벤트를 등록해주세요 :)"
-            view.addSubview(emptyView)
-            emptyView.snp.makeConstraints { make in
-                make.edges.equalTo(view.safeAreaLayoutGuide)
-            }
-        } else {
+//        if notAllDayTasks.isEmpty && allDayTasks.isEmpty {
+//            let emptyView = EmptyView()
+//            emptyView.label.text = "등록된 이벤트들의 체크리스트를\n한 눈에 볼 수 있는 페이지입니다.\n\n먼저 이벤트를 등록해주세요 :)"
+//            view.addSubview(emptyView)
+//            emptyView.snp.makeConstraints { make in
+//                make.edges.equalTo(view.safeAreaLayoutGuide)
+//            }
+//        } else {
             view.addSubview(tableView)
             tableView.snp.makeConstraints { make in
                 make.edges.equalToSuperview()
             }
             tableView.delegate = self
             tableView.dataSource = self
+//        }
+        emptyView.snp.makeConstraints { make in
+            make.top.equalToSuperview().inset(20)
+            make.bottom.centerX.equalToSuperview()
+            make.width.equalTo(200)
         }
+        emptyView.isHidden = !allDayTasks.isEmpty || !notAllDayTasks.isEmpty
     }
     
     func setNavigationLeftItems() {
@@ -244,6 +257,8 @@ extension CheckListViewController {
         isHiding.toggle()
         fetchRealm(isHiding: isHiding)
         setNavigationRightItems()
+        emptyView.isHidden = !allDayTasks.isEmpty || !notAllDayTasks.isEmpty
+        emptyView.label.text = isHiding ? "등록된 이후 일정이 없네요.\n\n먼저 이벤트를 등록해주세요 :)" : "등록된 이벤트들의 체크리스트를\n한 눈에 볼 수 있는 페이지입니다.\n\n먼저 이벤트를 등록해주세요 :)"
         tableView.reloadData()
     }
 
@@ -252,6 +267,7 @@ extension CheckListViewController {
             selectedDate = datePicker.date
             setNavigationLeftItems()
             fetchRealm(isHiding: isHiding)
+            emptyView.isHidden = !allDayTasks.isEmpty || !notAllDayTasks.isEmpty
             tableView.reloadData()
         }
     }
@@ -261,6 +277,7 @@ extension CheckListViewController {
         datePicker.date = selectedDate
         setNavigationLeftItems()
         fetchRealm(isHiding: isHiding)
+        emptyView.isHidden = !allDayTasks.isEmpty || !notAllDayTasks.isEmpty
         tableView.reloadData()
     }
     
