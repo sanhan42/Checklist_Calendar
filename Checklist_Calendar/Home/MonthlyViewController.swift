@@ -332,7 +332,9 @@ class MonthlyViewController: BaseViewController {
             selectedDate = vc.selectedDate
             mainView.calendar.select(selectedDate)
             isHiding = vc.isHiding
-            dismissHandler()
+            self.fetchRealm(date: selectedDate)
+            self.mainView.calendar.reloadData()
+            self.mainView.tableView.reloadData()
         }
         let navigationVC = UINavigationController(rootViewController: vc)
         self.present(navigationVC, animated: true)
