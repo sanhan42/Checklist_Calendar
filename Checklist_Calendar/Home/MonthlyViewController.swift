@@ -40,10 +40,12 @@ class MonthlyViewController: BaseViewController {
         self.fetchRealm(date: self.mainView.calendar.selectedDate ?? Date())
         self.mainView.calendar.reloadData()
         self.mainView.tableView.reloadData()
+        self.selectionFeedbackGenerator.prepare()
         if let (row, item) = self.calEditEventIndex() {
             guard let tableCell = self.mainView.tableView.cellForRow(at: [0, row]) as? MonthlyTableViewCell else { return }
             tableCell.collectionView.scrollToItem(at: [0, item], at: .centeredHorizontally, animated: true)
         }
+        self.selectionFeedbackGenerator.selectionChanged()
         self.editEvent = nil
     }
     
@@ -52,7 +54,7 @@ class MonthlyViewController: BaseViewController {
         if let item = allDayTasks.firstIndex(of: event) {
             return (0, item)
         } else {
-            var row = 0
+            var row = allDayTasks.isEmpty ? -1 : 0
             for hour in 0...event.startHour {
                 if !repository.atTimeTasksFetch(date: selectedDate, isHiding: isHiding, startHour: hour).isEmpty { row += 1 }
             }
@@ -276,9 +278,16 @@ class MonthlyViewController: BaseViewController {
                     
                     self.repository.addEvent(event: event)
                     self.fetchRealm(date: date)
-                    self.selectionFeedbackGenerator.selectionChanged()
                     self.mainView.calendar.reloadData()
                     self.mainView.tableView.reloadData()
+                    self.selectionFeedbackGenerator.prepare()
+                    self.editEvent = event
+                    if let (row, item) = self.calEditEventIndex() {
+                        guard let tableCell = self.mainView.tableView.cellForRow(at: [0, row]) as? MonthlyTableViewCell else { return }
+                        tableCell.collectionView.scrollToItem(at: [0, item], at: .centeredHorizontally, animated: true)
+                    }
+                    self.selectionFeedbackGenerator.selectionChanged()
+                    self.editEvent = nil
                 }
                 menuElement.append(template)
             }
