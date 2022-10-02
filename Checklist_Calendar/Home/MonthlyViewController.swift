@@ -13,32 +13,54 @@ import SwiftUI
 
 class MonthlyViewController: BaseViewController {
     
-    let mainView = MonthlyView()
-    let repository = EventRepository()
-    let notificationCenter = UNUserNotificationCenter.current()
+    private let mainView = MonthlyView()
+    private let repository = EventRepository()
+    private let notificationCenter = UNUserNotificationCenter.current()
     private let selectionFeedbackGenerator = UISelectionFeedbackGenerator()
     
-    var allDayTasks: Results<Event>!
-    var notAllDayTasks: Results<Event>!
-    var templateTasks: Results<Template>!
-    var notAllDayArr: [[Event]] = [] // [테이블셀 row][컬렉션뷰셀의 item]
+    private var allDayTasks: Results<Event>!
+    private var notAllDayTasks: Results<Event>!
+    private var templateTasks: Results<Template>!
+    private var notAllDayArr: [[Event]] = [] // [테이블셀 row][컬렉션뷰셀의 item]
     
-    var dayEventCount: Int {
+    private var dayEventCount: Int {
         return allDayTasks.count + notAllDayTasks.count
     }
     
     var isHiding = false
     var isFiest = true
     
-    lazy var lunarDate = calLunarDate()
+    private lazy var lunarDate = calLunarDate()
     lazy var selectedDate = mainView.calendar.selectedDate ?? Date()
     
+    var editEvent: Event?
     private var collectionViewLayout: UICollectionViewFlowLayout?
     
     lazy var dismissHandler = {
         self.fetchRealm(date: self.mainView.calendar.selectedDate ?? Date())
         self.mainView.calendar.reloadData()
         self.mainView.tableView.reloadData()
+        if let (row, item) = self.calEditEventIndex() {
+            guard let tableCell = self.mainView.tableView.cellForRow(at: [0, row]) as? MonthlyTableViewCell else { return }
+            tableCell.collectionView.scrollToItem(at: [0, item], at: .centeredHorizontally, animated: true)
+        }
+        self.editEvent = nil
+    }
+    
+    func calEditEventIndex() -> (Int, Int)? {
+        guard let event = editEvent else { return nil }
+        if let item = allDayTasks.firstIndex(of: event) {
+            return (0, item)
+        } else {
+            var row = 0
+            for hour in 0...event.startHour {
+                if !repository.atTimeTasksFetch(date: selectedDate, isHiding: isHiding, startHour: hour).isEmpty { row += 1 }
+            }
+            if let item = repository.atTimeTasksFetch(date: selectedDate, isHiding: isHiding, startHour: event.startHour).firstIndex(of: event) {
+                return (row, item)
+            }
+            return nil
+        }
     }
     
     fileprivate lazy var scopeGesture: UIPanGestureRecognizer = {
@@ -277,6 +299,7 @@ class MonthlyViewController: BaseViewController {
         let components = Calendar.current.dateComponents([.hour, .minute], from: Date())
         guard let date = Calendar.current.date(bySettingHour: components.hour!, minute: components.minute!, second: 0, of: selectedDate) else { return }
         vc.writeDate = date
+        vc.monthlyViewController = self // TODO: 나중에 다른 방식으로 교체 필요
         let navi = UINavigationController(rootViewController: vc)
         vc.afterDissmiss = dismissHandler
         self.present(navi, animated: true)
@@ -459,6 +482,7 @@ extension MonthlyViewController: UICollectionViewDelegate, UICollectionViewDataS
         let vc = WriteViewController()
         vc.realmEvent = event
         vc.afterDissmiss = dismissHandler
+        vc.monthlyViewController = self
         let navi = UINavigationController(rootViewController: vc)
         present(navi , animated: true)
     }

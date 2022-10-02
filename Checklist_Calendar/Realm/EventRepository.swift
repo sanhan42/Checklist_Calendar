@@ -15,6 +15,7 @@ protocol EventRepositoryType {
     func dayTasksFetch(date: Date) -> Results<Event>
     func allDayTasksFetch(date: Date, isHiding: Bool) -> Results<Event>
     func notAllDayTasksFetch(date: Date, isHiding: Bool) -> Results<Event>
+    func atTimeTasksFetch(date: Date, isHiding: Bool, startHour: Int) -> Results<Event>
     
     func updateEvent(old: Event, new: Event)
     func deleteEvent(event: Event)
@@ -80,6 +81,22 @@ class EventRepository: EventRepositoryType {
             return todayEventTasks.sorted(byKeyPath: "endTime", ascending: true).sorted(byKeyPath: "startTime", ascending: true).where {
                 ($0.startTime <= todayStart && $0.endTime < todayEnd) || ($0.startTime > todayStart && $0.startTime < todayEnd)
             }
+        }
+    }
+    
+    func atTimeTasksFetch(date: Date, isHiding: Bool, startHour: Int) -> Results<Event> {
+        let todayStart = date.calMidnight()
+        let todayEnd = date.calNextMidnight()
+        let todayEventTasks = dayTasksFetch(date: date)
+        let date = Calendar.current.date(byAdding: .minute, value: -1, to: Date()) ?? Date()
+        if isHiding {
+            return todayEventTasks.sorted(byKeyPath: "endTime", ascending: true).sorted(byKeyPath: "startTime", ascending: true).where {
+                $0.endTime > date && (($0.startTime <= todayStart && $0.endTime < todayEnd) || ($0.startTime > todayStart && $0.startTime < todayEnd))
+            }.where { $0.startHour == startHour }
+        } else {
+            return todayEventTasks.sorted(byKeyPath: "endTime", ascending: true).sorted(byKeyPath: "startTime", ascending: true).where {
+                ($0.startTime <= todayStart && $0.endTime < todayEnd) || ($0.startTime > todayStart && $0.startTime < todayEnd)
+            }.where { $0.startHour == startHour }
         }
     }
     

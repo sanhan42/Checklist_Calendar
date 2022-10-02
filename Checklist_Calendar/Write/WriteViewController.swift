@@ -19,6 +19,7 @@ class WriteViewController: BaseViewController {
     
     var realmEvent: Event?
     var realmTemplate: Template?
+    var monthlyViewController: MonthlyViewController?
     var isTemplatePage = false
     private var hasChanges = false { // View의 변화를 감지하기 위한 변수
         didSet {
@@ -366,6 +367,9 @@ extension WriteViewController {
             }
             DispatchQueue.main.async {
                 self.realmEvent == nil ? self.repository.addEvent(event: self.event) : self.repository.updateEvent(old: self.realmEvent!, new: self.event)
+                if let vc = self.monthlyViewController {
+                    vc.editEvent = self.event
+                }
             }
         }
         
@@ -381,6 +385,7 @@ extension WriteViewController {
                 self.noPermissions = false
                 return
             }
+            
             self.afterDissmiss?()
             self.dismiss(animated: true)
         }
