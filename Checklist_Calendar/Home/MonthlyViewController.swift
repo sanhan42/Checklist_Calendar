@@ -329,7 +329,8 @@ class MonthlyViewController: BaseViewController {
         vc.selectedDate = date
         vc.isHiding = isHiding
         vc.afterDissmiss = { [self] in
-            mainView.calendar.select(vc.selectedDate)
+            selectedDate = vc.selectedDate
+            mainView.calendar.select(selectedDate)
             isHiding = vc.isHiding
             dismissHandler()
         }
