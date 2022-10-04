@@ -61,7 +61,7 @@ class WriteViewController: BaseViewController {
     }
     
     private func setNavigationBar() {
-        let name = isTemplatePage ? "템플릿" : "이벤트"
+        let name = isTemplatePage ? "템플릿" : "일정"
         let tasks = isTemplatePage ? realmTemplate : realmEvent
         title = tasks == nil ? "새로운 " + name : name + " 세부사항"
         navigationController?.navigationBar.backgroundColor = .tableBgColor
@@ -79,10 +79,10 @@ class WriteViewController: BaseViewController {
     private func setToolbar() {
         navigationController?.isToolbarHidden = realmEvent == nil
         let btn = UIButton()
-        let name = isTemplatePage ? "템플릿" : "이벤트"
+        let name = isTemplatePage ? "템플릿" : "일정"
         btn.setTitle(name + " 삭제", for: .normal)
         btn.setTitleColor(.red, for: .normal)
-        btn.titleLabel?.font = .systemFont(ofSize: 16.5, weight: .bold)
+        btn.titleLabel?.font = .systemFont(ofSize: 16.4, weight: .regular)
         btn.layer.cornerRadius = 4
         btn.backgroundColor = .clear
         btn.addTarget(self, action: #selector(deleteEventBtnClicked), for: .touchUpInside)
@@ -299,8 +299,8 @@ extension WriteViewController: UITableViewDelegate, UITableViewDataSource {
 
 extension WriteViewController {
     @objc func deleteEventBtnClicked() {
-        let deleteAlert = UIAlertController(title: nil, message: "이 이벤트를 삭제하겠습니까?", preferredStyle: .actionSheet)
-        let ok = UIAlertAction(title: "이벤트 삭제", style: .destructive) { _ in
+        let deleteAlert = UIAlertController(title: nil, message: "이 일정을 삭제하겠습니까?", preferredStyle: .actionSheet)
+        let ok = UIAlertAction(title: "일정 삭제", style: .destructive) { _ in
             self.repository.deleteEvent(event: self.realmEvent!)
             self.afterDissmiss?()
             self.dismiss(animated: true)
@@ -335,7 +335,7 @@ extension WriteViewController {
             view.makeToast("제목을 입력해주세요", duration: 0.8, position: .center)
             return
         } else if (event.startTime >= event.endTime) || (event.isAllDay && (event.startDate > event.endDate)) {
-            view.makeToast("이벤트의 시작이 종료보다 먼저 이뤄져야합니다.", duration: 1, position: .center)
+            view.makeToast("일정 종료 시간은 시작 시간 이후여야 합니다.", duration: 1, position: .center)
             return
         }
         
@@ -358,7 +358,7 @@ extension WriteViewController {
                     
                     let content = UNMutableNotificationContent()
                     content.title = self.event.title
-                    content.subtitle = self.event.notiOption == 1 ? "이벤트 시작 시간입니다!" : "이벤트 시작 " + self.event.getOptionName() + " 입니다."
+                    content.subtitle = self.event.notiOption == 1 ? "일정 시작 시간입니다!" : "일정 시작 " + self.event.getOptionName() + " 입니다."
                     let dateComponents = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: self.event.getNotiDate())
                     let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
                     let request = UNNotificationRequest(identifier: "\(self.event.id)", content: content, trigger: trigger)

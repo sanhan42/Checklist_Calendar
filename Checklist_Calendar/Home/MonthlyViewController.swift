@@ -92,6 +92,7 @@ class MonthlyViewController: BaseViewController {
         configure()
         fetchRealm(date: mainView.calendar.selectedDate ?? Date())
         setToolbar()
+        mainView.calendar.select(Date())
     }
     
     override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -179,9 +180,9 @@ class MonthlyViewController: BaseViewController {
         self.navigationController?.toolbar.backgroundColor = .bgColor
         
         let btn = UIButton()
-        btn.setTitle("＋ 새로운 이벤트 추가 ", for: .normal)
+        btn.setTitle("＋ 일정 추가 ", for: .normal)
         btn.setTitleColor(.textColor.withAlphaComponent(0.9), for: .normal)
-        btn.titleLabel?.font = .systemFont(ofSize: 18, weight: .bold)
+        btn.titleLabel?.font = .systemFont(ofSize: 17.5, weight: .semibold)
         btn.layer.cornerRadius = 4
         btn.backgroundColor = .bgColor.withAlphaComponent(0.5)
         btn.layer.borderColor = UIColor.clear.cgColor
@@ -267,7 +268,7 @@ class MonthlyViewController: BaseViewController {
                             DispatchQueue.main.async {
                                 let content = UNMutableNotificationContent()
                                 content.title = event.title
-                                content.subtitle = event.notiOption == 1 ? "이벤트 시작 시간입니다!" : "이벤트 시작 " + event.getOptionName() + " 입니다."
+                                content.subtitle = event.notiOption == 1 ? "일정 시작 시간입니다!" : "일정 시작 " + event.getOptionName() + " 입니다."
                                 let dateComponents = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: event.getNotiDate())
                                 let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
                                 let request = UNNotificationRequest(identifier: "\(event.id)", content: content, trigger: trigger)
@@ -366,14 +367,13 @@ extension MonthlyViewController: FSCalendarDataSource, FSCalendarDelegate {
     
     func calendar(_ calendar: FSCalendar, boundingRectWillChange bounds: CGRect, animated: Bool) {
         mainView.calendar.snp.remakeConstraints { make in
-            make.top.equalTo(mainView.calHeaderView.snp.bottom)
+            make.top.equalTo(mainView.calHeaderView.snp.bottom).offset(8)
             make.horizontalEdges.equalTo(view.safeAreaLayoutGuide)
             make.height.equalTo(bounds.height)
         }
         
         UIView.animate(withDuration: 0.5) {
             self.view.layoutIfNeeded()
-            // TODO: layoutIfNeeded 메서드 검색
         }
     }
     
@@ -387,6 +387,12 @@ extension MonthlyViewController: FSCalendarDataSource, FSCalendarDelegate {
     func calendar(_ calendar: FSCalendar, numberOfEventsFor date: Date) -> Int {
         return repository.dayTasksFetch(date: date).isEmpty ? 0 : 1
     }
+    
+    // Event 표시 Dot 사이즈 조정
+    func calendar(_ calendar: FSCalendar, willDisplay cell: FSCalendarCell, for date: Date, at monthPosition: FSCalendarMonthPosition) {
+        let eventScaleFactor: CGFloat = 0.64
+        cell.eventIndicator.transform = CGAffineTransform(scaleX: eventScaleFactor, y: eventScaleFactor)
+    }    
 }
 
 extension MonthlyViewController: UITableViewDelegate, UITableViewDataSource {
@@ -394,7 +400,7 @@ extension MonthlyViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header = MonthlyTableViewHeaderView()
         header.titleLabel.text = lunarDate
-        header.subtitleLabel.text = "(총 이벤트 수 : \(repository.dayTasksFetch(date: selectedDate).count))"
+        header.subtitleLabel.text = "(총 일정 : \(repository.dayTasksFetch(date: selectedDate).count)개)"
         header.hideBtn.addTarget(self, action: #selector(hideBtnClicked(_:)), for: .touchUpInside)
         let title = isHiding ? "모든 일정 보기" : "지난 일정 숨기기"
         header.hideBtn.setTitle(title, for: .normal)
@@ -419,7 +425,7 @@ extension MonthlyViewController: UITableViewDelegate, UITableViewDataSource {
         if dayEventCount == 0 {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: EmptyCell.reuseIdentifier, for: indexPath) as? EmptyCell else { return UITableViewCell() }
             cell.selectionStyle = .none
-            cell.label.text = "이벤트를 추가해보세요 :)"
+            cell.label.text = "일정을 추가해보세요 :)"
             return cell
         }
         guard let cell = tableView.dequeueReusableCell(withIdentifier: MonthlyTableViewCell.reuseIdentifier, for: indexPath) as? MonthlyTableViewCell else { return UITableViewCell() }

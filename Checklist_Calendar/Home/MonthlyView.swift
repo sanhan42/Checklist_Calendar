@@ -15,8 +15,10 @@ class MonthlyView: BaseView {
     private lazy var prevButton: UIButton = {
         let view = UIButton()
         view.setTitle(nil, for: .normal)
-        view.setImage(UIImage(named: "icon_prev")?.withTintColor(.textColor), for: .normal)
+        view.setImage(UIImage(systemName: "chevron.compact.left"), for: .normal)
+        view.tintColor = .textColor
         view.addTarget(self, action: #selector(prevBtnClicked), for: .touchUpInside)
+        view.imageEdgeInsets = .init(top: 5, left: 0, bottom: 6.5, right: -8)
         return view
     }()
     
@@ -24,15 +26,17 @@ class MonthlyView: BaseView {
         let view = UIButton()
         view.setTitle(self.calendar.currentPage.toString(format: "yyyy년 MM월"), for: .normal)
         view.setTitleColor(.textColor, for: .normal)
-        view.titleLabel?.font = .systemFont(ofSize: 18)
+        view.titleLabel?.font = .systemFont(ofSize: 15.8)
         return view
     }()
     
     private lazy var nextButton: UIButton = {
        let view = UIButton()
         view.setTitle(nil, for: .normal)
-        view.setImage(UIImage(named: "icon_next")?.withTintColor(.textColor), for: .normal)
+        view.setImage(UIImage(systemName: "chevron.compact.right"), for: .normal)
+        view.tintColor = .textColor
         view.addTarget(self, action: #selector(nextBtnClicked), for: .touchUpInside)
+        view.imageEdgeInsets = .init(top: 5, left:  -8, bottom: 6.5, right: 0)
         return view
     }()
   
@@ -52,16 +56,16 @@ class MonthlyView: BaseView {
         btn.translatesAutoresizingMaskIntoConstraints = false
         btn.setTitleColor(.textColor, for: .normal)
         btn.imageView?.contentMode = .scaleAspectFit
-        btn.titleLabel?.font = .boldSystemFont(ofSize: 14)
+        btn.titleLabel?.font = .boldSystemFont(ofSize: 13)
         btn.contentHorizontalAlignment = .center
         btn.semanticContentAttribute = .forceRightToLeft //<- 중요
-        btn.imageEdgeInsets = .init(top: 10, left: 15, bottom: 15, right: 15) //<- 중요
+        btn.imageEdgeInsets = .init(top: 15, left: 15.5, bottom: 16, right: 15.5) //<- 중요
         return btn
     }()
     
     let tableView: UITableView = {
         let view = UITableView(frame: .null, style: .grouped)
-        view.backgroundColor = .tableBgColor//.GrayColor // TODO: 임시 색상 => 수정 필요
+        view.backgroundColor = .tableBgColor
         view.separatorColor = .clear
         return view
     }()
@@ -84,39 +88,43 @@ class MonthlyView: BaseView {
     override func setConstraints() {
         
         prevButton.snp.makeConstraints { make in
-            make.width.equalTo(18)
+            make.width.equalTo(22)
+            make.height.equalTo(25)
+            make.centerY.equalToSuperview()
         }
         
         nextButton.snp.makeConstraints { make in
-            make.width.equalTo(18)
+            make.width.equalTo(22)
+            make.height.equalTo(25)
+            make.centerY.equalToSuperview()
         }
         
         titleButton.snp.makeConstraints { make in
-            make.width.equalTo(100)
+            make.width.equalTo(90)
         }
         
         calHeaderView.snp.makeConstraints { make in
-            make.topMargin.equalTo(12)
-            make.width.equalTo(150)
-            make.height.equalTo(48)
-            make.leading.equalTo(self.safeAreaLayoutGuide).inset(10)
+            make.topMargin.equalTo(6)
+            make.width.equalTo(134)
+            make.height.equalTo(38)
+            make.leading.equalTo(self.safeAreaLayoutGuide).inset(2)
         }
         
         todayBtn.snp.makeConstraints { make in
             make.width.equalTo(60)
             make.height.equalTo(48)
-            make.trailing.equalTo(self.safeAreaLayoutGuide)
+            make.trailing.equalTo(self.safeAreaLayoutGuide).inset(4.5)
             make.centerY.equalTo(calHeaderView)
         }
         
         calendar.snp.makeConstraints { make in
-            make.top.equalTo(calHeaderView.snp.bottom)
+            make.top.equalTo(calHeaderView.snp.bottom).offset(10)
             make.horizontalEdges.equalToSuperview()//(self.safeAreaLayoutGuide)
             
             if UIDevice.current.model.hasPrefix("iPad") {
-                make.height.equalTo(340)
+                make.height.equalTo(350)
             } else {
-                make.height.equalTo(240)
+                make.height.equalTo(282)
             }
         }
         
@@ -157,17 +165,18 @@ class MonthlyView: BaseView {
         calendar.calendarWeekdayView.weekdayLabels[6].text = "토"
        
         // 월 ~ 일 요일 글자색 변경
-        calendar.appearance.weekdayTextColor = .textColor //.black.withAlphaComponent(0.66)
+        calendar.appearance.weekdayTextColor = .textColor.withAlphaComponent(0.8) //.black.withAlphaComponent(0.66)
+        calendar.appearance.weekdayFont = .systemFont(ofSize: 10.6)
         
         // 토,일 날짜 색상
-        calendar.appearance.titleWeekendColor = .systemRed.withAlphaComponent(0.7)
+//        calendar.appearance.titleWeekendColor = .systemRed.withAlphaComponent(0.7)
            
         // 기본 날짜 색상
         calendar.appearance.titleDefaultColor = .textColor
         calendar.appearance.titleSelectionColor = .selectTextColor
         
         // 숫자들 글자 폰트 사이즈 지정
-        calendar.appearance.titleFont = .systemFont(ofSize: 16)
+        calendar.appearance.titleFont = .systemFont(ofSize: 13.2)
         
         // 캘린더 스크롤 가능하게 지정
         calendar.scrollEnabled = true
@@ -177,8 +186,7 @@ class MonthlyView: BaseView {
         calendar.headerHeight = 0 // 헤더 높이 조정
         calendar.calendarHeaderView.isHidden = true // 헤더 숨기기
         
-        // 캘린더의 cornerRadius 지정
-        calendar.layer.cornerRadius = 16
+        calendar.appearance.calendar.rowHeight = 15
         
         // 양옆 년도, 월 지우기
         calendar.appearance.headerMinimumDissolvedAlpha = 0.0
@@ -190,16 +198,18 @@ class MonthlyView: BaseView {
         
         // Today
 //        calendar.appearance.titleTodayColor //Today에 표시되는 특정 글자색
-        calendar.appearance.todayColor = .systemRed.withAlphaComponent(0.9) // Today에 표시되는 동그라미색
+        calendar.appearance.todayColor = .clear //.systemRed.withAlphaComponent(0.9) // Today에 표시되는 동그라미색
         calendar.appearance.todaySelectionColor = .systemRed.withAlphaComponent(0.9)
-        calendar.appearance.titleTodayColor = .bgColor
+        calendar.appearance.titleTodayColor = .systemRed.withAlphaComponent(0.9)//.bgColor
        
         calendar.appearance.selectionColor = .selectColor
        
-        calendar.appearance.eventDefaultColor = .textColor.withAlphaComponent(0.85)
-        calendar.appearance.eventSelectionColor = .textColor.withAlphaComponent(0.85)
+        calendar.appearance.eventDefaultColor = .textColor.withAlphaComponent(0.4)
+        calendar.appearance.eventSelectionColor = .bgColor//.textColor.withAlphaComponent(0.85)
         
-        
+        calendar.appearance.borderRadius = 0.9 // 1이면 원, 0이면 사각형
+        calendar.appearance.eventOffset = CGPoint.init(x: 0, y: -9.5)
+//        calendar.appearance.eventOffset = CGPoint.init(x: 7, y: -26)
         calendar.translatesAutoresizingMaskIntoConstraints = false
     }
     

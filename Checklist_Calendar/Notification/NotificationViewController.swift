@@ -63,6 +63,7 @@ extension NotificationViewController: UITableViewDelegate, UITableViewDataSource
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .default, reuseIdentifier: "cell")
+        cell.backgroundColor = .bgColor
         cell.imageView?.image = (indexPath.section + indexPath.row) != selectedRow ? UIImage(systemName: "square") : UIImage(systemName: "checkmark.square")
         cell.imageView?.tintColor = .textColor
         cell.selectionStyle = .none

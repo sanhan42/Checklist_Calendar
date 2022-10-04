@@ -77,6 +77,7 @@ extension SettingViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .default, reuseIdentifier: "cell")
+        cell.backgroundColor = .bgColor
         cell.imageView?.tintColor = .textColor
         cell.selectionStyle = .none
         var text: String
@@ -235,6 +236,7 @@ extension SettingViewController {
     
     private func showOpenSourceList() {
         let viewController = AcknowListViewController()
+        viewController.title = "오픈 소스"
         viewController.headerText = "사용한 오픈소스 라이브러리 목록"
         viewController.tableView.backgroundColor = .tableBgColor
         navigationController?.navigationBar.tintColor = .textColor

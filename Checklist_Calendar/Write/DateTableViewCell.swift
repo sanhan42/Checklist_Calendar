@@ -18,7 +18,7 @@ class DateTableViewCell: BaseTableViewCell {
         let label = UILabel()
         label.text = "하루 종일"
         label.textColor = .textColor
-        label.font = .systemFont(ofSize: 17.6, weight: .bold)
+        label.font = .systemFont(ofSize: 15, weight: .bold)
         return label
     }()
     
@@ -39,7 +39,7 @@ class DateTableViewCell: BaseTableViewCell {
         let btn = UIButton()
         btn.setTitle("22/09/17 (토)", for: .normal) // TODO: 임시값
         btn.setTitleColor(UIColor.textColor, for: .normal)
-        btn.titleLabel?.font = .systemFont(ofSize: 16, weight: .bold)
+        btn.titleLabel?.font = .systemFont(ofSize: 14.5, weight: .bold)
         return btn
     }()
     
@@ -47,7 +47,7 @@ class DateTableViewCell: BaseTableViewCell {
         let btn = UIButton()
         btn.setTitle("22/09/17 (토)", for: .normal) // TODO: 임시값
         btn.setTitleColor(UIColor.textColor, for: .normal)
-        btn.titleLabel?.font = .systemFont(ofSize: 16, weight: .bold)
+        btn.titleLabel?.font = .systemFont(ofSize: 14.5, weight: .bold)
         return btn
     }()
     
@@ -55,7 +55,7 @@ class DateTableViewCell: BaseTableViewCell {
         let btn = UIButton()
         btn.setTitle("오전 09:00", for: .normal) // TODO: 임시값
         btn.setTitleColor(UIColor.textColor, for: .normal)
-        btn.titleLabel?.font = .systemFont(ofSize: 16, weight: .bold)
+        btn.titleLabel?.font = .systemFont(ofSize: 14, weight: .bold)
         return btn
     }()
     
@@ -63,7 +63,7 @@ class DateTableViewCell: BaseTableViewCell {
         let btn = UIButton()
         btn.setTitle("오전 10:00", for: .normal) // TODO: 임시값
         btn.setTitleColor(UIColor.textColor, for: .normal)
-        btn.titleLabel?.font = .systemFont(ofSize: 16, weight: .bold)
+        btn.titleLabel?.font = .systemFont(ofSize: 14, weight: .bold)
         return btn
     }()
     
@@ -93,7 +93,7 @@ class DateTableViewCell: BaseTableViewCell {
     
     let separatorView: UIView = {
         let view = UIView()
-        view.backgroundColor = .grayColor.withAlphaComponent(0.8)
+        view.backgroundColor = .grayColor.withAlphaComponent(0.5)
         return view
     }()
     
@@ -140,13 +140,13 @@ class DateTableViewCell: BaseTableViewCell {
         }
         
         dateView.snp.makeConstraints { make in
-            make.horizontalEdges.equalToSuperview().inset(10)
+            make.horizontalEdges.equalToSuperview().inset(6)
             make.top.equalTo(titleView.snp.bottom).inset(-6)
             make.height.equalTo(height)
         }
         
         timeView.snp.makeConstraints { make in
-            make.horizontalEdges.equalToSuperview().inset(10)
+            make.horizontalEdges.equalToSuperview().inset(6)
             make.top.equalTo(dateView.snp.bottom)
             make.height.equalTo(30)
 //            make.width.equalToSuperview().inset(40)
@@ -194,7 +194,7 @@ class DateTableViewCell: BaseTableViewCell {
         separatorView.snp.makeConstraints { make in
             make.height.equalTo(1)
             make.bottom.equalToSuperview()
-            make.leading.trailing.equalToSuperview().inset(6)
+            make.leading.trailing.equalToSuperview().inset(6.5)
         }
     }
 }

@@ -13,7 +13,7 @@ class TitleTableViewCell: BaseTableViewCell {
         tf.textColor = .textColor
         tf.placeholder = "제목"
         tf.adjustsFontSizeToFitWidth = true
-        tf.font = .systemFont(ofSize: 18, weight: .black)
+        tf.font = .systemFont(ofSize: 16, weight: .bold)
         tf.textAlignment = .left
         return tf
     }()
@@ -35,7 +35,7 @@ class TitleTableViewCell: BaseTableViewCell {
     
     let separatorView: UIView = {
         let view = UIView()
-        view.backgroundColor = .grayColor.withAlphaComponent(0.8)
+        view.backgroundColor = .grayColor.withAlphaComponent(0.5)
         return view
     }()
     
@@ -77,7 +77,7 @@ class TitleTableViewCell: BaseTableViewCell {
         separatorView.snp.makeConstraints { make in
             make.height.equalTo(1)
             make.bottom.equalToSuperview()
-            make.leading.trailing.equalToSuperview().inset(6)
+            make.leading.trailing.equalToSuperview().inset(6.5)
         }
     }
 }

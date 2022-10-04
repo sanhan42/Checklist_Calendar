@@ -19,7 +19,7 @@ class NotiTableViewCell: BaseTableViewCell {
         let label = UILabel()
         label.text = "알림"
         label.textColor = .textColor
-        label.font = .systemFont(ofSize: 17.6, weight: .bold)
+        label.font = .systemFont(ofSize: 15, weight: .bold)
         label.textAlignment = .left
         return label
     }()
@@ -28,7 +28,7 @@ class NotiTableViewCell: BaseTableViewCell {
         let label = UILabel()
         label.text = "없음"
         label.textColor = .placeholderText
-        label.font = .systemFont(ofSize: 17.8, weight: .semibold)
+        label.font = .systemFont(ofSize: 15.5, weight: .semibold)
         label.textAlignment = .left
         return label
     }()
@@ -41,7 +41,7 @@ class NotiTableViewCell: BaseTableViewCell {
    
     let separatorView: UIView = {
         let view = UIView()
-        view.backgroundColor = .grayColor.withAlphaComponent(0.8)
+        view.backgroundColor = .grayColor.withAlphaComponent(0.5)
         return view
     }()
     
@@ -64,13 +64,13 @@ class NotiTableViewCell: BaseTableViewCell {
     
     override func setConstraints() {
         bellImgView.snp.makeConstraints { make in
-            make.leading.equalToSuperview().inset(21)
+            make.leading.equalToSuperview().inset(22)
             make.centerY.equalToSuperview()
             make.width.height.equalTo(24)
         }
         
         label.snp.makeConstraints { make in
-            make.leading.equalTo(bellImgView.snp.trailing).offset(16)
+            make.leading.equalTo(bellImgView.snp.trailing).offset(15.8)
             make.centerY.equalToSuperview()
         }
         
@@ -89,7 +89,7 @@ class NotiTableViewCell: BaseTableViewCell {
         separatorView.snp.makeConstraints { make in
             make.height.equalTo(1)
             make.bottom.equalToSuperview()
-            make.leading.trailing.equalToSuperview().inset(6)
+            make.leading.trailing.equalToSuperview().inset(6.5)
         }
     }
 }

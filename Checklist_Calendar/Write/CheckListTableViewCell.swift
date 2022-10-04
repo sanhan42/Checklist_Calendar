@@ -19,6 +19,7 @@ class CheckListTableViewCell: BaseTableViewCell {
     let textField: UITextField = {
         let tf = UITextField()
         tf.placeholder = "새로운 할 일 추가"
+        tf.font = .systemFont(ofSize: 14.2)
         tf.textColor = .textColor
         return tf
     }()
