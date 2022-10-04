@@ -168,7 +168,7 @@ class EventRepository: EventRepositoryType {
     }
     
     func templateTasksFetch() -> Results<Template> {
-        return localRealm.objects(Template.self).sorted(byKeyPath: "startHour", ascending: false)
+        return localRealm.objects(Template.self).sorted(byKeyPath: "startHour", ascending: true)
     }
     
     func addTemplate(template: Template) {

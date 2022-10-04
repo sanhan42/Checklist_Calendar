@@ -237,7 +237,7 @@ class MonthlyViewController: BaseViewController {
         }
         var menuElement = [edit]
         if templateTasks != nil {
-            for task in templateTasks {
+            for task in templateTasks.reversed() {
                 let img = UIImage(systemName: "plus.circle")
                 let template = UIAction(title: task.title, image: img?.imageWithColor(color: UIColor(hexAlpha: task.color))) { _ in
                     var components = Calendar.current.dateComponents([.hour, .minute], from: task.startTime)

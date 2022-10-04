@@ -113,7 +113,7 @@ extension TemplateListViewController: UITableViewDelegate, UITableViewDataSource
         vc.realmTemplate = templateTasks[indexPath.row]
         vc.isTemplatePage = true
         vc.afterDissmiss = {
-            self.tableView.reloadRows(at: [[0, indexPath.row]], with: .automatic)
+            self.tableView.reloadData()
         }
         let navi = UINavigationController(rootViewController: vc)
         self.present(navi, animated: true)
