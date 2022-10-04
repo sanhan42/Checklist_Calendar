@@ -197,19 +197,17 @@ class MonthlyView: BaseView {
         calendar.placeholderType = .fillHeadTail
         
         // Today
-//        calendar.appearance.titleTodayColor //Today에 표시되는 특정 글자색
-        calendar.appearance.todayColor = .clear //.systemRed.withAlphaComponent(0.9) // Today에 표시되는 동그라미색
+        calendar.appearance.todayColor = .clear  // Today에 표시되는 동그라미색
         calendar.appearance.todaySelectionColor = .systemRed.withAlphaComponent(0.9)
-        calendar.appearance.titleTodayColor = .systemRed.withAlphaComponent(0.9)//.bgColor
+        calendar.appearance.titleTodayColor = .systemRed.withAlphaComponent(0.9)
        
         calendar.appearance.selectionColor = .selectColor
        
         calendar.appearance.eventDefaultColor = .textColor.withAlphaComponent(0.4)
-        calendar.appearance.eventSelectionColor = .bgColor//.textColor.withAlphaComponent(0.85)
+        calendar.appearance.eventSelectionColor = .bgColor
         
         calendar.appearance.borderRadius = 0.9 // 1이면 원, 0이면 사각형
         calendar.appearance.eventOffset = CGPoint.init(x: 0, y: -9.5)
-//        calendar.appearance.eventOffset = CGPoint.init(x: 7, y: -26)
         calendar.translatesAutoresizingMaskIntoConstraints = false
     }
     

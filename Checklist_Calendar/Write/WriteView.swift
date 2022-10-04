@@ -10,7 +10,7 @@ import UIKit
 class WriteView: BaseView {
     let tableView: UITableView = {
         let view = UITableView(frame: .null, style: .insetGrouped)
-        view.backgroundColor = .tableBgColor //.bgColor // TODO: 임시 색상 => 수정 필요
+        view.backgroundColor = .tableBgColor
         view.separatorStyle = .none
         view.tag = 0
         view.isScrollEnabled = false
