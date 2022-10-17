@@ -195,7 +195,6 @@ class MonthlyViewController: BaseViewController {
         let templateBtn = setTemplateBtn()
         let space = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         let settingBtn = setSettingBtn()
-//        UIBarButtonItem(image: UIImage(systemName: "gearshape"), style: .plain, target: self, action: #selector(settingBtnClicked))
         settingBtn.tintColor = .textColor.withAlphaComponent(0.8)
       
         toolbarItems = [settingBtn, space, addNewEventBtn, space, templateBtn]
