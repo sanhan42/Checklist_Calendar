@@ -36,7 +36,6 @@ class WriteViewController: BaseViewController {
     }
     
     var todoTableViewCell: TodoTableViewCell?
-    var checkListTableViewCell : CheckListTableViewCell?
     
     var afterDissmiss: (() -> ())?
     
@@ -339,6 +338,14 @@ extension WriteViewController {
             return
         }
         
+        let index: IndexPath = !event.todos.isEmpty ?  [1, 0] : [0, 0]
+        if let addTodoCell = todoTableViewCell?.checkListTableView.cellForRow(at: index) as? CheckListTableViewCell {
+            let content = addTodoCell.textField.text == nil ? "" : addTodoCell.textField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
+            if !content.isEmpty {
+                event.todos.append(Todo(title: content))
+            }
+        }
+        
         if isTemplatePage {
             let newTemplate = Template(title: event.title, color: event.color, startTime: event.startTime, endTime: event.endTime, isAllDay: event.isAllDay, notiOption: event.notiOption)
             for todo in event.todos {
@@ -389,10 +396,6 @@ extension WriteViewController {
             self.afterDissmiss?()
             self.dismiss(animated: true)
         }
-    }
-   
-    private func setNotification() {
-        
     }
     
     @objc func colorWellChanged(_ sender: UIColorWell) {
