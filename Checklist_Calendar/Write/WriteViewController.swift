@@ -220,9 +220,9 @@ extension WriteViewController: UITableViewDelegate, UITableViewDataSource {
                 cell.endDateBtn.addTarget(self, action: #selector(setEndDate), for: .touchUpInside)
                 cell.startTimeBtn.addTarget(self, action: #selector(setStartTime), for: .touchUpInside)
                 cell.endTimeBtn.addTarget(self, action: #selector(setEndTime), for: .touchUpInside)
-                cell.startDateBtn.setTitle(event.startTime.toString(format: "yy/MM/dd (E)"), for: .normal)
+                cell.startDateBtn.setTitle(event.startTime.toString(format: "yyyy/MM/dd (E)"), for: .normal)
                 let endDate = event.isAllDay ? Calendar.current.date(byAdding: .second , value: -1, to: event.endTime)! : event.endTime
-                cell.endDateBtn.setTitle(endDate.toString(format: "yy/MM/dd (E)"), for: .normal)
+                cell.endDateBtn.setTitle(endDate.toString(format: "yyyy/MM/dd (E)"), for: .normal)
                 cell.startTimeBtn.setTitle(event.startTime.toString(format: "a hh:mm"), for: .normal)
                 cell.endTimeBtn.setTitle(event.endTime.toString(format: "a hh:mm"), for: .normal)
                 return cell
