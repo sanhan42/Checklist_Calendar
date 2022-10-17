@@ -95,7 +95,7 @@ class MonthlyCollectionViewCell: BaseCollectionViewCell {
         fullDateLabel.snp.makeConstraints { make in
             make.leading.equalTo(lineView.snp.trailing).offset(12)
             make.trailing.equalToSuperview().inset(8)
-            make.top.equalTo(titleLabel.snp.bottom).offset(4)
+            make.top.equalTo(titleLabel.snp.bottom).offset(2)
             make.bottom.equalToSuperview().inset(6)
         }
     }

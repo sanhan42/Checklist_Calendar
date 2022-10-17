@@ -18,14 +18,14 @@ class DateTableViewCell: BaseTableViewCell {
         let label = UILabel()
         label.text = "하루 종일"
         label.textColor = .textColor
-        label.font = .systemFont(ofSize: 15, weight: .bold)
+        label.font = .systemFont(ofSize: 15.4, weight: .bold)
         return label
     }()
     
     let allDaySwitch: UISwitch = {
-        let btn = UISwitch(frame: CGRect(x: 0, y: 0, width: 250, height: 28))
+        let btn = UISwitch(frame: CGRect(x: 0, y: 0, width: 240, height: 25))
         btn.transform = CGAffineTransform(scaleX: 0.75, y: 0.8)
-        btn.onTintColor = .redColor.withAlphaComponent(0.9)
+        btn.onTintColor = .redColor.withAlphaComponent(0.86)
         return btn
     }()
     
@@ -122,7 +122,7 @@ class DateTableViewCell: BaseTableViewCell {
         }
         
         clockImageView.snp.makeConstraints { make in
-            make.width.height.equalTo(26)
+            make.width.height.equalTo(24)
             make.bottom.equalToSuperview().inset(-4)
             make.leading.equalToSuperview().inset(20)
         }
@@ -131,12 +131,12 @@ class DateTableViewCell: BaseTableViewCell {
             make.height.equalToSuperview()
             make.width.equalTo(100)
             make.top.equalToSuperview()
-            make.leading.equalTo(clockImageView.snp.trailing).offset(12)
+            make.leading.equalTo(clockImageView.snp.trailing).offset(14)
         }
         
         allDaySwitch.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
-            make.trailing.equalToSuperview().inset(20)
+            make.trailing.equalToSuperview().inset(14)
         }
         
         dateView.snp.makeConstraints { make in

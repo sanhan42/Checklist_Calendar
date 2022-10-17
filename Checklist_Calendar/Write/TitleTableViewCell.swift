@@ -13,7 +13,7 @@ class TitleTableViewCell: BaseTableViewCell {
         tf.textColor = .textColor
         tf.placeholder = "제목"
         tf.adjustsFontSizeToFitWidth = true
-        tf.font = .systemFont(ofSize: 16, weight: .bold)
+        tf.font = .systemFont(ofSize: 16.4, weight: .bold)
         tf.textAlignment = .left
         return tf
     }()

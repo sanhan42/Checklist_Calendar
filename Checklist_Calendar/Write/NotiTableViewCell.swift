@@ -66,11 +66,11 @@ class NotiTableViewCell: BaseTableViewCell {
         bellImgView.snp.makeConstraints { make in
             make.leading.equalToSuperview().inset(22)
             make.centerY.equalToSuperview()
-            make.width.height.equalTo(24)
+            make.width.height.equalTo(23)
         }
         
         label.snp.makeConstraints { make in
-            make.leading.equalTo(bellImgView.snp.trailing).offset(15.8)
+            make.leading.equalTo(bellImgView.snp.trailing).offset(15)
             make.centerY.equalToSuperview()
         }
         
