@@ -16,10 +16,17 @@ class BaseViewController: UIViewController {
         dp.maximumDate = "2099.12.31 오후 11:59:59".toDate(format: "yyyy.MM.dd a hh:mm:ss")
         dp.minimumDate = "1970.01.01 오전 00:00:00".toDate(format: "yyyy.MM.dd a hh:mm:ss")
         
-        dp.locale = NSLocale(localeIdentifier: "ko_KR") as Locale // 영어에서 한글로 바꿔줌.
-//        dp.locale = NSLocale.current
+        dp.locale = Locale.current
+        guard let langCode = Locale.preferredLanguages.first else { return dp }
+        
+        if #available(iOS 16, *) {
+            guard let regionCode = Locale.current.language.region?.identifier else { return dp }
+            dp.locale = Locale(identifier: langCode + "_" + regionCode)
+        } else {
+            guard let regionCode = Locale.current.regionCode else { return dp }
+            dp.locale = Locale(identifier: langCode + "_" + regionCode)
+        }
         dp.timeZone = .autoupdatingCurrent
-        // TODO: 글로벌 대응
         return dp
     }()
     

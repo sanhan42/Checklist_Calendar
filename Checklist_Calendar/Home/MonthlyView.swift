@@ -152,9 +152,6 @@ class MonthlyView: BaseView {
     }
     
     func setCalendarUI() {
-        // calendar locale > 한국으로 설정
-        calendar.locale = Locale(identifier: "ko_KR")
-        
         // 상단 요일을 한글로 변경
         calendar.calendarWeekdayView.weekdayLabels[0].text = "일"
         calendar.calendarWeekdayView.weekdayLabels[1].text = "월"
@@ -209,6 +206,14 @@ class MonthlyView: BaseView {
         calendar.appearance.borderRadius = 0.9 // 1이면 원, 0이면 사각형
         calendar.appearance.eventOffset = CGPoint.init(x: 0, y: -9.5)
         calendar.translatesAutoresizingMaskIntoConstraints = false
+        
+        guard let langCode = Locale.preferredLanguages.first else { return }
+        if #available(iOS 16, *) {
+            guard let regionCode = Locale.current.language.region?.identifier else { return }
+            calendar.locale = Locale(identifier: langCode + "_" + regionCode)
+        } else {
+            guard let regionCode = Locale.current.regionCode else { return }
+            calendar.locale = Locale(identifier: langCode + "_" + regionCode)
+        }
     }
-    
 }

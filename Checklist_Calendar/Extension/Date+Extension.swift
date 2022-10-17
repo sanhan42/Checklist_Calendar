@@ -11,8 +11,22 @@ extension Date {
     func toString(format: String) -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = format
-        dateFormatter.locale = Locale(identifier:"ko_KR")
-//        dateFormatter.timeZone = TimeZone(identifier: "KST")
+        dateFormatter.locale = Locale.current
+        guard let langCode = Locale.preferredLanguages.first else {
+            return dateFormatter.string(from: self)
+        }
+        if #available(iOS 16, *) {
+            guard let regionCode = Locale.current.language.region?.identifier else {
+                return dateFormatter.string(from: self)
+            }
+            dateFormatter.locale = Locale(identifier: langCode + "_" + regionCode)
+        } else {
+            guard let regionCode = Locale.current.regionCode else {
+                return dateFormatter.string(from: self)
+            }
+            dateFormatter.locale = Locale(identifier: langCode + "_" + regionCode)
+        }
+        dateFormatter.timeZone = TimeZone.current
         return dateFormatter.string(from: self)
     }
     

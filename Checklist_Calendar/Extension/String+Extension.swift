@@ -13,7 +13,21 @@ extension String {
     func toDate(format: String) -> Date? {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = format
-        dateFormatter.locale = Locale(identifier:"ko_KR")
+        dateFormatter.locale = Locale.current
+        guard let langCode = Locale.preferredLanguages.first else {
+            return dateFormatter.date(from: self)
+        }
+        if #available(iOS 16, *) {
+            guard let regionCode = Locale.current.language.region?.identifier else {
+                return dateFormatter.date(from: self)
+            }
+            dateFormatter.locale = Locale(identifier: langCode + "_" + regionCode)
+        } else {
+            guard let regionCode = Locale.current.regionCode else {
+                return dateFormatter.date(from: self)
+            }
+            dateFormatter.locale = Locale(identifier: langCode + "_" + regionCode)
+        }
         return dateFormatter.date(from: self)
     }
 }
