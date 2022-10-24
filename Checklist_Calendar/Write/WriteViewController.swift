@@ -161,11 +161,11 @@ extension WriteViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if tableView.tag == 0 {
-            let num: CGFloat = isTemplatePage ? 26 : 0
+            let num: CGFloat = isTemplatePage ? 28 : 0
             switch indexPath.row {
             case 0: return 46
             case 1:
-                return event.isAllDay ? 72 - num : 98 - num
+                return event.isAllDay ? 74 - num : 98 - num
             case 2: return 38
             default: return tableView.frame.height - (navigationController?.navigationBar.frame.height ?? 0) - (event.isAllDay ? 72 - num : 98 - num) - 70 - 38
             }
