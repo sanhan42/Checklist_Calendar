@@ -161,13 +161,13 @@ extension WriteViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if tableView.tag == 0 {
-            let num: CGFloat = isTemplatePage ? 35 : 0
+            let num: CGFloat = isTemplatePage ? 26 : 0
             switch indexPath.row {
             case 0: return 46
             case 1:
-                return event.isAllDay ? 76 - num : 106 - num // TODO: 수정 필요!
+                return event.isAllDay ? 72 - num : 98 - num
             case 2: return 38
-            default: return tableView.frame.height - (navigationController?.navigationBar.frame.height ?? 0) - (event.isAllDay ? 76 - num : 106 - num) - 70 - 38
+            default: return tableView.frame.height - (navigationController?.navigationBar.frame.height ?? 0) - (event.isAllDay ? 72 - num : 98 - num) - 70 - 38
             }
         } else {
             return 38
@@ -209,7 +209,7 @@ extension WriteViewController: UITableViewDelegate, UITableViewDataSource {
                 if isTemplatePage {
                     cell.dateView.snp.remakeConstraints { make in
                         make.horizontalEdges.equalToSuperview().inset(10)
-                        make.top.equalTo(cell.titleView.snp.bottom).inset(-10)
+                        make.top.equalTo(cell.titleView.snp.bottom).inset(-14)
                         make.height.equalTo(CGFloat.leastNonzeroMagnitude)
                     }
                 }

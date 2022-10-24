@@ -24,7 +24,7 @@ class DateTableViewCell: BaseTableViewCell {
     
     let allDaySwitch: UISwitch = {
         let btn = UISwitch(frame: CGRect(x: 0, y: 0, width: 240, height: 25))
-        btn.transform = CGAffineTransform(scaleX: 0.75, y: 0.8)
+        btn.transform = CGAffineTransform(scaleX: 0.75, y: 0.78)
         btn.onTintColor = .redColor.withAlphaComponent(0.86)
         return btn
     }()
@@ -113,7 +113,7 @@ class DateTableViewCell: BaseTableViewCell {
     }
     
     override func setConstraints() {
-        let height = 36
+        let height = 34
         
         titleView.snp.makeConstraints { make in
             make.top.equalToSuperview().inset(16)
@@ -142,14 +142,13 @@ class DateTableViewCell: BaseTableViewCell {
         dateView.snp.makeConstraints { make in
             make.horizontalEdges.equalToSuperview().inset(6)
             make.top.equalTo(titleView.snp.bottom).inset(-6)
-            make.height.equalTo(height)
+            make.height.equalTo(height - 2)
         }
         
         timeView.snp.makeConstraints { make in
             make.horizontalEdges.equalToSuperview().inset(6)
             make.top.equalTo(dateView.snp.bottom)
-            make.height.equalTo(30)
-//            make.width.equalToSuperview().inset(40)
+            make.height.equalTo(height - 6)
         }
         
         [startDateBtn, endDateBtn].forEach({ item in
@@ -164,7 +163,7 @@ class DateTableViewCell: BaseTableViewCell {
             item.snp.makeConstraints { make in
                 make.top.equalToSuperview().inset(-6)
                 make.width.equalTo(120)
-                make.height.equalTo(30)
+                make.height.equalTo(height - 6)
             }
         })
         
