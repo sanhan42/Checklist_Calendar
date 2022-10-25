@@ -16,11 +16,12 @@ protocol EventRepositoryType {
     func allDayTasksFetch(date: Date, isHiding: Bool) -> Results<Event>
     func notAllDayTasksFetch(date: Date, isHiding: Bool) -> Results<Event>
     func atTimeTasksFetch(date: Date, isHiding: Bool, startHour: Int) -> Results<Event>
+    func notFinishedTasksFetch(date: Date) -> Results<Event>
     
     func updateEvent(old: Event, new: Event)
     func deleteEvent(event: Event)
     
-    func addTodoInEvent(event: Event)
+    func addTodoInEvent(event: Event, todo: Todo)
     func deleteTodo(todo: Todo)
     func updateTodoTitle(todo: Todo, title: String)
     func updateTodoStatus(todo: Todo)
@@ -100,6 +101,12 @@ class EventRepository: EventRepositoryType {
         }
     }
     
+    func notFinishedTasksFetch(date: Date) -> Results<Event> {
+        return localRealm.objects(Event.self).where {
+            $0.endTime >= Date()
+        }
+    }
+    
     func updateEvent(old: Event, new: Event) {
         deleteEvent(event: old)
         addEvent(event: new)
@@ -127,10 +134,10 @@ class EventRepository: EventRepositoryType {
         }
     }
     
-    func addTodoInEvent(event: Event) {
+    func addTodoInEvent(event: Event, todo:Todo = Todo()) {
         do {
             try localRealm.write({
-                event.todos.append(Todo())
+                event.todos.append(todo)
             })
         } catch let error {
             print(error)

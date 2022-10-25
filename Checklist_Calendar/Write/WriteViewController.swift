@@ -39,6 +39,8 @@ class WriteViewController: BaseViewController {
     
     var afterDissmiss: (() -> ())?
     
+    var afterOkActions: [(() -> ())] = []
+    
     override func loadView() {
         view = mainView
     }
@@ -292,7 +294,50 @@ extension WriteViewController: UITableViewDelegate, UITableViewDataSource {
         
         delete.image = .init(systemName: "trash.fill")
         delete.backgroundColor = .systemRed
-        return UISwipeActionsConfiguration(actions: [delete])
+        if isTemplatePage { return UISwipeActionsConfiguration(actions: [delete]) }
+        
+        var putBack = UIContextualAction(style: .normal, title: nil) { [unowned self] action, view, completionHandler in
+            
+            UILabel.appearance(whenContainedInInstancesOf: [UIAlertController.self]).numberOfLines = 2
+            let tasks = repository.notFinishedTasksFetch(date: event.startTime)
+            let alert = UIAlertController(title: nil, message: "진행 중인 혹은 미래의 다른 일정으로, 할 일을 옮기시겠습니까?", preferredStyle: .actionSheet)
+            let cancel = UIAlertAction(title: "취소", style: .cancel)
+            cancel.setValue(UIColor.red, forKey: "titleTextColor")
+            alert.addAction(cancel)
+            for task in tasks {
+                let dateFormatter = DateFormatter()
+                dateFormatter.locale = Locale.current
+                guard let langCode = Locale.preferredLanguages.first else { return }
+                
+                if #available(iOS 16, *) {
+                    guard let regionCode = Locale.current.language.region?.identifier else { return }
+                    dateFormatter.locale = Locale(identifier: langCode + "_" + regionCode)
+                } else {
+                    guard let regionCode = Locale.current.regionCode else { return }
+                    dateFormatter.locale = Locale(identifier: langCode + "_" + regionCode)
+                }
+                dateFormatter.timeZone = .autoupdatingCurrent
+                dateFormatter.dateFormat = "yy.MM.dd(EEEEE) HH:mm"
+                let title = task.title + "\n\(dateFormatter.string(from: task.startTime)) → \(dateFormatter.string(from: task.endTime))"
+                let otherEvent = UIAlertAction(title: title, style: .default) { [unowned self] action in
+                    let tempTodo = self.event.todos[indexPath.row]
+                    self.afterOkActions.append {
+                        self.repository.addTodoInEvent(event: task, todo: tempTodo)
+                    }
+                    self.event.todos.remove(at: indexPath.row)
+                    self.todoTableViewCell?.checkListTableView.reloadData()
+                    self.hasChanges = true
+                }
+                otherEvent.setValue(UIColor.textColor, forKey: "titleTextColor")
+                otherEvent.setValue(1, forKey: "titleTextAlignment")
+                otherEvent.setValue(UIImage(systemName: "arrow.right.square"), forKey: "image")
+                otherEvent.setValue(UIColor(hexAlpha: task.color), forKey: "imageTintColor")
+                if realmEvent != task { alert.addAction(otherEvent) }
+            }
+            present(alert, animated: true)
+        }
+        putBack.image = UIImage(systemName: "arrowshape.turn.up.backward.badge.clock.rtl")
+        return UISwipeActionsConfiguration(actions: [delete, putBack])
     }
 }
 
@@ -320,6 +365,10 @@ extension WriteViewController {
     }
     
     @objc func okButtonClicked() {
+        for act in afterOkActions {
+            act()
+        }
+        
         guard let titleCell = mainView.tableView.cellForRow(at: [0,0]) as? TitleTableViewCell else { return }
         titleCell.titleTextField.becomeFirstResponder()
         titleCell.titleTextField.endEditing(true)
