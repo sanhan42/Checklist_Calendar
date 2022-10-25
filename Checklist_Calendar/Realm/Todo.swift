@@ -19,5 +19,11 @@ class Todo: Object {
         self.title = title
         self.isDone = isDone
     }
+    
+    convenience init(todo: Todo) {
+        self.init()
+        self.title = todo.title
+        self.isDone = todo.isDone
+    }
 }
 
