@@ -33,7 +33,7 @@ class TemplateListViewController: BaseViewController {
     var templateTasks: Results<Template>!
     
     var afterDissmiss: (() -> ())?
-    
+ 
     override func viewDidLoad() {
         super.viewDidLoad()
         configure()

@@ -20,7 +20,7 @@ class NotificationViewController: BaseViewController {
     }()
   
     var afterDissmiss: (() -> ())?
-   
+
     override func viewDidLoad() {
         super.viewDidLoad()
         configure()

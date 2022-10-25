@@ -283,9 +283,10 @@ extension WriteViewController: UITableViewDelegate, UITableViewDataSource {
             let alert = UIAlertController(title: nil, message: "정말 삭제하시겠습니까?", preferredStyle: .alert)
             let cancel = UIAlertAction(title: "취소", style: .cancel)
             cancel.setValue(UIColor.red, forKey: "titleTextColor")
-            let ok = UIAlertAction(title: "확인", style: .destructive) { _ in
+            let ok = UIAlertAction(title: "확인", style: .destructive) { [unowned self] _ in
                 self.event.todos.remove(at: indexPath.row)
                 self.todoTableViewCell?.checkListTableView.reloadData()
+                self.hasChanges = true
             }
             alert.addAction(cancel)
             alert.addAction(ok)
@@ -296,7 +297,7 @@ extension WriteViewController: UITableViewDelegate, UITableViewDataSource {
         delete.backgroundColor = .systemRed
         if isTemplatePage { return UISwipeActionsConfiguration(actions: [delete]) }
         
-        var putBack = UIContextualAction(style: .normal, title: nil) { [unowned self] action, view, completionHandler in
+        let putBack = UIContextualAction(style: .normal, title: nil) { [unowned self] action, view, completionHandler in
             
             UILabel.appearance(whenContainedInInstancesOf: [UIAlertController.self]).numberOfLines = 2
             let tasks = repository.notFinishedTasksFetch(date: event.startTime)
@@ -344,7 +345,7 @@ extension WriteViewController: UITableViewDelegate, UITableViewDataSource {
 extension WriteViewController {
     @objc func deleteEventBtnClicked() {
         let deleteAlert = UIAlertController(title: nil, message: "이 일정을 삭제하겠습니까?", preferredStyle: .actionSheet)
-        let ok = UIAlertAction(title: "일정 삭제", style: .destructive) { _ in
+        let ok = UIAlertAction(title: "일정 삭제", style: .destructive) { [unowned self] _ in
             self.repository.deleteEvent(event: self.realmEvent!)
             self.afterDissmiss?()
             self.dismiss(animated: true)
@@ -403,7 +404,7 @@ extension WriteViewController {
             realmTemplate == nil ? repository.addTemplate(template: newTemplate) : repository.updateTemplate(old: realmTemplate!, new: newTemplate)
         } else {
             if self.event.notiOption != 0 {
-                self.notificationCenter.getNotificationSettings { settings in
+                self.notificationCenter.getNotificationSettings { [unowned self] settings in
                     guard settings.authorizationStatus == .authorized else {
                         self.noPermissions = true
                         DispatchQueue.main.async {

@@ -328,7 +328,7 @@ class MonthlyViewController: BaseViewController {
         vc.notAllDayTasks = notAllDayTasks
         vc.selectedDate = date
         vc.isHiding = isHiding
-        vc.afterDissmiss = { [self] in
+        vc.afterDissmiss = { [unowned self] in
             selectedDate = vc.selectedDate
             mainView.calendar.select(selectedDate)
             isHiding = vc.isHiding

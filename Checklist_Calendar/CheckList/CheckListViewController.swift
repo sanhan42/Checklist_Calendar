@@ -35,8 +35,6 @@ class CheckListViewController: BaseViewController {
     var afterDissmiss: (() -> ())?
     var isHiding = false
    
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         configure()
@@ -215,7 +213,7 @@ extension CheckListViewController: UITableViewDelegate, UITableViewDataSource {
             let alert = UIAlertController(title: nil, message: "정말 삭제하시겠습니까?", preferredStyle: .alert)
             let cancel = UIAlertAction(title: "취소", style: .cancel)
             cancel.setValue(UIColor.red, forKey: "titleTextColor")
-            let ok = UIAlertAction(title: "확인", style: .destructive) { [self] _ in
+            let ok = UIAlertAction(title: "확인", style: .destructive) { [unowned self] _ in
                 let section = 0..<allDayTasks.count ~= indexPath.section ? indexPath.section : indexPath.section - allDayTasks.count
                 let tasks: Results<Event> = 0..<allDayTasks.count ~= indexPath.section ? allDayTasks : notAllDayTasks
                 let todos = tasks[section].todos
@@ -238,6 +236,7 @@ extension CheckListViewController {
     @objc func cancelBtnClicked() {
         afterDissmiss?()
         dismiss(animated: true)
+        afterDissmiss = nil
     }
     
     @objc func hideBtnClicked() {
@@ -251,7 +250,7 @@ extension CheckListViewController {
     }
 
     @objc func calendarBtnClicked() {
-        showDatePickerPopup(mode: .date) { [self] _ in
+        showDatePickerPopup(mode: .date) { [unowned self] _ in
             selectedDate = datePicker.date
             setNavigationLeftItems()
             fetchRealm(isHiding: isHiding)
@@ -318,5 +317,6 @@ extension CheckListViewController: UITextViewDelegate {
 extension CheckListViewController: UIAdaptivePresentationControllerDelegate {
     func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
         afterDissmiss?()
+        afterDissmiss = nil
     }
 }
