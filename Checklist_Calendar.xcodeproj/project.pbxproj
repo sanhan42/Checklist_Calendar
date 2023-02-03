@@ -27,6 +27,7 @@
 		BF70765828D6F2DA003506C0 /* MonthlyTableViewHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF70765728D6F2DA003506C0 /* MonthlyTableViewHeaderView.swift */; };
 		BF7C140D28D1B60B00DF1EEE /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF7C140C28D1B60B00DF1EEE /* Date+Extension.swift */; };
 		BF7C141128D1F8A100DF1EEE /* MonthlyTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF7C141028D1F8A100DF1EEE /* MonthlyTableViewCell.swift */; };
+		BF8DE754298CE3E9000D7D64 /* CGColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8DE753298CE3E9000D7D64 /* CGColor+Extension.swift */; };
 		BFB1052728D3153200D24376 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB1052628D3153200D24376 /* Event.swift */; };
 		BFB1052928D31B8F00D24376 /* Todo.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB1052828D31B8F00D24376 /* Todo.swift */; };
 		BFB64C6E28E6D51C00E56CE4 /* EmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB64C6D28E6D51C00E56CE4 /* EmptyView.swift */; };
@@ -78,6 +79,7 @@
 		BF7C140C28D1B60B00DF1EEE /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
 		BF7C141028D1F8A100DF1EEE /* MonthlyTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthlyTableViewCell.swift; sourceTree = "<group>"; };
 		BF7C141228D1FA9000DF1EEE /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		BF8DE753298CE3E9000D7D64 /* CGColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGColor+Extension.swift"; sourceTree = "<group>"; };
 		BFB1052628D3153200D24376 /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
 		BFB1052828D31B8F00D24376 /* Todo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Todo.swift; sourceTree = "<group>"; };
 		BFB64C6D28E6D51C00E56CE4 /* EmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyView.swift; sourceTree = "<group>"; };
@@ -168,6 +170,7 @@
 			children = (
 				BF7C140C28D1B60B00DF1EEE /* Date+Extension.swift */,
 				BF27397B28D3476500441B7F /* UIColor+Extension.swift */,
+				BF8DE753298CE3E9000D7D64 /* CGColor+Extension.swift */,
 				BFF236A828DED4BB0057FCF7 /* UIImage+Extension.swift */,
 				BF1E010628E00F98006D27E5 /* String+Extension.swift */,
 			);
@@ -384,6 +387,7 @@
 				BFDDC99C28D0572D0047F22E /* ViewController.swift in Sources */,
 				BF1E010728E00F98006D27E5 /* String+Extension.swift in Sources */,
 				BF1A6AEA28DE93E20094EA6D /* EmptyCell.swift in Sources */,
+				BF8DE754298CE3E9000D7D64 /* CGColor+Extension.swift in Sources */,
 				BF5E552528E3B2DB0050594D /* NotificationViewController.swift in Sources */,
 				BF55056728DC80F200DF978E /* CheckListViewController.swift in Sources */,
 				BFDDC99828D0572D0047F22E /* AppDelegate.swift in Sources */,

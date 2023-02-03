@@ -7,6 +7,8 @@
 
 import UIKit
 
+fileprivate let intMax = CGFloat(Int.max)
+
 extension UIColor {
     // 사용자 정의 색
     class var bgColor: UIColor { return UIColor(named: "BgColor")!}
@@ -19,7 +21,7 @@ extension UIColor {
     class var lineColor: UIColor { return UIColor(named: "LineColor")!.withAlphaComponent(0.9)}
     class var skyColor: UIColor { return UIColor(named:  "SkyColor")!}
     class var pinkColor: UIColor { return UIColor(named:  "PinkColor")!}
-    class var selectColor: UIColor { return UIColor(named:  "CalSelectColor")!}
+    class var selectColor: UIColor { return UIColor(named:  "calSelectColor")!}
 
     // UIColor <-> String (DB에 color를 저장하기 위해 String으로 바꿔줄 필요가 있음.) (비트연산 사용.)
     convenience init(hexAlpha: String) {
@@ -34,7 +36,7 @@ extension UIColor {
         var rgbaValue: UInt64 = 0
         Scanner(string: hexFormatted).scanHexInt64(&rgbaValue)
 
-        self.init(red: CGFloat((rgbaValue & 0xFF000000) >> 24) / 255.0,
+        self.init(displayP3Red: CGFloat((rgbaValue & 0xFF000000) >> 24) / 255.0,
                   green: CGFloat((rgbaValue & 0x00FF0000) >> 16) / 255.0,
                   blue: CGFloat((rgbaValue & 0x0000FF00) >> 8) / 255.0,
                   alpha: CGFloat(rgbaValue & 0x000000FF) / 255.0)
@@ -46,9 +48,10 @@ extension UIColor {
         var b:CGFloat = 0
         var a:CGFloat = 0
         getRed(&r, green: &g, blue: &b, alpha: &a)
-        print(r, g, b, a)
         let rgba:Int = (Int)(r*255)<<24 | (Int)(g*255)<<16 | (Int)(b*255)<<8 | (Int)(a*255)<<0
-
-        return String(format:"#%08x", rgba)
+        let hex = String(format:"#%08x", rgba)
+        
+        guard let displayP3Color = self.cgColor.converted(to: CGColorSpace(name: CGColorSpace.displayP3)!, intent: .defaultIntent, options: nil) else { return hex }
+        return displayP3Color.toHex() ?? hex
     }
 }
