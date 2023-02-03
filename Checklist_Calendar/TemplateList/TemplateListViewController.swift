@@ -101,10 +101,15 @@ extension TemplateListViewController: UITableViewDelegate, UITableViewDataSource
         
         guard let cell = tableView.dequeueReusableCell(withIdentifier: TemplateListTableCell.reuseIdentifier, for: indexPath) as? TemplateListTableCell else { return UITableViewCell() }
         cell.selectionStyle = .none
-        cell.dateLabel.text = templateTasks[indexPath.row].startTime.toString(format: SHDate.time.str())
         cell.lineView.backgroundColor = UIColor(hexAlpha: templateTasks[indexPath.row].color)
         cell.titleLabel.text = templateTasks[indexPath.row].title
-        cell.fullDateLabel.text = templateTasks[indexPath.row].startTime.toString(format: SHDate.time.str()) + " → " + templateTasks[indexPath.row].endTime.toString(format: SHDate.time.str())
+        if templateTasks[indexPath.row].isAllDay {
+            cell.dateLabel.text = "하루 종일"
+            cell.fullDateLabel.text = "하루 종일"
+        } else {
+            cell.dateLabel.text = templateTasks[indexPath.row].startTime.toString(format: SHDate.time.str())
+            cell.fullDateLabel.text = templateTasks[indexPath.row].startTime.toString(format: SHDate.time.str()) + " → " + templateTasks[indexPath.row].endTime.toString(format: SHDate.time.str())
+        }
         return cell
     }
     
