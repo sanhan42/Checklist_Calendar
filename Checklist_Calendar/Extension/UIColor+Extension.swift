@@ -43,15 +43,17 @@ extension UIColor {
     }
 
     func toHexString() -> String {
-        var r:CGFloat = 0
-        var g:CGFloat = 0
-        var b:CGFloat = 0
-        var a:CGFloat = 0
-        getRed(&r, green: &g, blue: &b, alpha: &a)
-        let rgba:Int = (Int)(r*255)<<24 | (Int)(g*255)<<16 | (Int)(b*255)<<8 | (Int)(a*255)<<0
-        let hex = String(format:"#%08x", rgba)
-        
-        guard let displayP3Color = self.cgColor.converted(to: CGColorSpace(name: CGColorSpace.displayP3)!, intent: .defaultIntent, options: nil) else { return hex }
-        return displayP3Color.toHex() ?? hex
+        var rgbHex = ""
+        guard let displayP3Color = self.cgColor.converted(to: CGColorSpace(name: CGColorSpace.displayP3)!, intent: .defaultIntent, options: nil) else {
+            var r:CGFloat = 0
+            var g:CGFloat = 0
+            var b:CGFloat = 0
+            var a:CGFloat = 0
+            getRed(&r, green: &g, blue: &b, alpha: &a)
+            let rgba:Int = (Int)(r*255)<<24 | (Int)(g*255)<<16 | (Int)(b*255)<<8 | (Int)(a*255)<<0
+            rgbHex = String(format:"#%08x", rgba)
+            return rgbHex
+        }
+        return displayP3Color.toHex() ?? rgbHex
     }
 }
