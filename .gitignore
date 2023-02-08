@@ -9,14 +9,6 @@
 
 .DS_Store
 
-### SwiftPackageManager ###
-Packages
-.build/
-xcuserdata
-DerivedData/
-#*.xcodeproj
-
-
 ### Xcode ###
 ## User settings
 xcuserdata/
