@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BF01DD6329FFA5FC0018080A /* CloudManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF01DD6229FFA5FC0018080A /* CloudManager.swift */; };
+		BF01DD882A00DD4C0018080A /* CloudKitSyncableProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF01DD872A00DD4C0018080A /* CloudKitSyncableProtocol.swift */; };
+		BF01DD8B2A00E22A0018080A /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = BF01DD8A2A00E22A0018080A /* Realm */; };
+		BF01DD8D2A00E22A0018080A /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = BF01DD8C2A00E22A0018080A /* RealmSwift */; };
 		BF0B57DC28D05BE9005A090B /* BaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0B57DB28D05BE9005A090B /* BaseView.swift */; };
 		BF0B57DE28D05C38005A090B /* BaseTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0B57DD28D05C38005A090B /* BaseTableViewCell.swift */; };
 		BF0B57E128D05F9C005A090B /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = BF0B57E028D05F9C005A090B /* SnapKit */; };
@@ -38,8 +42,6 @@
 		BFDDC9A128D057300047F22E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BFDDC9A028D057300047F22E /* Assets.xcassets */; };
 		BFDDC9A428D057300047F22E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BFDDC9A228D057300047F22E /* LaunchScreen.storyboard */; };
 		BFDDC9AD28D058950047F22E /* FSCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = BFDDC9AC28D058950047F22E /* FSCalendar */; };
-		BFDDC9B028D059350047F22E /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = BFDDC9AF28D059350047F22E /* Realm */; };
-		BFDDC9B228D059350047F22E /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = BFDDC9B128D059350047F22E /* RealmSwift */; };
 		BFDDC9B528D059BC0047F22E /* MonthlyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFDDC9B428D059BC0047F22E /* MonthlyViewController.swift */; };
 		BFDDC9B728D05A3C0047F22E /* MonthlyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFDDC9B628D05A3C0047F22E /* MonthlyView.swift */; };
 		BFDDC9BB28D05B380047F22E /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFDDC9BA28D05B380047F22E /* BaseViewController.swift */; };
@@ -61,6 +63,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		BF01DD6229FFA5FC0018080A /* CloudManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudManager.swift; sourceTree = "<group>"; };
+		BF01DD662A0095D30018080A /* Checklist_Calendar.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Checklist_Calendar.entitlements; sourceTree = "<group>"; };
+		BF01DD872A00DD4C0018080A /* CloudKitSyncableProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitSyncableProtocol.swift; sourceTree = "<group>"; };
 		BF0B57DB28D05BE9005A090B /* BaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseView.swift; sourceTree = "<group>"; };
 		BF0B57DD28D05C38005A090B /* BaseTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTableViewCell.swift; sourceTree = "<group>"; };
 		BF1A6AE528DE7BEE0094EA6D /* Template.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Template.swift; sourceTree = "<group>"; };
@@ -114,9 +119,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BFDDC9B228D059350047F22E /* RealmSwift in Frameworks */,
+				BF01DD8D2A00E22A0018080A /* RealmSwift in Frameworks */,
+				BF01DD8B2A00E22A0018080A /* Realm in Frameworks */,
 				BF0B57E128D05F9C005A090B /* SnapKit in Frameworks */,
-				BFDDC9B028D059350047F22E /* Realm in Frameworks */,
 				BF497FA028D9E194007D1527 /* Toast in Frameworks */,
 				BFDDC9AD28D058950047F22E /* FSCalendar in Frameworks */,
 				BFFA945628E571AD00D73AFD /* AcknowList in Frameworks */,
@@ -128,6 +133,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		BF01DD6129FFA5E40018080A /* Cloud */ = {
+			isa = PBXGroup;
+			children = (
+				BF01DD6229FFA5FC0018080A /* CloudManager.swift */,
+			);
+			path = Cloud;
+			sourceTree = "<group>";
+		};
 		BF1A6AE728DE7DC90094EA6D /* TemplateList */ = {
 			isa = PBXGroup;
 			children = (
@@ -179,6 +192,7 @@
 		BFB1052528D314C300D24376 /* Realm */ = {
 			isa = PBXGroup;
 			children = (
+				BF01DD872A00DD4C0018080A /* CloudKitSyncableProtocol.swift */,
 				BFB1052628D3153200D24376 /* Event.swift */,
 				BFB1052828D31B8F00D24376 /* Todo.swift */,
 				BF1A6AE528DE7BEE0094EA6D /* Template.swift */,
@@ -207,9 +221,11 @@
 		BFDDC99628D0572D0047F22E /* Checklist_Calendar */ = {
 			isa = PBXGroup;
 			children = (
+				BF01DD662A0095D30018080A /* Checklist_Calendar.entitlements */,
 				BFFA945728E5759400D73AFD /* Package.resolved */,
 				BFEA3A3628D8576D00003E81 /* Enum */,
 				BFB1052528D314C300D24376 /* Realm */,
+				BF01DD6129FFA5E40018080A /* Cloud */,
 				BF7C140B28D1B5D900DF1EEE /* Extension */,
 				BFDDC9B828D05A5E0047F22E /* Utility */,
 				BFDDC9B328D059860047F22E /* Home */,
@@ -302,13 +318,13 @@
 			name = Checklist_Calendar;
 			packageProductDependencies = (
 				BFDDC9AC28D058950047F22E /* FSCalendar */,
-				BFDDC9AF28D059350047F22E /* Realm */,
-				BFDDC9B128D059350047F22E /* RealmSwift */,
 				BF0B57E028D05F9C005A090B /* SnapKit */,
 				BF497F9F28D9E194007D1527 /* Toast */,
 				BF1A6AF028DEBF480094EA6D /* IQKeyboardManagerSwift */,
 				BFFA945528E571AD00D73AFD /* AcknowList */,
 				BFE9DF8528E7F242002684D0 /* Zip */,
+				BF01DD8A2A00E22A0018080A /* Realm */,
+				BF01DD8C2A00E22A0018080A /* RealmSwift */,
 			);
 			productName = Checklist_Calendar;
 			productReference = BFDDC99428D0572D0047F22E /* Checklist_Calendar.app */;
@@ -340,12 +356,12 @@
 			mainGroup = BFDDC98B28D0572D0047F22E;
 			packageReferences = (
 				BFDDC9AB28D058950047F22E /* XCRemoteSwiftPackageReference "FSCalendar" */,
-				BFDDC9AE28D059350047F22E /* XCRemoteSwiftPackageReference "realm-swift" */,
 				BF0B57DF28D05F9C005A090B /* XCRemoteSwiftPackageReference "SnapKit" */,
 				BF497F9E28D9E194007D1527 /* XCRemoteSwiftPackageReference "Toast-Swift" */,
 				BF1A6AEF28DEBF480094EA6D /* XCRemoteSwiftPackageReference "IQKeyboardManager" */,
 				BFFA945428E571AD00D73AFD /* XCRemoteSwiftPackageReference "AcknowList" */,
 				BFE9DF8428E7F242002684D0 /* XCRemoteSwiftPackageReference "Zip" */,
+				BF01DD892A00E22A0018080A /* XCRemoteSwiftPackageReference "realm-swift" */,
 			);
 			productRefGroup = BFDDC99528D0572D0047F22E /* Products */;
 			projectDirPath = "";
@@ -383,6 +399,7 @@
 				BFF02C6328D4635800F0D6AA /* TodoTableViewCell.swift in Sources */,
 				BF1A6AE628DE7BEE0094EA6D /* Template.swift in Sources */,
 				BFDDC99C28D0572D0047F22E /* ViewController.swift in Sources */,
+				BF01DD6329FFA5FC0018080A /* CloudManager.swift in Sources */,
 				BF1E010728E00F98006D27E5 /* String+Extension.swift in Sources */,
 				BF1A6AEA28DE93E20094EA6D /* EmptyCell.swift in Sources */,
 				BF8DE754298CE3E9000D7D64 /* CGColor+Extension.swift in Sources */,
@@ -400,6 +417,7 @@
 				BFDDC9B728D05A3C0047F22E /* MonthlyView.swift in Sources */,
 				BFDDC9BB28D05B380047F22E /* BaseViewController.swift in Sources */,
 				BF27397C28D3476500441B7F /* UIColor+Extension.swift in Sources */,
+				BF01DD882A00DD4C0018080A /* CloudKitSyncableProtocol.swift in Sources */,
 				BF5E552928E46B9A0050594D /* NotiEnum.swift in Sources */,
 				BF1A6AEC28DE96720094EA6D /* TemplateListViewController.swift in Sources */,
 				BFEA3A3828D8579B00003E81 /* DateFormEnum.swift in Sources */,
@@ -481,7 +499,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -535,7 +553,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -550,6 +568,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Checklist_Calendar/Checklist_Calendar.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 5534Y3FYT7;
@@ -580,6 +599,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Checklist_Calendar/Checklist_Calendar.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 5534Y3FYT7;
@@ -629,6 +649,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		BF01DD892A00E22A0018080A /* XCRemoteSwiftPackageReference "realm-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/realm/realm-swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 10.0.0;
+			};
+		};
 		BF0B57DF28D05F9C005A090B /* XCRemoteSwiftPackageReference "SnapKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
@@ -661,14 +689,6 @@
 				minimumVersion = 2.0.0;
 			};
 		};
-		BFDDC9AE28D059350047F22E /* XCRemoteSwiftPackageReference "realm-swift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/realm/realm-swift.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 10.0.0;
-			};
-		};
 		BFE9DF8428E7F242002684D0 /* XCRemoteSwiftPackageReference "Zip" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/marmelroy/Zip.git";
@@ -688,6 +708,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		BF01DD8A2A00E22A0018080A /* Realm */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BF01DD892A00E22A0018080A /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = Realm;
+		};
+		BF01DD8C2A00E22A0018080A /* RealmSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BF01DD892A00E22A0018080A /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = RealmSwift;
+		};
 		BF0B57E028D05F9C005A090B /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = BF0B57DF28D05F9C005A090B /* XCRemoteSwiftPackageReference "SnapKit" */;
@@ -707,16 +737,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = BFDDC9AB28D058950047F22E /* XCRemoteSwiftPackageReference "FSCalendar" */;
 			productName = FSCalendar;
-		};
-		BFDDC9AF28D059350047F22E /* Realm */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = BFDDC9AE28D059350047F22E /* XCRemoteSwiftPackageReference "realm-swift" */;
-			productName = Realm;
-		};
-		BFDDC9B128D059350047F22E /* RealmSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = BFDDC9AE28D059350047F22E /* XCRemoteSwiftPackageReference "realm-swift" */;
-			productName = RealmSwift;
 		};
 		BFE9DF8528E7F242002684D0 /* Zip */ = {
 			isa = XCSwiftPackageProductDependency;
